@@ -7,7 +7,7 @@ permalink: /manuals/1.0/en/quick-start.html
 # QuickStart
 
 ```
-git clone git@github.com:koriym/manual-skeleton.git your-manual
+git clone git@github.com:koriym/be-framework.git your-manual
 cd your-manual
 rm -rf .git
 git init

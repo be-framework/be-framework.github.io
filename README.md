@@ -1,4 +1,4 @@
-# manual-skeleton
+# be-framework
 
 A manual website template based on [http://bearsunday.github.io/](http://bearsunday.github.io/).
 

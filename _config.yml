@@ -1,9 +1,9 @@
-name: manual-skeleton
+name: Be Framework
 safe: true
 lsi: false
 
-url: http://koriym.github.io/manual-skeleton
-title: manual-skeleton
+url: http://be-framework.github.io/
+title: Be Framework
 
 markdown: kramdown
 redcarpet:
