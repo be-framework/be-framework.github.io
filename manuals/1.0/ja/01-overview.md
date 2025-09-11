@@ -19,7 +19,7 @@ $activeUser = User::find($id);
 $deletedUser = new DeletedUser($activeUser);
 ```
 
-「DeletedUser?？」なにそれ？と思いましたか？
+「`DeletedUser`？」なにそれ？と思いましたか？
 
 実はこの疑問が、プログラミングの新しい世界への入り口なんです。これまで**考えてもみなかった方法**で、プログラミングを考えてみましょう。
 
@@ -52,7 +52,7 @@ $savedUser = new SavedUser($validatedUser);
 **BEING**に着目すると：
 - 不正な状態のオブジェクトは最初から存在しません
 - オブジェクトが存在すること自体が「正しい状態」の証明になります
-- その時になすべき事だけに集中できます。出来ないことが出来ません
+- その時にできることだけに集中できます。できないことはそもそも実行できません
 
 違いは型そのものにあります：
 ```php
@@ -80,4 +80,4 @@ function archiveUser(DeletedUser $user) { }
 
 基礎から学んでいきます：[入力クラス →](./02-input-classes.html)
 
-最初のオブジェクトを作りながら、なぜ『`DeletedUser`』なのかを体感してください。
+最初のオブジェクトを作りながら、なぜ「`DeletedUser`」なのかを体感してください。

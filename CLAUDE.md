@@ -82,3 +82,4 @@ The Be Framework manual is organized in 12 chapters:
 - Index page uses special `index` layout
 - Navigation must be manually updated when adding pages
 - Consistent frontmatter required for proper rendering
+- Use page permalinks (`.html`) for cross-links, e.g., `./02-input-classes.html` (avoid linking to `.md`)
