@@ -8,7 +8,7 @@
     --c-default: #0b3da6; /* default: 識別子/変数/演算子 */
     --c-keyword: #1a7f37; /* keyword: final/public/readonly/function/new/match など */
     --c-string : #c62828; /* string: "…" '…' */
-    --c-comment: #ef6c00; /* comment: オレンジ */
+    --c-comment: #d35400; /* comment: 焦げオレンジ */
     --c-punc   : #222222; /* 記号/括弧 */
     --c-func   : #6b1b1b; /* 関数名: 目立ち過ぎない赤茶。完全php.netなら default に */
     --c-number : #0a8f8f; /* 数値 */
@@ -55,7 +55,7 @@
 /* php.net 完全準拠なら .nf{color:var(--c-default);} */
 
 /* --- 属性 #[...] を default 扱いに（#の色ブレ防止） --- */
-.highlight .na, .highlight .nd{ color:var(--c-default); }
+.highlight .na, .highlight .nd, .highlight .nf { color: var(--c-default); font-weight: normal; }
 
 /* --- JSON 読みやすさ：キー=青, 値=赤, 記号=黒 --- */
 .highlight .nt{ color:var(--c-default); } /* "key" */
@@ -87,7 +87,7 @@
         --c-default:#c8d7ff;
         --c-keyword:#7bd28f;
         --c-string:#ff8a80;
-        --c-comment:#ffb74d; /* ダーク時のオレンジを明るめに */
+        --c-comment:#e67e22;
         --c-punc:#e5e7eb;
         --c-func:#b0c3ff;
         --c-number:#63d1d1;
