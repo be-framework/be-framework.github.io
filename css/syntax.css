@@ -1,14 +1,80 @@
 .highlight  { background: #f8f8f8; }
-.highlight .c { color: #999988; font-style: italic } /* Comment */
-.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 
-/* Fix PHP attribute highlighting - target # character in PHP code blocks */
-.language-php .highlighter-rouge .highlight .err,
+/* PHP.net inspired highlighting for PHP code blocks */
+.language-php .highlight {
+    color: #0000BB; /* Default text (blue) */
+}
+
+.language-php .highlight .k,     /* Keywords */
+.language-php .highlight .kd,    /* Keyword.Declaration */
+.language-php .highlight .kn,    /* Keyword.Namespace */
+.language-php .highlight .kp,    /* Keyword.Pseudo */
+.language-php .highlight .kr,    /* Keyword.Reserved */
+.language-php .highlight .kt {   /* Keyword.Type */
+    color: #007700; /* Keywords (green) - php.net highlight.keyword */
+    font-weight: bold;
+}
+
+.language-php .highlight .o {    /* Operators */
+    color: #0000BB; /* Operators (blue) - php.net highlight.default */
+    font-weight: normal;
+}
+
+.language-php .highlight .s,     /* String */
+.language-php .highlight .s1,    /* String.Single */
+.language-php .highlight .s2,    /* String.Double */
+.language-php .highlight .sb,    /* String.Backtick */
+.language-php .highlight .sc,    /* String.Char */
+.language-php .highlight .sd,    /* String.Doc */
+.language-php .highlight .se,    /* String.Escape */
+.language-php .highlight .sh,    /* String.Heredoc */
+.language-php .highlight .si,    /* String.Interpol */
+.language-php .highlight .sx {   /* String.Other */
+    color: #DD0000; /* Strings (red) */
+    font-weight: normal;
+}
+
+.language-php .highlight .c,     /* Comment */
+.language-php .highlight .c1,    /* Comment.Single */
+.language-php .highlight .cm,    /* Comment.Multiline */
+.language-php .highlight .cp,    /* Comment.Preproc */
+.language-php .highlight .cs {   /* Comment.Special */
+    color: #FF8000; /* Comments (orange) */
+    font-style: italic;
+    font-weight: normal;
+}
+
+/* PHP attributes - keep purple for modern PHP features */
 .language-php .highlight .err {
-    color: #6f42c1; /* Purple color for PHP attributes */
+    color: #6f42c1; /* PHP attributes (purple) */
     background-color: transparent;
     font-weight: normal;
 }
+
+/* Variables */
+.language-php .highlight .nv,    /* Name.Variable */
+.language-php .highlight .vc,    /* Name.Variable.Class */
+.language-php .highlight .vg,    /* Name.Variable.Global */
+.language-php .highlight .vi {   /* Name.Variable.Instance */
+    color: #0000BB; /* Variables (blue, same as default) */
+}
+
+/* Class names, method names, and identifiers - all default blue */
+.language-php .highlight .nc,    /* Name.Class */
+.language-php .highlight .nn,    /* Name.Namespace */
+.language-php .highlight .nt,    /* Name.Tag */
+.language-php .highlight .nb,    /* Name.Builtin */
+.language-php .highlight .nx,    /* Name.Other */
+.language-php .highlight .nf,    /* Name.Function - method names */
+.language-php .highlight .na,    /* Name.Attribute */
+.language-php .highlight .no {   /* Name.Constant */
+    color: #0000BB !important; /* All identifiers (blue, highlight.default) */
+    font-weight: normal !important;
+}
+
+/* Keep general highlighting for non-PHP code */
+.highlight .c { color: #999988; font-style: italic } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 
 .highlight .k { font-weight: bold } /* Keyword */
 .highlight .o { font-weight: bold } /* Operator */
