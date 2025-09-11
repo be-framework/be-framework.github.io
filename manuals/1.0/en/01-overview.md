@@ -21,9 +21,9 @@ $deletedUser = new DeletedUser($activeUser);
 
 **DeletedUser?**
 
-If that feels strange, you're not alone. Why would deletion create something new?
+Feel puzzled by `DeletedUser`? That's perfectly natural.
 
-This discomfort reveals something important—an assumption about programming so deep we rarely question it.
+This confusion is actually the gateway to a new world of programming—one that explores **ways you never considered before**.
 
 ## The Difference
 
@@ -52,9 +52,9 @@ When you focus on DOING:
 - You fight against invalid states
 
 When you focus on BEING:
-- Invalid states cannot exist
-- Objects carry their own validity
-- Existence itself is the proof
+- Invalid states cannot exist in the first place
+- Objects carry their own validity just by existing
+- You can only focus on what's actually possible at that moment
 
 The difference is in the types themselves:
 ```php
@@ -67,16 +67,16 @@ function saveUser(SavedUser $user) { }
 function archiveUser(DeletedUser $user) { }
 ```
 
-Each type represents a specific stage of existence, not just data.
+Each type represents a specific stage of existence, not just data. The type system captures the temporal evolution of objects—you cannot delete what doesn't exist.
 
 ## What You'll Learn
 
 This manual will show you how to:
 
-1. **Define existence** instead of commanding actions
-2. **Make invalid states impossible** instead of checking for them
-3. **Let objects transform naturally** instead of forcing changes
-4. **Trust existence** instead of defending against errors
+1. **Design "what objects are"** instead of "what they should do"
+2. **Make invalid states impossible to create** instead of checking for them
+3. **Express natural object metamorphosis** instead of forcing changes
+4. **Trust correct states** instead of defending against errors
 
 ## Ready?
 

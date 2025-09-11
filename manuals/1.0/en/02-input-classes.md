@@ -7,12 +7,14 @@ permalink: /manuals/1.0/en/02-input-classes.html
 
 # Input Classes
 
-Input Classes are the starting point of every transformation in Be Framework. They carry pure **Immanent** nature—what something already is, its essential identity.
+Input Classes are the starting point of every metamorphosis in Be Framework.
+
+They contain only what the object itself possesses—no external dependencies. Think of it as the object's identity. Since these elements exist within the object, we call this **Immanent** nature.
 
 ## Basic Structure
 
 ```php
-#[Be(UserProfile::class)]  // Metamorphosis destiny
+#[Be(UserProfile::class)]  // The object's destiny
 final class UserInput
 {
     public function __construct(
@@ -59,9 +61,8 @@ final class PaymentInput
 
 ## The Role of Immanent
 
-In Input Classes, everything is **Immanent**—the object's inherent nature that it carries forward into transformation. There are no **Transcendent** forces here; those come later in Being Classes.
+Input Classes contain only **Immanent** elements. These are the object's own data, independent of external dependencies.
 
-This represents the "self" part of the transformation equation:
-**Immanent + Transcendent → New Immanent**
+**Transcendent** elements (powers that the object cannot achieve by itself) are not included here. They appear in Being Classes, which we'll learn about next.
 
-Input Classes provide the foundation—the "what already is" that will encounter the world and become something new.
+Input Classes represent the starting point of metamorphosis—the object's initial form.
