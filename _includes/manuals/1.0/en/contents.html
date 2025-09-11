@@ -16,12 +16,12 @@
     </div>
     <div class="collapse navbar-collapse" id="Navber">
         <ul class="navbar-nav mr-auto">
+            {% assign sidebar_pages = site.pages | get_sidebar_pages: 'en' %}
+            {% for item in sidebar_pages %}
             <li class="nav-item">
-                <a class="nav-link {% if page.permalink == '/manuals/1.0/en/' %}active{% endif %}" href="/manuals/1.0/en/">Introduction</a>
+                <a class="nav-link {% if page.permalink == item.permalink %}active{% endif %}" href="{{ item.url }}">{{ item.title }}</a>
             </li>
-            <li>
-                <a class="nav-link {% if page.permalink == '/manuals/1.0/en/quick-start.html' %}active{% endif %}" href="/manuals/1.0/en/quick-start.html">Quick Start</a>
-            </li>
+            {% endfor %}
         </ul>
     </div>
 </nav>
