@@ -11,20 +11,12 @@ redcarpet:
 highlighter: rouge
 repository: be-framework/be-framework.github.io
 
-# Include markdown files as static files for AI/llms.txt compatibility
+# Process manuals as first-class pages (needed for sidebar/nav)
 include:
-  - "manuals"
-
-# Exclude from processing but include as static files
-keep_files:
   - "manuals"
 
 # Default settings for different file types
 defaults:
-  - scope:
-      path: "manuals/**/*.md"
-    values:
-      sitemap: false
   - scope:
       path: "manuals"
       type: "pages"

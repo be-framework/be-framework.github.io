@@ -47,13 +47,11 @@
 .highlight .nt, .highlight .o, .highlight .p, .highlight .w{
     color:var(--c-default);
 }
+/* --- 記号/演算子 --- */
 .highlight .p{ color:var(--c-punc); }   /* {}, (), :, ; など */
 .highlight .o{ color:var(--c-default); }/* -> :: => などは php.net 風に青 */
 
-/* --- 関数名（最小強調）--- */
-.highlight .nf{ color:var(--c-func); font-weight: normal; }
-/* php.net 完全準拠なら .nf{color:var(--c-default);} */
-
+/* --- 関数名（最小強調）：php.net 完全準拠でデフォルト色 --- */
 /* --- 属性 #[...] を default 扱いに（#の色ブレ防止） --- */
 .highlight .na, .highlight .nd, .highlight .nf { color: var(--c-default); font-weight: normal; }
 
