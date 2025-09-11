@@ -9,7 +9,7 @@ permalink: /manuals/1.0/en/03-being-classes.html
 
 Being Classes are where transformation actually occurs.
 
-The object's own nature (**Immanence**) meets forces provided from the outside (**Transcendence**), and a new being is born. If Input Classes are the "beginning," Being Classes express the "moment of change."
+The object's own nature (**Immanent Nature**) meets forces provided from the outside (**Transcendent Forces**), and a new being is born. If Input Classes are the "beginning," Being Classes express the "moment of change."
 
 ## Basic Structure
 
@@ -43,7 +43,7 @@ Every Being Class follows the same flow of transformation:
 
 ## Entelecheia - Becoming Who You're Meant to Be
 
-The constructor is where a new self is born. To become the intended self, immanent nature meets transcendent forces that the self doesn't possess, and transformation logic unfolds.
+The constructor is where a new self is born. To become the intended self, **Immanent Nature** meets **Transcendent Forces** that the self doesn't possess, and transformation logic unfolds.
 
 ```php
 final class OrderCalculation
@@ -102,4 +102,4 @@ final class OrderValidation
 
 ## Natural Flow
 
-Being Classes don't "do" things—they naturally become what they're meant to be through the interaction of their immanent nature with transcendent forces that the world doesn't possess. This is the principle of wu wei (無為) from Taoist philosophy. They don't change other things; they transform themselves.
+Being Classes don't "do" things—they naturally become what they're meant to be through the interaction of their **Immanent Nature** with **Transcendent Forces** provided by the world. This is the principle of wu wei (無為) from Taoist philosophy. They don't change other things; they transform themselves.
