@@ -1,23 +1,34 @@
-# be-framework
+# Be Framework Documentation
 
-A manual website template based on [http://bearsunday.github.io/](http://bearsunday.github.io/).
+Documentation website for Be Framework - a PHP framework focused on ontological programming.
 
-<img width="550" alt="demo screen" src="https://user-images.githubusercontent.com/529021/143152197-6a988981-87bb-4da4-8a5b-f9abbe8dfe60.png">
+## Overview
 
-## Getting Started
+Be Framework introduces a paradigm shift from "what objects should do" to "what objects are". This documentation explores concepts like metamorphosis, immanence, and transcendence in programming.
 
-1. [Create a new organization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/creating-a-new-organization-from-scratch) for the new manual web site.
+## Local Development
 
-2. [Generate new repository](https://github.blog/2019-06-06-generate-new-repositories-with-repository-templates/) in new organization from this template.
+Start the Jekyll server:
 
-3. git clone your new repo.
-
-## Start local testing server
-
-```
+```bash
 ./bin/serve.sh
 ```
 
-## Demo
+Visit: http://127.0.0.1:4000
 
-https://user-manual-demo.github.io/
+## Structure
+
+- `manuals/1.0/en/` - English documentation
+- `manuals/1.0/ja/` - Japanese documentation
+- `_plugins/` - Jekyll plugins for sidebar generation
+
+## Key Concepts
+
+- **Immanence** - What objects inherently possess
+- **Transcendence** - External powers that enable transformation  
+- **Metamorphosis** - Natural object transformation process
+- **DOING vs BEING** - Action-oriented vs state-oriented programming
+
+## Contributing
+
+This documentation uses Jekyll with multilingual support. See `CLAUDE.md` for detailed development guidelines.
