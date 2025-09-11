@@ -75,7 +75,7 @@ The Be Framework manual is organized in 12 chapters:
 - Main site configuration: `_config.yml`
 - Page layouts: `_layouts/`
 - Reusable components: `_includes/`
-- Styling: Standard Jekyll/Bootstrap setup in `_site/css/`
+- Styling: Source styles live under your theme or `assets/` (do not edit `_site/`; it is build output)
 
 ### Content Guidelines
 - Manual pages use specific Jekyll layouts (`docs-en`, `docs-ja`)
