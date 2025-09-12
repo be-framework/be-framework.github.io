@@ -234,9 +234,9 @@ Constructor arguments reveal preconditions. Properties reveal postconditions:
 final class ProcessedOrder
 {
     public function __construct(
-        #[Input] string $productCode,    // Precondition: valid product code
-        #[Input] int $paymentAmount,     // Precondition: positive amount
-        #[Input] int $customerAge        // Precondition: valid age
+        #[Input] #[Verified] string $productCode,    // Precondition: verified product code
+        #[Input] int $paymentAmount,                 // Precondition: payment amount
+        #[Input] #[Adult] int $age                   // Precondition: adult age
     ) {
         // Can only exist when preconditions are satisfied
         $this->orderNumber = $this->generateOrderNumber();
