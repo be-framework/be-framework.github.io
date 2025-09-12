@@ -13,9 +13,9 @@ permalink: /manuals/1.0/ja/faq.html
 
 ### Q. これは新しい"プログラミングパラダイム"ですか？
 
-A. はい。Be Frameworkは、従来のDO指向（Imperative = "How?", OOP = "Who?", FP = "What?"）に対して、BE指向（"Whether?" = その状態は存在できるか）を提案します。
+A. はい。Be Frameworkは、 時間的存在を一次市民に据え、「何をするか」ではなく「何であるか」に基づいて設計します。
 
-時間的存在を一次市民に据え、「何をするか」ではなく「何であるか」に基づいて設計します。思想面では大きなパラダイム転換ですが、実装面ではOOP/FP/DDDと共存可能で、既存スタイルを置き換える必要はありません。
+思想面では大きなパラダイム転換ですが、実装面ではOOP/FP/DDDと共存可能で、既存スタイルを置き換える必要はありません。
 
 ---
 
@@ -29,7 +29,7 @@ Be Frameworkは「存在条件と時間的変容」を中核に据える設計�
 
 ### Q2. OOP/FPのどちらですか？
 
-A. どちらにも適用できます。
+A. どちらの要素もあります。
 
 不変性・参照透明性を重視しながら、コンストラクタでの一回完結の変容（エンテレケイア）をOOPの枠組みで実現しています。
 
@@ -39,11 +39,11 @@ A. 不正状態を事前に生成不能にできます。
 
 防御的なif/guard文が激減し、型＝到達可能状態がAPI仕様となります。
 
-### Q4. 「型＝時間的状態」とは何ですか？
+### Q4. 「時間的存在の型」とは何ですか？
 
-A. `ValidatedUser`、`SavedUser`、`DeletedUser`など、進行中の"いつ"を型名で表現しています。
+A. `ValidatedUser`、`SavedUser`、`DeletedUser`など、進行中の特定の時を型名で表現しています。
 
-時間とドメインは不可分です。詳細は[メタモルフォーシス](./05-metamorphosis.html)をご覧ください。
+Be Frameworkは時間とドメインは不可分と考えます。詳細は[メタモルフォーシス](./05-metamorphosis.html)をご覧ください。
 
 ---
 
@@ -88,6 +88,32 @@ A. 変数名＝意味＋制約です。`$email`は「有効なEmail」でなけ�
 分散しがちな検証（controller/validator/docs）を型に統合します。
 
 （詳細：[意味変数](./06-semantic-variables.html)）
+
+### Q8.5. 意味は違うが制約が同じ変数（`$userId`、`$authorId`など）はどう扱いますか？
+
+A. 共通の基底クラスやトレイトで制約を共有し、継承で意味を分離します。
+
+```php
+// src/Semantic/Abstract/Id.php - 共通制約を持つ基底クラス
+namespace App\Semantic\Abstract;
+
+abstract readonly class Id {
+    public function __construct(public string $value) {
+        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}/', $value)) {
+            throw new InvalidIdException();
+        }
+    }
+}
+
+// src/Semantic/UserId.php - 意味変数として継承
+readonly class UserId extends \App\Semantic\Abstract\Id {}
+readonly class AuthorId extends \App\Semantic\Abstract\Id {}
+
+// 使用例：変数名に意味が込められる
+function updateArticle(UserId $userId, AuthorId $authorId) {
+    // $userIdと$authorIdは混同不可能
+}
+```
 
 ### Q9. 「存在理由層（Reason）」とは何ですか？
 
@@ -159,15 +185,9 @@ A. Reasonで。
 
 保存や送信の手段はReasonに集約し、存在（状態）定義と分離します。
 
-### Q18. フレームワーク依存はどうなりますか？
-
-A. コアはPHP標準＋DI（例：Ray.Di）です。
-
-Laravel/Symfony等へはアダプタで連携可能です。
-
 ### Q19. 静的解析やIDE補完は効きますか？
 
-A. 型が"状態"なので非常に効きます。
+A. 型が"状態"なので効果的に効きます。
 
 ユニオン型で分岐が明示化され、補完も安全です。
 
@@ -177,7 +197,7 @@ A. 型が"状態"なので非常に効きます。
 
 ### Q20. ログはどう残りますか？
 
-A. 意味的ログを推奨しています（Koriym.SemanticLogger連携）。
+A. 従来のログと違い、実行全体が型づけされた意味的ログになります。
 
 変容（from/to/理由/証跡）を構造化JSONで記録します。
 
@@ -188,22 +208,6 @@ A. 意味的ログを推奨しています（Koriym.SemanticLogger連携）。
 A. `$been`（自己証明）＋意味的ログで完全な監査証跡を提供可能です。
 
 個人情報はReasonレイヤで最小権限を徹底します。
-
----
-
-## 6) モデリング指針 & アンチパターン
-
-### Q22. よくある落とし穴は何ですか？
-
-A. 以下のような点に注意が必要です：
-
-* なんでもかんでもReasonに丸投げする（肥大化）
-* `Input`に外部依存を混入する（内在が汚れる）
-* "状態名が曖昧"で時間性が不明確（`Processed?`などの曖昧語）
-
-### Q23. いつBeを使わない方がいいですか？
-
-A. 単発スクリプト／超軽量なCRUDで時間性や存在条件が希薄な場合は、従来手法の方が速いことがあります。
 
 ---
 
@@ -230,6 +234,7 @@ A. 以下の手順をお勧めします：
 A. 構想段階の機能です。
 
 確定できない判断を専門家やAIへ委譲し、確定性と不確実性を一つのフレームで扱う予定です。
+決定を第一級市民として外部から制御可能にします。
 
 （詳細：[型駆動変容](./07-type-driven-metamorphosis.html)末尾の注記）
 
