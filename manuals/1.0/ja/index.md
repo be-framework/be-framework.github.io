@@ -20,7 +20,7 @@ permalink: /manuals/1.0/ja/
 ## [4. 最終オブジェクト](04-final-objects.html)
 変容の目的地 - 完全に変容した存在
 
-## [5. 変容パターン](05-metamorphosis-patterns.html)
+## [5. 変容パターン](05-metamorphosis.html)
 単純な連鎖、分岐する運命、複雑な変容
 
 ## [6. 意味変数](06-semantic-variables.html)

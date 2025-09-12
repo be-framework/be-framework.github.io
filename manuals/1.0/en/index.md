@@ -21,7 +21,7 @@ Intermediate transformations through Immanent + Transcendent interactions
 ## [4. Final Objects](04-final-objects.html)
 The destination of metamorphosis - complete transformed beings
 
-## [5. Metamorphosis Patterns](05-metamorphosis-patterns.html)
+## [5. Metamorphosis Patterns](05-metamorphosis.html)
 Simple chains, branching destinies, and complex transformations
 
 ## [6. Semantic Variables](06-semantic-variables.html)

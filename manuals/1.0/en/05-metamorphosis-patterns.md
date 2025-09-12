@@ -75,8 +75,8 @@ final class OrderProcessing
     public readonly ShippingResult $shipping;
     
     public function __construct(
-        #[Input] Order $order,                    // Immanent
-        #[Inject] Becoming $becoming              // Transcendent
+        #[Input] Order $order,                    // Intrinsic nature
+        #[Inject] Becoming $becoming              // External environment
     ) {
         // Nested transformations
         $this->payment = $becoming(new PaymentInput($order->getPayment()));
