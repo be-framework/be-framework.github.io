@@ -7,6 +7,10 @@ permalink: /manuals/1.0/en/10-semantic-logging.html
 
 # Semantic Logging
 
+> "What we record becomes memory; what we remember becomes truth"
+>
+> —Adaptation of Orwell's concept from '1984' (1949)
+
 ## Overview
 
 Be Framework implements **semantic logging** functionality that automatically records object metamorphosis processes as structured logs.
