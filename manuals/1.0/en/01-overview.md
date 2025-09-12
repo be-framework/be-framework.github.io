@@ -19,11 +19,11 @@ $activeUser = User::find($id);
 $deletedUser = new DeletedUser($activeUser);
 ```
 
-**DeletedUser?** What is that?
+**`DeletedUser`?** What is that?
 
-This question is actually your doorway into a new world of programming—one that invites you to think in **completely different ways**.
+This question is your doorway into a new world of programming—one that invites you to think in **a completely different way**.
 
-## From 'What to Do' to 'What to Be'
+## From What to Do to What to Be
 
 Traditional programming focuses on **DOING (actions)**:
 ```php
@@ -56,7 +56,7 @@ When you focus on BEING:
 
 The difference is in the types themselves:
 ```php
-// Traditional: generic types
+// Traditional: general User type
 function processUser(User $user) { }
 
 // Be Framework: specific states of being
@@ -65,7 +65,7 @@ function saveUser(SavedUser $user) { }
 function archiveUser(DeletedUser $user) { }
 ```
 
-Each type represents a specific stage of existence, not just data. The type system captures the temporal evolution of objects—you cannot delete what doesn't exist.
+Each type represents a specific stage of existence, not just data. The type system captures the temporal evolution of objects—you cannot delete what does not exist.
 
 ## What You'll Learn
 
@@ -78,6 +78,6 @@ This manual will show you how to:
 
 ## Ready?
 
-Let's start with the foundation: [Input Classes →]({{ '/manuals/1.0/en/02-input-classes.html' | relative_url }})
+Let's start with the foundation: [Input Classes →]({% link manuals/1.0/en/02-input-classes.md %})
 
 You'll build your first Being—and discover why `DeletedUser` makes perfect sense.
