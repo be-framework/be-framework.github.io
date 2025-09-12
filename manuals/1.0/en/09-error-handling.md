@@ -141,6 +141,6 @@ Semantic exceptions make failure reasons clear, enabling users to understand spe
 
 ---
 
-**Next**: Learn about Be Framework's philosophical foundations in [The Philosophy Behind](10-philosophy-behind.html).
+**Next**: Learn about the evolution of programming paradigms in [From Doing to Being](10-from-doing-to-being-final.html).
 
 *"Semantic exceptions specifically teach us why existence is impossible."*

@@ -1,8 +1,8 @@
 ---
 layout: docs-en
-title: "12. From Doing to Being: The Bigger Picture"
+title: "10. From Doing to Being: The Bigger Picture"
 category: Manual
-permalink: /manuals/1.0/en/12-from-doing-to-being-final.html
+permalink: /manuals/1.0/en/10-from-doing-to-being-final.html
 ---
 
 # From Doing to Being: The Bigger Picture
@@ -120,3 +120,5 @@ Welcome to programming where code doesn't just execute—it exists, transforms, 
 ---
 
 > *"We thought we were learning a framework. We were actually discovering a new way to see."*
+> 
+> Readers interested in the philosophical foundations behind this paradigm shift can explore [The Philosophy Behind](12-philosophy-behind.html), where deeper intellectual roots including Heidegger's Dasein, Laozi's Wu Wei, and Buddhist interdependence are examined.

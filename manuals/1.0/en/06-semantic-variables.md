@@ -226,16 +226,29 @@ Semantic Variables make **impossible states impossible**. Invalid email addresse
 
 The type system itself becomes a **domain language**, where each type speaks of what can exist in your business domain.
 
-Looking at function signatures, they become specifications:
+## Design by Contract
+
+Constructor arguments reveal preconditions. Properties reveal postconditions:
 
 ```php
-function processOrder(ProductCode $product, PaymentAmount $amount, CustomerAge $age)
+final class ProcessedOrder
 {
-    // The signature IS the specification
+    public function __construct(
+        #[Input] string $productCode,    // Precondition: valid product code
+        #[Input] int $paymentAmount,     // Precondition: positive amount
+        #[Input] int $customerAge        // Precondition: valid age
+    ) {
+        // Can only exist when preconditions are satisfied
+        $this->orderNumber = $this->generateOrderNumber();
+        $this->processedAt = new DateTime();
+    }
+    
+    public readonly string $orderNumber;    // Postcondition: order number always exists
+    public readonly DateTime $processedAt;  // Postcondition: processed time always exists
 }
 ```
 
-This function accepts only valid product codes, positive amounts, and valid ages. No need to read documentation—the types tell the whole story.
+Constructor arguments express **preconditions** (conditions that must be satisfied for this object to exist), while `public readonly` properties express **postconditions** (states this object guarantees).
 
 Defensive programming becomes unnecessary. Argument validation, null checks, range verification, inventory confirmation, geographic constraints—semantic variables guarantee all of these. Code can focus on its true purpose: implementing business logic.
 

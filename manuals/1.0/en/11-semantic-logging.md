@@ -7,87 +7,52 @@ permalink: /manuals/1.0/en/11-semantic-logging.html
 
 # Semantic Logging
 
-> "Every transformation tells a story. Semantic logging captures that narrative."
+## Overview
 
-Semantic logging in Be Framework automatically captures the complete metamorphosis journey, providing deep observability into object transformations.
+Be Framework implements **semantic logging** functionality that automatically records object metamorphosis processes as structured logs.
 
-## What is Semantic Logging?
+### Basic Concept
 
-Traditional logging captures events. **Semantic logging captures meaning** - the ontological journey of objects through their transformations.
+**Traditional Logs**: Fragmented event records  
+**Semantic Logs**: Complete metamorphosis story records of objects
 
-Be Framework automatically logs every metamorphosis without any code changes required.
+```php
+// Object metamorphosis...
+#[Be(RegisteredUser::class)]
+final class UserInput { /* ... */ }
 
-## Automatic Log Structure
+final class RegisteredUser { /* ... */ }
 
-### Open Context (Transformation Begins)
-```json
+// Automatically recorded as structured logs
 {
-  "open": {
-    "context": {
-      "fromClass": "UserInput",
-      "beAttribute": "#[Be(RegisteredUser::class)]",
-      "immanentSources": {
-        "email": "user@example.com"
-      },
-      "transcendentSources": {
-        "UserRepository": "App\\Repository\\UserRepository"
-      }
-    }
+  "metamorphosis": {
+    "from": "UserInput",
+    "to": "RegisteredUser",
+    // Complete metamorphosis information...
   }
 }
 ```
 
-### Close Context (Transformation Completes)
-```json
-{
-  "close": {
-    "context": {
-      "be": "FinalDestination",
-      "properties": {
-        "userId": "user_123",
-        "email": "user@example.com"
-      }
-    }
-  }
-}
-```
+## Technical Foundation
 
-## Configuration and Usage
+Integrated with [Koriym.SemanticLogger](https://github.com/koriym/Koriym.SemanticLogger):
 
-### Enabling Semantic Logging
-Be Framework automatically uses [Koriym.SemanticLogger](https://github.com/koriym/Koriym.SemanticLogger) for structured semantic logging.
+- **Type-safe structured logging**
+- **Open/Event/Close pattern**
+- **JSON schema validation**
+- **Hierarchical operation tracking**
 
-**TBD** - Configuration details for enabling/disabling log output
+## Value Provided
 
-### Schema-Validated Logs
-Semantic logs follow JSON schema for type safety and AI analysis:
+### Development & Debugging
+Complete tracking of object metamorphosis makes it easy to understand complex processing flows and identify problems.
 
-- **Type-safe structured logging** with validation
-- **AI-native analysis** capabilities  
-- **Hierarchical workflow context** (intent → events → result)
+### Audit & Compliance
+Since all metamorphoses are recorded as structured data, complete audit trails can be provided.
 
-### Custom Log Context
-**TBD** - How to add custom context to metamorphosis logs
-
-### Log Processing
-**TBD** - Integration with monitoring tools and log aggregation
-
-## Log Analysis Examples
-
-```bash
-# Find failed transformations
-jq '.close.context.be == "DestinationNotFound"' logs/semantic.log
-
-# Follow specific user journeys
-jq '.open.context.immanentSources.email == "user@example.com"' logs/semantic.log
-```
-
-## The Power of Ontological Observability
-
-Semantic logging transforms debugging from **"what happened?"** to **"what became?"**
-
-Instead of tracking method calls, you track the natural evolution of objects through their intended forms - providing unprecedented insight into your application's true behavior.
+### System Analysis
+Analysis of object growth patterns and processing efficiency becomes possible.
 
 ---
 
-*"In traditional logging, we track events. In semantic logging, we witness becoming."*
+**Detailed usage methods, configuration examples, and practical samples will be documented at a later date.**

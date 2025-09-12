@@ -21,8 +21,8 @@ Intermediate transformations through Immanent + Transcendent interactions
 ## [4. Final Objects](04-final-objects.html)
 The destination of metamorphosis - complete transformed beings
 
-## [5. Metamorphosis Patterns](05-metamorphosis.html)
-Simple chains, branching destinies, and complex transformations
+## [5. Metamorphosis](05-metamorphosis.html)
+Inseparability of time and domain, self-determination of destiny
 
 ## [6. Semantic Variables](06-semantic-variables.html)
 Domain-specific validation and ontological type safety
@@ -36,14 +36,11 @@ Understanding transcendent capabilities and contextual ontologies
 ## [9. Error Handling & Validation](09-error-handling.html)
 Semantic exceptions and multilingual error messages
 
-## [10. The Philosophy Behind](10-philosophy-behind.html)
-Wu Wei, Immanent/Transcendent principles, and BE = Be, Everything
+## [10. From Doing to Being: The Bigger Picture](10-from-doing-to-being-final.html)
+Understanding the paradigm shift and its place in programming history
 
 ## [11. Semantic Logging](11-semantic-logging.html)
-Automatic metamorphosis tracking and ontological observability
-
-## [12. From Doing to Being: The Bigger Picture](12-from-doing-to-being-final.html)
-Understanding the paradigm shift and its place in programming history
+Structured recording and audit trails of object metamorphosis
 
 ---
 
