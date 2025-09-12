@@ -226,16 +226,29 @@ try {
 
 型システムそのものが**ドメイン言語**となり、各型があなたのビジネスドメインで何が存在可能かを語ります。
 
-関数シグネチャを見れば、それが仕様書になります：
+## 契約による設計
+
+コンストラクタの引数は事前条件を表し、プロパティは事後条件を表します：
 
 ```php
-function processOrder(ProductCode $product, PaymentAmount $amount, CustomerAge $age)
+final class ProcessedOrder
 {
-    // シグネチャが仕様です
+    public function __construct(
+        #[Input] #[Verified] string $productCode,    // 事前条件：検証済み商品コード
+        #[Input] int $paymentAmount,                 // 事前条件：支払い金額
+        #[Input] #[Adult] int $age                   // 事前条件：成人年齢
+    ) {
+        // 事前条件が満たされた時のみ存在可能
+        $this->orderNumber = $this->generateOrderNumber();
+        $this->processedAt = new DateTime();
+    }
+    
+    public readonly string $orderNumber;    // 事後条件：注文番号は必ず存在
+    public readonly DateTime $processedAt;  // 事後条件：処理時刻は必ず存在
 }
 ```
 
-この関数は有効な商品コード、正の金額、有効な年齢のみを受け入れます。ドキュメントを読む必要はありません—型が全てを物語っています。
+コンストラクタの引数は**事前条件**（このオブジェクトが存在するために満たされなければならない条件）を表し、`public readonly`プロパティは**事後条件**（このオブジェクトが保証する状態）を表現します。
 
 防御的プログラミングは不要になります。引数の検証、null チェック、範囲確認、在庫確認、地理的制約—これらはすべて意味変数が保証します。コードは本来の目的であるビジネスロジックの実装に集中できるのです。
 
