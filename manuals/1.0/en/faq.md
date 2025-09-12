@@ -12,7 +12,9 @@ permalink: /manuals/1.0/en/faq.html
 ## 0) TL;DR
 
 **Q. Is this a new "programming paradigm"?**
-A. **Yes (as a design paradigm)**. Built on top of OOP/FP/DDD, it's an **ontological programming model** that makes "whether something can exist (WHETHER?)" and "type = temporal state" first-class citizens. It's an orthogonal extension, not a replacement.
+A. **Yes**. Be Framework proposes BE-oriented programming ("Whether?" = can this state exist?) in contrast to traditional DO-oriented approaches (Imperative = "How?", OOP = "Who?", FP = "What?").
+
+It makes temporal existence first-class citizens and designs based on "what something is" rather than "what it does." While it's a significant paradigm shift philosophically, implementation-wise it coexists with OOP/FP/DDD and doesn't require replacing existing styles.
 
 ---
 
