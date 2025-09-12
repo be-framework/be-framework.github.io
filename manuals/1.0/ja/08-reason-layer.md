@@ -5,185 +5,178 @@ category: Manual
 permalink: /manuals/1.0/ja/08-reason-layer.html
 ---
 
-# 存在理由層: 存在論的能力
+# 存在理由層
 
-> 「文脈は装飾ではありません—それは存在の条件そのものです。」
+> 「道具は、それが道具として存在するために、特定の関連の全体性のなかに属している」
+>
+> 　　—ハイデガー『存在と時間』第15節（1927年）
 
-存在理由層は**超越的**な力—存在の変容を形成する文脈的能力を体現します。
+## なぜこの名前か？
 
-## 単純なサービスを超えて
+存在理由層には2つの「理由」があります。
 
-従来の依存性注入はツールを提供します：
+### 1. 型マッチングの理由
 
-```php
-public function __construct(
-    EmailService $emailService,     // ただのツール
-    DatabaseService $database       // ただのツール
-) {}
-```
-
-## 存在論的能力
-
-存在理由層は**文脈的存在能力**を提供します：
+まず、次の変容先を決定する判断基準としての理由：
 
 ```php
-public function __construct(
-    #[Input] string $message,                    // 内在的
-    #[Inject] #[English] CulturalGreeting $greeting,  // 超越的能力
-    #[Inject] #[Formal] BusinessProtocol $protocol     // 超越的文脈
-) {
-    // 能力と文脈が変容を形成する
+final class BeGreeting
+{
+    public readonly CasualStyle|FormalStyle $being;
+    
+    public function __construct(
+        #[Input] string $name,
+        #[Input] string $style
+    ) {
+        // 'formal'という条件が FormalStyle を選ぶ理由
+        $this->being = $style === 'formal' 
+            ? new FormalStyle() 
+            : new CasualStyle();
+    }
 }
 ```
 
-## 存在理由クラス: 存在の方法
+### 2. 存在の理由
 
-存在理由クラスは**サービスではありません**—文脈的な存在の方法です：
+次に、オブジェクトがその存在でいるための根拠としての理由：
+
+```php
+final class FormalGreeting
+{
+    public readonly string $greeting;
+    public readonly string $businessCard;
+    
+    public function __construct(
+        #[Input] string $name,           // 内在的性質
+        #[Input] FormalStyle $being      // 存在理由
+    ) {
+        // FormalStyleが、このオブジェクトがFormalGreetingでいる理由を提供
+        $this->greeting = $being->formalGreeting($name);
+        $this->businessCard = $being->formalBusinessCard($name);
+    }
+}
+```
+
+`FormalGreeting`が`FormalGreeting`として存在できるのは、`FormalStyle`が必要な振る舞いを提供するからです。これが存在の理由です。
+
+## 存在理由クラスの定義
+
+存在理由クラスは、特定の存在様式を実現するメソッドを提供します：
 
 ```php
 namespace App\Reason;
 
-final class CasualStyle
+final class FormalStyle
 {
-    public function format(string $message): string
+    public function formalGreeting(string $name): string
     {
-        return strtolower($message) . " 😊";
+        return "おはようございます、{$name}様。";
     }
     
-    public function getGreeting(): string
+    public function formalBusinessCard(string $name): string
     {
-        return "やあ！";
+        return "【{$name}様】\n正式なご挨拶をさせていただきます。";
     }
 }
 
-final class FormalStyle  
+final class CasualStyle  
 {
-    public function format(string $message): string
+    public function casualGreeting(string $name): string
     {
-        return ucfirst($message) . "。";
+        return "やあ、{$name}！";
     }
     
-    public function getGreeting(): string
+    public function casualMessage(string $name): string
     {
-        return "おはようございます。";
+        return "Hi {$name}! 😊 よろしく！";
     }
 }
 ```
 
-これらは**存在論的モード**—特定の文脈で存在する異なる方法です。
+## raison d'être としての存在理由
 
-## 文脈駆動変容
-
-同じオブジェクトが文脈的能力に基づいて異なって変容します：
+存在理由層は、オブジェクトの**raison d'être**（レーゾンデートル：存在理由）を提供します。
 
 ```php
-final class FormattedGreeting
-{
-    public readonly string $greeting;
-    public readonly string $signature;
-    
-    public function __construct(
-        #[Input] string $name,
-        #[Input] string $message,
-        #[Inject] StyleReason $style       // 文脈が変容を形成する
-    ) {
-        $this->greeting = $style->getGreeting() . " " . $name;
-        $this->signature = $style->format($message);
-    }
-}
-```
-
-## 文化的文脈存在論
-
-アプリケーションは自然に文化的文脈に適応します：
-
-```php
-final class JapaneseEtiquette
-{
-    public function addHonorific(string $name): string
-    {
-        return $name . "さん";
-    }
-    
-    public function formatGreeting(string $message): string
-    {
-        return "いつもお世話になっております。" . $message;
-    }
-}
-
-final class AmericanEtiquette
-{
-    public function addHonorific(string $name): string
-    {
-        return $name;  // 敬語は不要
-    }
-}
-```
-
-## 存在論としての戦略
-
-戦略パターンとは異なり、存在理由クラスはアルゴリズムではなく**存在の方法**を表します：
-
-```php
-interface PricingOntology
-{
-    public function interpretValue(Money $price): PriceCategory;
-}
-
-final class LuxuryMarketOntology implements PricingOntology
-{
-    // 高級文脈では、高価格は独占性を意味する
-}
-
-final class MassMarketOntology implements PricingOntology  
-{
-    // 大衆市場では、高価格は障壁を意味する
-}
-```
-
-## 複数の文脈的能力
-
-```php
-final class InternationalMessage
+final class ValidatedUser
 {
     public function __construct(
-        #[Input] string $recipientName,
-        #[Input] string $message,
-        #[Inject] CulturalEtiquette $culture,     // 文化的文脈
-        #[Inject] CommunicationProtocol $protocol, // コミュニケーション文脈
-        #[Inject] FormalityLevel $formality       // 形式レベル文脈
+        #[Input] string $email,
+        #[Input] ValidationReason $raisonDEtre    // この存在の raison d'être
     ) {
-        $name = $culture->addHonorific($recipientName);
-        $greeting = $culture->formatGreeting($message);
-        $styled = $formality->apply($greeting);
-        
-        $this->content = $protocol->format($styled);
+        // ValidationReasonが、ValidatedUserの存在理由を提供
     }
 }
 ```
 
-## 依存性解決
+**raison d'être**とは：
+- なぜそのオブジェクトがその存在でいられるのか
+- `ValidatedUser`の raison d'être は検証能力
+- `SavedUser`の raison d'être は保存能力
+- `DeletedUser`の raison d'être は削除・アーカイブ能力
 
-依存性注入による文脈認識バインディング：
+存在理由オブジェクトがなければ、そのオブジェクトはその状態として存在できません。これがBeフレームワークの「存在理由層」の名前の由来です。
 
+## #[Inject]との違い
+
+存在理由層の独自価値は、従来の依存性注入との比較で明確になります：
+
+**従来のInject**：
 ```php
-$injector->bind(PaymentGateway::class)
-    ->annotatedWith(Production::class)
-    ->to(StripeGateway::class);
-    
-$injector->bind(PaymentGateway::class)
-    ->annotatedWith(Testing::class)
-    ->to(MockGateway::class);
+public function __construct(
+    #[Input] string $email,
+    #[Inject] EmailValidator $emailValidator,
+    #[Inject] PasswordChecker $passwordChecker, 
+    #[Inject] SecurityAuditor $auditor,
+    #[Inject] DatabaseSaver $saver
+) {
+    // バラバラの道具を個別に使用
+}
 ```
 
-## 革命
+**存在理由層**：
+```php
+public function __construct(
+    #[Input] string $email,
+    #[Input] UserValidationReason $reason    // 関連道具がまとまった存在理由
+) {
+    // ValidatedUserになるための道具一式が提供される
+    $this->result = $reason->validateUser($email, $this);
+}
+```
 
-存在理由層は依存性注入を**ツール提供**から**存在論的文脈**に変換します。
+**違い**：
+- **Inject**: 個別の道具を別々に注入
+- **存在理由層**: 「その状態になるための道具セット」として意味的にまとまって提供
 
-オブジェクトは単にサービスを受け取るのではなく、環境に適した**存在の方法**を受け取ります。
+**価値**：
+- **概念的まとまり**: 「ValidatedUserになるには何が必要？」が明確
+- **テストの簡素化**: 存在理由オブジェクト一つをモックすれば済む
+- **関心の分離**: 関連する道具が一か所に集約
+
+## 委譲パターンとしての構造
+
+存在理由層は、ダブルディスパッチに似た構造を持ちます。オブジェクトが存在理由を受け取り、自身の状態実現を存在理由に委譲します：
+
+```php
+final class SavedUser
+{
+    public function __construct(
+        #[Input] UserData $data,
+        #[Input] SaveReason $reason    // 存在理由を受け取り
+    ) {
+        // 自身の保存操作を存在理由に委譲
+        $this->result = $reason->saveUser($data, $this);
+    }
+}
+```
+
+オブジェクト型（`SavedUser`）と道具型（`SaveReason`）の組み合わせで振る舞いが決定される点はダブルディスパッチと類似していますが、相互呼び出しではなく一方向的な委譲です。
+
+`SavedUser`になるためには保存用の道具セットが、`ValidatedUser`になるためには検証用の道具セットが必要です。存在理由オブジェクトは「この状態になるには何が必要か？」を明確に整理し、単一責任原則に従うため、テストも簡潔になります。
 
 ---
 
-**次へ**: 意味的例外が意味を保持する[エラーハンドリング & 検証](09-error-handling.html)について学びましょう。
+**次へ**: エラーの意味保持について[検証とエラーハンドリング](09-error-handling.html)で学びましょう。
 
-> 「存在理由層は世界の能力がオブジェクトの性質と出会う場所—意味のある成長のための文脈的条件として。」
+> 「存在理由層は、オブジェクトがその存在様式を実現するために必要な道具セットを提供します。」
