@@ -42,6 +42,9 @@ Structured recording and audit trails of object metamorphosis
 ## [11. Reference](./11-reference-resources.html)
 Essential resources and links for framework development
 
+## [FAQ](./faq.html)
+Frequently asked questions and answers
+
 ---
 
 *"Be, Don't Do"*
