@@ -192,6 +192,6 @@ public function testCollectsAllValidationErrors(): void
 
 ---
 
-**次へ**: より深い原理を理解するために[背後にある哲学](10-philosophy-behind.html)について学びましょう。
+**次へ**: オブジェクト変容の記録について[意味的ログ](10-semantic-logging.html)について学びましょう。
 
 *「意味的例外は失敗を報告するだけではありません—存在できないものの意味を保持します。」*

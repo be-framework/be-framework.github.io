@@ -20,8 +20,8 @@ permalink: /manuals/1.0/ja/
 ## [4. 最終オブジェクト](04-final-objects.html)
 変容の目的地 - 完全に変容した存在
 
-## [5. 変容パターン](05-metamorphosis.html)
-単純な連鎖、分岐する運命、複雑な変容
+## [5. メタモルフォーシス](05-metamorphosis.html)
+時間とドメインの不可分性、運命の自己決定
 
 ## [6. 意味変数](06-semantic-variables.html)
 ドメイン固有の検証と存在論的型安全性
@@ -35,16 +35,13 @@ permalink: /manuals/1.0/ja/
 ## [9. エラーハンドリング & 検証](09-error-handling.html)
 意味的例外と多言語エラーメッセージ
 
-## [10. 背後にある哲学](10-philosophy-behind.html)
-無為、内在/超越原理、そしてBE = Be, Everything
+## [10. 意味的ログ](10-semantic-logging.html)
+オブジェクト変容の構造化記録と監査証跡
 
-## [11. 意味的ログ](11-semantic-logging.html)
-自動変容追跡と存在論的観測可能性
-
-## [12. Doingから Beingへ: より大きな視点](12-from-doing-to-being-final.html)
-パラダイムシフトとプログラミング史における位置の理解
+## [11. リファレンス](11-reference-resources.html)
+フレームワーク開発に必要なリソースとリンク集
 
 ---
 
-*「Beフレームワークでは、オブジェクトに何かをさせるのではありません。オブジェクトが最も深い本質において既にあるものになるための条件を作り出します。」*
+> Be, Don't Do
 

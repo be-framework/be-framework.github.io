@@ -34,6 +34,3 @@ Naming standards for project development:
 Be Framework's philosophical foundations:
 - [**The Philosophy Behind**](12-philosophy-behind.html) - Wu Wei, ontological programming, and philosophical roots
 
----
-
-*"Be, Don't Do"*
