@@ -28,9 +28,9 @@ Essential resources and links for Be Framework project development.
 
 ### Naming Conventions
 Naming standards for project development:
-- [**Be Framework Naming Standards**](convention/naming-standards.html) - Being-oriented naming principles
+- [**Be Framework Naming Standards**](./convention/naming-standards.html) - Being-oriented naming principles
 
 ### Theoretical Background
 Be Framework's philosophical foundations:
-- [**The Philosophy Behind**](12-philosophy-behind.html) - Wu Wei, ontological programming, and philosophical roots
+- [**The Philosophy Behind**](./12-philosophy-behind.html) - Wu Wei, ontological programming, and philosophical roots
 

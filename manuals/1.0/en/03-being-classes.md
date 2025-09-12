@@ -20,10 +20,10 @@ The object's own nature (**Immanent Nature**) meets forces provided from the out
 ## Basic Structure
 
 ```php
-final class UserProfile
+final readonly class UserProfile
 {
-    public readonly string $displayName;
-    public readonly bool $isValid;
+    public string $displayName;
+    public bool $isValid;
     
     public function __construct(
         #[Input] string $name,                    // Immanent
@@ -52,11 +52,11 @@ Every Being Class follows the same flow of transformation:
 The constructor is where a new self is born. To become the intended self, **Immanent Nature** meets **Transcendent Forces** that the self doesn't possess, and transformation logic unfolds.
 
 ```php
-final class OrderCalculation
+final readonly class OrderCalculation
 {
-    public readonly Money $subtotal;
-    public readonly Money $tax;
-    public readonly Money $total;
+    public Money $subtotal;
+    public Money $tax;
+    public Money $total;
     
     public function __construct(
         #[Input] array $items,                    // Immanent
@@ -83,11 +83,11 @@ Being Classes often serve as bridges, preparing data for final transformation:
 
 ```php
 #[Be([SuccessfulOrder::class, FailedOrder::class])]  // Multiple destinies
-final class OrderValidation
+final readonly class OrderValidation
 {
-    public readonly bool $isValid;
-    public readonly array $errors;
-    public readonly SuccessfulOrder|FailedOrder $being;  // Being Property
+    public bool $isValid;
+    public array $errors;
+    public SuccessfulOrder|FailedOrder $being;  // Being Property
     
     public function __construct(
         #[Input] Money $total,                    // Immanent

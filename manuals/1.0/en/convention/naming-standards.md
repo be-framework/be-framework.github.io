@@ -21,15 +21,15 @@ Our naming reflects this fundamental shift from imperative to existential thinki
 
 ```php
 // ✅ Correct
-final class UserInput
-final class OrderInput  
-final class DataInput
-final class PaymentInput
+final readonly class UserInput
+final readonly class OrderInput  
+final readonly class DataInput
+final readonly class PaymentInput
 
 // ❌ Avoid
-final class UserData          // Too generic
-final class CreateUserRequest // Action-oriented
-final class UserCommand       // Imperative thinking
+final readonly class UserData          // Too generic
+final readonly class CreateUserRequest // Action-oriented
+final readonly class UserCommand       // Imperative thinking
 ```
 
 ### Being Classes
@@ -38,19 +38,19 @@ final class UserCommand       // Imperative thinking
 
 ```php
 // ✅ Correct - Being prefix (recommended)
-final class BeingUser
-final class BeingOrder
-final class BeingData
-final class BeingPayment
+final readonly class BeingUser
+final readonly class BeingOrder
+final readonly class BeingData
+final readonly class BeingPayment
 
 // ✅ Acceptable - Being suffix
-final class UserBeing
-final class OrderBeing
+final readonly class UserBeing
+final readonly class OrderBeing
 
 // ❌ Avoid
-final class UserValidator     // Action-oriented
-final class OrderProcessor    // What it does, not what it is
-final class DataTransformer   // Imperative thinking
+final readonly class UserValidator     // Action-oriented
+final readonly class OrderProcessor    // What it does, not what it is
+final readonly class DataTransformer   // Imperative thinking
 ```
 
 ### Final Objects
@@ -59,35 +59,35 @@ final class DataTransformer   // Imperative thinking
 
 ```php
 // ✅ Correct - State of being
-final class ValidatedUser
-final class ProcessedOrder
-final class Success
-final class Failure
-final class ApprovedLoan
-final class RejectedApplication
+final readonly class ValidatedUser
+final readonly class ProcessedOrder
+final readonly class Success
+final readonly class Failure
+final readonly class ApprovedLoan
+final readonly class RejectedApplication
 
 // ❌ Avoid  
-final class UserResponse      // Implementation detail
-final class OrderResult       // Generic
-final class ProcessingOutput  // Action-oriented
+final readonly class UserResponse      // Implementation detail
+final readonly class OrderResult       // Generic
+final readonly class ProcessingOutput  // Action-oriented
 ```
 
 ## Property Naming
 
 ### Being Property
-**Pattern**: `public readonly {Type1}|{Type2} $being;`
+**Pattern**: `public {Type1}|{Type2} $being;`
 **Purpose**: Carries the object's destiny through union types
 
 ```php
 // ✅ Correct
-public readonly Success|Failure $being;
-public readonly ValidUser|InvalidUser $being;
-public readonly ApprovedLoan|RejectedLoan $being;
+public Success|Failure $being;
+public ValidUser|InvalidUser $being;
+public ApprovedLoan|RejectedLoan $being;
 
 // ❌ Avoid
-public readonly mixed $result;      // Not type-specific
-public readonly object $outcome;    // Too generic
-public readonly array $data;        // Action-oriented
+public mixed $result;      // Not type-specific
+public object $outcome;    // Too generic
+public array $data;        // Action-oriented
 ```
 
 ### Immanent Properties
@@ -96,14 +96,14 @@ public readonly array $data;        // Action-oriented
 
 ```php
 // ✅ Correct
-public readonly string $email;
-public readonly Money $amount;
-public readonly UserId $userId;
-public readonly \DateTimeImmutable $timestamp;
+public string $email;
+public Money $amount;
+public UserId $userId;
+public \DateTimeImmutable $timestamp;
 
 // ❌ Avoid
-public readonly string $inputEmail;    // Redundant prefix
-public readonly Money $requestAmount;  // Action-oriented
+public string $inputEmail;    // Redundant prefix
+public Money $requestAmount;  // Action-oriented
 ```
 
 ## Parameter Naming
@@ -137,11 +137,11 @@ public function __construct(
 ```php
 // ✅ Single destiny
 #[Be(BeingUser::class)]
-final class UserInput
+final readonly class UserInput
 
 // ✅ Multiple destinies  
 #[Be([ValidatedUser::class, InvalidUser::class])]
-final class BeingUser
+final readonly class BeingUser
 
 // ❌ Avoid
 #[Be(UserProcessor::class)]    // Action-oriented

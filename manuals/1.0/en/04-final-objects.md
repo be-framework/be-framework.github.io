@@ -38,13 +38,13 @@ Traditional programming verifies whether objects have been processed correctly t
 
 ### Intrinsic Self-Evidence
 ```php
-final class SuccessfulOrder
+final readonly class SuccessfulOrder
 {
-    public readonly string $orderId;
-    public readonly string $confirmationCode;
-    public readonly DateTimeImmutable $timestamp;
-    public readonly string $message;
-    public readonly BeenProcessed $been;          // Self-evidence
+    public string $orderId;
+    public string $confirmationCode;
+    public DateTimeImmutable $timestamp;
+    public string $message;
+    public BeenProcessed $been;          // Self-evidence
     
     public function __construct(
         #[Input] Money $total,                    // Immanent nature
@@ -75,12 +75,12 @@ This object requires no external testing. The `$been` property contains complete
 
 ### Error States with Self-Evidence
 ```php
-final class FailedOrder
+final readonly class FailedOrder
 {
-    public readonly string $errorCode;
-    public readonly string $message;
-    public readonly DateTimeImmutable $timestamp;
-    public readonly BeenRejected $been;          // Self-evidence of failure
+    public string $errorCode;
+    public string $message;
+    public DateTimeImmutable $timestamp;
+    public BeenRejected $been;          // Self-evidence of failure
     
     public function __construct(
         #[Input] array $errors,                   // Immanent nature
@@ -124,7 +124,7 @@ Objects can have multiple possible final forms, determined by their nature:
 
 ```php
 // From OrderValidation's being property:
-public readonly SuccessfulOrder|FailedOrder $being;
+public SuccessfulOrder|FailedOrder $being;
 
 // Usage:
 $order = $becoming(new OrderInput($items, $card));

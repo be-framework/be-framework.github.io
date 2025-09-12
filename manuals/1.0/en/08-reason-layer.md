@@ -20,9 +20,9 @@ The Reason Layer has two meanings of "reason":
 First, the reason as criteria for determining the next transformation destination:
 
 ```php
-final class BeGreeting
+final readonly class BeGreeting
 {
-    public readonly CasualStyle|FormalStyle $being;
+    public CasualStyle|FormalStyle $being;
     
     public function __construct(
         #[Input] string $name,
@@ -41,10 +41,10 @@ final class BeGreeting
 Next, the reason as the foundation for why an object can be in that existence:
 
 ```php
-final class FormalGreeting
+final readonly class FormalGreeting
 {
-    public readonly string $greeting;
-    public readonly string $businessCard;
+    public string $greeting;
+    public string $businessCard;
     
     public function __construct(
         #[Input] string $name,           // Immanent property
@@ -66,7 +66,7 @@ Reason classes provide methods that realize specific modes of existence:
 ```php
 namespace App\Reason;
 
-final class FormalStyle
+final readonly class FormalStyle
 {
     public function formalGreeting(string $name): string
     {
@@ -79,7 +79,7 @@ final class FormalStyle
     }
 }
 
-final class CasualStyle  
+final readonly class CasualStyle  
 {
     public function casualGreeting(string $name): string
     {
@@ -98,7 +98,7 @@ final class CasualStyle
 The Reason Layer provides the **raison d'être** of objects.
 
 ```php
-final class ValidatedUser
+final readonly class ValidatedUser
 {
     public function __construct(
         #[Input] string $email,
@@ -159,7 +159,7 @@ public function __construct(
 In the Reason Layer, objects delegate the realization of their state to reason objects:
 
 ```php
-final class SavedUser
+final readonly class SavedUser
 {
     public function __construct(
         #[Input] UserData $data,
@@ -177,6 +177,6 @@ Objects themselves declare "what to become", while reason objects realize "how t
 
 ---
 
-**Next**: Learn about meaning preservation in errors through [Validation and Error Handling](09-error-handling.html).
+**Next**: Learn about meaning preservation in errors through [Validation and Error Handling](./09-error-handling.html).
 
 *"The Reason Layer provides the tool set necessary for objects to realize their mode of existence."*

@@ -9,7 +9,8 @@ permalink: /manuals/1.0/en/05-metamorphosis.html
 
 > "Space and time cannot be defined independently of each other."
 > 
-> —Albert Einstein, The Foundation of the General Theory of Relativity (1916)
+> —Albert Einstein, The Foundation of the General Theory of Relativity (1916)  
+> *Analogy applying spacetime concepts to programming
 
 ## Time and Domain Are Inseparable
 
@@ -22,18 +23,18 @@ Object metamorphosis follows the arrow of time in a unidirectional flow. There i
 ```php
 // Time T0: Birth of input
 #[Be(EmailValidation::class)]
-final class EmailInput { /* ... */ }
+final readonly class EmailInput { /* ... */ }
 
 // Time T1: First metamorphosis (T0 is already past)
 #[Be(UserCreation::class)]
-final class EmailValidation { /* ... */ }
+final readonly class EmailValidation { /* ... */ }
 
 // Time T2: Second metamorphosis (T1 becomes memory)
 #[Be(WelcomeMessage::class)]
-final class UserCreation { /* ... */ }
+final readonly class UserCreation { /* ... */ }
 
 // Time T3: Final existence (encompassing all past)
-final class WelcomeMessage { /* ... */ }
+final readonly class WelcomeMessage { /* ... */ }
 ```
 
 Each moment never returns, and new existence preserves previous forms as memory within itself. Like a river flowing, time moves only in one direction.
@@ -44,9 +45,9 @@ Like living beings in reality, objects determine their own destiny through the i
 
 ```php
 #[Be([ApprovedApplication::class, RejectedApplication::class])]
-final class ApplicationReview
+final readonly class ApplicationReview
 {
-    public readonly ApprovedApplication|RejectedApplication $being;
+    public ApprovedApplication|RejectedApplication $being;
     
     public function __construct(
         #[Input] array $documents,                // Intrinsic nature
@@ -69,10 +70,10 @@ final class ApplicationReview
 Complex objects can contain their own transformation chains:
 
 ```php
-final class OrderProcessing
+final readonly class OrderProcessing
 {
-    public readonly PaymentResult $payment;
-    public readonly ShippingResult $shipping;
+    public PaymentResult $payment;
+    public ShippingResult $shipping;
     
     public function __construct(
         #[Input] Order $order,                    // Intrinsic nature
@@ -144,9 +145,9 @@ When the same input branches into different results based on nature or permissio
 ```php
 // Implementation example: Feature differentiation by payment capability
 #[Be([FullAccess::class, LimitedAccess::class, ReadOnlyAccess::class])]
-final class AccessDetermination
+final readonly class AccessDetermination
 {
-    public readonly FullAccess|LimitedAccess|ReadOnlyAccess $being;
+    public FullAccess|LimitedAccess|ReadOnlyAccess $being;
     
     public function __construct(
         #[Input] User $user,
@@ -166,7 +167,7 @@ final class AccessDetermination
 When executing multiple independent processes in parallel and aggregating their results:
 
 ```php
-final class OrderCompletion
+final readonly class OrderCompletion
 {
     public function __construct(
         #[Input] OrderData $order,

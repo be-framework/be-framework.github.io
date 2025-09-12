@@ -52,7 +52,7 @@ Be Framework integrates scattered definitions into **complete information models
 Semantic variables are defined as classes in dedicated folders:
 
 ```php
-final class Name
+final readonly class Name
 {
     #[Validate]
     public function validate(string $name): void
@@ -69,7 +69,7 @@ final class Name
 Different business contexts may require different rules. Semantic variables naturally support multiple validation contexts:
 
 ```php
-final class ProductCode
+final readonly class ProductCode
 {
     #[Validate]
     public function validate(string $code): void 
@@ -109,7 +109,7 @@ When existence fails, the meaning of failure must be preserved:
     'en' => 'Name cannot be empty.',
     'ja' => '名前は空にできません。'
 ])]
-final class EmptyNameException extends DomainException {}
+final readonly class EmptyNameException extends DomainException {}
 ```
 
 The framework collects not just the first thrown exception but **all validation errors** as a collection of exceptions, creating complete understanding of why existence is impossible.
@@ -138,7 +138,7 @@ The variable name `$name` is automatically associated with the `Name` semantic v
 Semantic variables can build upon other semantic variables. This is a powerful technique for expressing the natural hierarchical structure of business rules in the type system.
 
 ```php
-final class TeenAge  
+final readonly class TeenAge  
 {
     #[Validate]
     public function validate(#[Teen] int $age): void
@@ -183,7 +183,7 @@ The framework automatically discovers and applies validation classes that **part
 
 ```php
 // If this exists...
-final class EmailConfirmation
+final readonly class EmailConfirmation
 {
     #[Validate]
     public function validate(string $email, string $confirmEmail): void
@@ -231,7 +231,7 @@ The type system itself becomes a **domain language**, where each type speaks of 
 Constructor arguments reveal preconditions. Properties reveal postconditions:
 
 ```php
-final class ProcessedOrder
+final readonly class ProcessedOrder
 {
     public function __construct(
         #[Input] #[Verified] string $productCode,    // Precondition: verified product code
@@ -243,8 +243,8 @@ final class ProcessedOrder
         $this->processedAt = new DateTime();
     }
     
-    public readonly string $orderNumber;    // Postcondition: order number always exists
-    public readonly DateTime $processedAt;  // Postcondition: processed time always exists
+    public string $orderNumber;    // Postcondition: order number always exists
+    public DateTime $processedAt;  // Postcondition: processed time always exists
 }
 ```
 
@@ -256,6 +256,6 @@ What began as a simple naming convention evolves into hierarchical validation, r
 
 ---
 
-**Next**: Learn about [Type-Driven Metamorphosis](07-type-driven-metamorphosis.html) where objects discover their own nature.
+**Next**: Learn about [Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html) where objects discover their own nature.
 
 *"Semantic Variables don't just validate data—they ensure only meaningful beings can exist."*

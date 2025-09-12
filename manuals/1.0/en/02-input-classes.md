@@ -21,11 +21,11 @@ They contain only what the object itself possesses—no external dependencies. T
 
 ```php
 #[Be(UserProfile::class)]  // The object's destiny
-final class UserInput
+final readonly class UserInput
 {
     public function __construct(
-        public readonly string $name,     // Immanent Nature
-        public readonly string $email     // Immanent Nature
+        public string $name,     // Immanent Nature
+        public string $email     // Immanent Nature
     ) {}
 }
 ```
@@ -43,11 +43,11 @@ final class UserInput
 ### Simple Data Input
 ```php
 #[Be(OrderCalculation::class)]
-final class OrderInput
+final readonly class OrderInput
 {
     public function __construct(
-        public readonly array $items,        // Immanent Nature
-        public readonly string $currency     // Immanent Nature
+        public array $items,        // Immanent Nature
+        public string $currency     // Immanent Nature
     ) {}
 }
 ```
@@ -55,12 +55,12 @@ final class OrderInput
 ### Complex Structured Input
 ```php
 #[Be(PaymentProcessing::class)]
-final class PaymentInput
+final readonly class PaymentInput
 {
     public function __construct(
-        public readonly Money $amount,           // Immanent Nature
-        public readonly CreditCard $card,        // Immanent Nature
-        public readonly Address $billing         // Immanent Nature
+        public Money $amount,           // Immanent Nature
+        public CreditCard $card,        // Immanent Nature
+        public Address $billing         // Immanent Nature
     ) {}
 }
 ```

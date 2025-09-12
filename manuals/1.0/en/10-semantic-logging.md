@@ -23,9 +23,9 @@ Be Framework implements **semantic logging** functionality that automatically re
 ```php
 // Object metamorphosis...
 #[Be(RegisteredUser::class)]
-final class UserInput { /* ... */ }
+final readonly class UserInput { /* ... */ }
 
-final class RegisteredUser { /* ... */ }
+final readonly class RegisteredUser { /* ... */ }
 
 // Automatically recorded as structured logs
 {

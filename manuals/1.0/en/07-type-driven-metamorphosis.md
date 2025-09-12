@@ -15,9 +15,9 @@ Type-driven metamorphosis enables objects to choose from multiple possible types
 
 ```php
 #[Be([Success::class, Failure::class])]
-final class PaymentAttempt
+final readonly class PaymentAttempt
 {
-    public readonly Success|Failure $being;
+    public Success|Failure $being;
     
     public function __construct(
         #[Input] Money $amount,
@@ -39,7 +39,7 @@ final class PaymentAttempt
 The `$being` property indicates the next transformation destination:
 
 ```php
-public readonly Success|Failure|Pending $being;
+public Success|Failure|Pending $being;
 ```
 
 Classes are chosen when this type signature matches the constructor of the next class.
@@ -56,9 +56,9 @@ class NextStep {
 
 ```php
 #[Be([VIPUser::class, RegularUser::class, SuspendedUser::class])]
-final class UserClassification
+final readonly class UserClassification
 {
-    public readonly VIPUser|RegularUser|SuspendedUser $being;
+    public VIPUser|RegularUser|SuspendedUser $being;
     
     public function __construct(
         #[Input] UserActivity $activity,
@@ -95,9 +95,9 @@ Beyond deterministic judgment, a new paradigm that embraces uncertainty is being
 // Future concept
 #[Accept]  // Unimplemented: delegation to experts
 #[Be([Approved::class, Rejected::class, Undetermined::class])]
-final class ComplexDecision
+final readonly class ComplexDecision
 {
-    public readonly Approved|Rejected|Undetermined $being;
+    public Approved|Rejected|Undetermined $being;
     
     // Extended decision-making through AI-human collaboration
 }
@@ -124,7 +124,7 @@ if ($score > 800) {
 In type-driven metamorphosis, these are expressed as union types:
 
 ```php
-public readonly Approved|Rejected|Review $being;
+public Approved|Rejected|Review $being;
 ```
 
 ## Integration with Type System
@@ -135,6 +135,6 @@ From the simple principle "if types match, proceed to the next", a rich workflow
 
 ---
 
-**Next**: Learn about the philosophy of dependency injection that supports metamorphosis in [Reason Layer: Ontological Capabilities](08-reason-layer.html).
+**Next**: Learn about the philosophy of dependency injection that supports metamorphosis in [Reason Layer](./08-reason-layer.html).
 
 *"Type-driven metamorphosis is a technique that integrates complex control flow into the type system itself."*

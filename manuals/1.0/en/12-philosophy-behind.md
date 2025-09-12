@@ -38,7 +38,7 @@ These terms come from philosophy, describing how beings come into meaningful exi
 
 ```php
 // Philosophical example in code:
-final class Greeting
+final readonly class Greeting
 {
     public function __construct(
         #[Input] string $name,                // Immanent: who you are
@@ -81,9 +81,9 @@ if ($email->isValid()) {
 
 // Ontological: "What exists when email meets validation?"
 #[Be(ValidatedUser::class)]
-final class EmailInput { /* ... */ }
+final readonly class EmailInput { /* ... */ }
 
-final class ValidatedUser { /* ... */ }  // This simply exists or doesn't
+final readonly class ValidatedUser { /* ... */ }  // This simply exists or doesn't
 ```
 
 We design by declaring what forms of existence are possible, then let objects naturally become those forms.
@@ -94,7 +94,7 @@ In traditional programming, there's always a "controller" that commands objects.
 
 ```php
 // The object decides its own destiny
-public readonly SuccessfulPayment|FailedPayment $being;
+public SuccessfulPayment|FailedPayment $being;
 
 public function __construct(/* ... */) {
     $this->being = $this->isValid 
@@ -110,16 +110,16 @@ No external orchestrator tells the object what to become. The transformation eme
 Objects in Be Framework exist **in time**—they have memory of their past (Immanent) and knowledge of their potential futures (Being Property with union types).
 
 ```php
-final class UserProfile
+final readonly class UserProfile
 {
     // Memory of past
     #[Input] string $originalEmail;
     
     // Present being  
-    public readonly string $displayName;
+    public string $displayName;
     
     // Potential futures
-    public readonly ActiveUser|SuspendedUser $being;
+    public ActiveUser|SuspendedUser $being;
 }
 ```
 

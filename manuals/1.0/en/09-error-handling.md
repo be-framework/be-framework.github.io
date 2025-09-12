@@ -38,19 +38,19 @@ In Be Framework, all exceptions inherit from `DomainException`:
 ```php
 abstract class DomainException extends Exception {}
 
-final class EmptyNameException extends DomainException {}
+final readonly class EmptyNameException extends DomainException {}
 
-final class InvalidEmailException extends DomainException
+final readonly class InvalidEmailException extends DomainException
 {
-    public function __construct(public readonly string $invalidEmail)
+    public function __construct(public string $invalidEmail)
     {
         parent::__construct("Invalid email format: {$invalidEmail}");
     }
 }
 
-final class AgeTooYoungException extends DomainException
+final readonly class AgeTooYoungException extends DomainException
 {
-    public function __construct(public readonly int $age, public readonly int $min = 13)
+    public function __construct(public int $age, public int $min = 13)
     {
         parent::__construct("Age insufficient: {$age} years (minimum {$min} years)");
     }
@@ -82,15 +82,15 @@ The `#[Message]` attribute enables multilingual error messages:
     'ja' => '名前は空にできません。',
     'es' => 'El nombre no puede estar vacío.'
 ])]
-final class EmptyNameException extends DomainException {}
+final readonly class EmptyNameException extends DomainException {}
 
 #[Message([
     'en' => 'Age must be at least {min} years.',
     'ja' => '年齢は最低{min}歳でなければなりません。'
 ])]
-final class AgeTooYoungException extends DomainException
+final readonly class AgeTooYoungException extends DomainException
 {
-    public function __construct(public readonly int $min = 13) {}
+    public function __construct(public int $min = 13) {}
 }
 ```
 
@@ -120,9 +120,9 @@ Error states can also be treated as valid metamorphosis results:
 
 ```php
 #[Be([ValidUser::class, InvalidUser::class])]
-final class UserValidation
+final readonly class UserValidation
 {
-    public readonly ValidUser|InvalidUser $being;
+    public ValidUser|InvalidUser $being;
     
     public function __construct(#[Input] string $data)
     {
@@ -141,6 +141,6 @@ Semantic exceptions make failure reasons clear, enabling users to understand spe
 
 ---
 
-**Next**: Learn about recording object metamorphosis in [Semantic Logging](10-semantic-logging.html).
+**Next**: Learn about recording object metamorphosis in [Semantic Logging](./10-semantic-logging.html).
 
 *"Semantic exceptions specifically teach us why existence is impossible."*
