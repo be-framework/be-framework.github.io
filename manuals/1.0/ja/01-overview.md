@@ -5,7 +5,7 @@ category: Manual
 permalink: /manuals/1.0/ja/01-overview.html
 ---
 
-# 概要: 新しいパラダイム
+## 概要: 新しいパラダイム
 
 ## まず、これを見てください
 
@@ -65,7 +65,7 @@ function saveUser(SavedUser $user) { }
 function archiveUser(DeletedUser $user) { }
 ```
 
-各型はただのデータではなく、オブジェクトの特定の状態を表現しています。つまり、オブジェクトの時間的な変化が型で表されていて、その時に可能なことだけが行えます。例えば、存在しないオブジェクトに削除を命じることはできません。 
+各型はただのデータではなく、オブジェクトの特定の状態を表現しています。つまり、オブジェクトの時間的な変化が型で表されていて、その時に可能なことだけが行えます。例えば、存在しないオブジェクトに削除を命じることはできません。
 
 ## このマニュアルで学べること
 
@@ -78,6 +78,6 @@ function archiveUser(DeletedUser $user) { }
 
 ## さあ、始めましょう
 
-基礎から学んでいきます：[入力クラス →](./02-input-classes.html)
+基礎から学んでいきます：[入力クラス →]({{ '/manuals/1.0/ja/02-input-classes.html' | relative_url }})
 
 最初のオブジェクトを作りながら、なぜ『`DeletedUser`』なのかを体感してください。

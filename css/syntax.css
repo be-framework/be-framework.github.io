@@ -5,6 +5,8 @@
    =========================== */
 
 :root{
+    --bg-code  : #fff;
+    --border-code: transparent;
     --c-default: #0b3da6; /* default: 識別子/変数/演算子 */
     --c-keyword: #1a7f37; /* keyword: final/public/readonly/function/new/match など */
     --c-string : #c62828; /* string: "…" '…' */
@@ -16,8 +18,8 @@
     --bg-delete: #ffdddd;
 }
 
-.highlight{ background:#fff; color:var(--c-default); border-radius:6px; }
-.highlight pre{ margin:0; padding:1rem 1.25rem; overflow-x:auto; }
+.highlight{ background:var(--bg-code); color:var(--c-default); border-radius:6px; color-scheme: light dark; }
+.highlight pre{ margin:0; padding:1rem 1.25rem; overflow-x:auto; tab-size: 2; line-height: 1.5; }
 .highlight, .highlight pre, .highlight code{ font-variant-ligatures:none; }
 
 /* --- コメント（オレンジ!） --- */
@@ -82,6 +84,8 @@
 /* --- ダークモード --- */
 @media (prefers-color-scheme: dark){
     :root{
+        --bg-code  : #0b1020;
+        --border-code: transparent;
         --c-default:#c8d7ff;
         --c-keyword:#7bd28f;
         --c-string:#ff8a80;
@@ -92,7 +96,6 @@
         --bg-insert:#12351a;
         --bg-delete:#3a1919;
     }
-    .highlight{ background:#0b1020; }
     
     /* diff用色調整：ダークモードで可読性確保 */
     .highlight .gd{ color:#fff; }  /* Deleted: 白文字で読みやすく */
@@ -101,4 +104,10 @@
     .highlight .gh, .highlight .gu{ color:#c9c9c9; }  /* Heading/Subheading: 明るいグレー */
     .highlight .go{ color:#b0b0b0; }  /* Output: 明るいグレー */
     .highlight .gp{ color:#d0d0d0; }  /* Prompt: 明るいグレー */
+}
+
+@media (forced-colors: active){
+  .highlight { background: Canvas; color: CanvasText; }
+  .highlight .gd{ background: none; outline: 2px solid ButtonBorder; }
+  .highlight .gi{ background: none; outline: 2px solid Highlight; }
 }
