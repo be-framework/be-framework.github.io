@@ -5,7 +5,11 @@ category: Manual
 permalink: /manuals/1.0/en/01-overview.html
 ---
 
-# Overview: A Different Way to Think About Code
+# A Different Way to Think About Code
+
+> "The real voyage of discovery consists not in seeking new landscapes, but in having new eyes."
+> 
+> —Marcel Proust, 'The Prisoner' (In Search of Lost Time, Volume 5) 1923
 
 ## First, Look at This
 

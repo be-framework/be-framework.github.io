@@ -7,6 +7,12 @@ permalink: /manuals/1.0/en/04-final-objects.html
 
 # Final Objects
 
+> "You are not me. How can you know that I don't know the feelings of fish?"
+> 
+> —Zhuangzi's reply when asked "You are not a fish. How can you know the feelings of fish?" (Zhuangzi, 4th century BC)
+
+## The Destination
+
 Final Objects represent the destination of metamorphosis—complete, transformed beings that embody the user's actual interest. These are what the application ultimately cares about.
 
 ## Characteristics of Final Objects

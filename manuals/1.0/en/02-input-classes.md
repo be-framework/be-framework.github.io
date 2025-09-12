@@ -7,6 +7,12 @@ permalink: /manuals/1.0/en/02-input-classes.html
 
 # Input Classes
 
+> "We begin from conditions we did not choose, and from there we build our existence."
+> 
+> —From Heidegger's concept of Geworfenheit (thrownness) in 'Being and Time' (1927)
+
+## The Beginning
+
 Input Classes are the starting point of every transformation in Be Framework.
 
 They contain only what the object itself possesses—no external dependencies. Think of it as the object's identity. These elements exist within the object, forming what we call the object's **Immanent Nature**.
