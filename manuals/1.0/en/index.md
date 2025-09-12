@@ -44,4 +44,4 @@ Essential resources and links for framework development
 
 ---
 
-*"In Be Framework, we don't make objects do things. We create the conditions for them to become what they already are, in their deepest nature."*
+*"Be, Don't Do"*

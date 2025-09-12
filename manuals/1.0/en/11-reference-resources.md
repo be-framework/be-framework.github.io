@@ -36,6 +36,4 @@ Be Framework's philosophical foundations:
 
 ---
 
-In Be Framework, we don't make objects do things. We create the conditions for them to become what they already are, in their deepest nature.
-
-*"Programming is not about instructing actions—it's about expressing existence."*
+*"Be, Don't Do"*
