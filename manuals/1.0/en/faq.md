@@ -61,9 +61,34 @@ However, using these names according to documentation, samples, and design philo
 - `$been`: Conventional property name for holding "completion self-proof" (past perfect meaning)
 
 **Q8. What are "Semantic Variables"?**  
-A. Variable name = **meaning + constraints**. `$email` must be a "valid Email" to **exist**.  
-It **integrates into types** validations that tend to scatter (controller/validator/docs).  
+A. Variable name = meaning + constraints. `$email` must be a "valid Email" to exist.  
+It integrates into types validations that tend to scatter (controller/validator/docs).  
 ([Semantic Variables](./06-semantic-variables.html))
+
+**Q8.5. How do you handle variables with different meanings but same constraints (`$userId`, `$authorId`, etc.)?**
+A. Share constraints through common base classes or traits while separating meaning through inheritance.
+
+```php
+// src/Semantic/Abstract/Id.php - Common constraint base class
+namespace App\Semantic\Abstract;
+
+abstract readonly class Id {
+    public function __construct(public string $value) {
+        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}/', $value)) {
+            throw new InvalidIdException();
+        }
+    }
+}
+
+// src/Semantic/UserId.php - Semantic variables through inheritance
+readonly class UserId extends \App\Semantic\Abstract\Id {}
+readonly class AuthorId extends \App\Semantic\Abstract\Id {}
+
+// Usage: variable names carry semantic meaning
+function updateArticle(UserId $userId, AuthorId $authorId) {
+    // $userId and $authorId cannot be confused
+}
+```
 
 **Q9. What is the "Reason Layer"?**  
 A. It injects **the foundation = tool set** that enables a certain existence state as objects.  
