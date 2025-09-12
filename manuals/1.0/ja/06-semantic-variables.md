@@ -52,7 +52,7 @@ Be Frameworkは、分散した定義を**完全な情報モデル**として統�
 意味変数は専用フォルダにクラスとして定義されます：
 
 ```php
-final class Name
+final readonly class Name
 {
     #[Validate]
     public function validate(string $name): void
@@ -69,7 +69,7 @@ final class Name
 異なるビジネスコンテキストには異なるルールが適用されることがあります。意味変数は複数の検証コンテキストを自然にサポートします：
 
 ```php
-final class ProductCode
+final readonly class ProductCode
 {
     #[Validate]
     public function validate(string $code): void 
@@ -109,7 +109,7 @@ final class ProductCode
     'en' => 'Name cannot be empty.',
     'ja' => '名前は空にできません。'
 ])]
-final class EmptyNameException extends DomainException {}
+final readonly class EmptyNameException extends DomainException {}
 ```
 
 フレームワークは最初に投げられる例外だけでなく、**すべての検証エラー**を例外の集合として収集し、なぜ存在できないかの完全な理解を作り出します。
@@ -138,7 +138,7 @@ final readonly class UserProfile
 意味変数は他の意味変数を基盤として構築できます。これはビジネスルールの自然な階層構造を型システムで表現する強力な手法です。
 
 ```php
-final class TeenAge  
+final readonly class TeenAge  
 {
     #[Validate]
     public function validate(#[Teen] int $age): void
@@ -183,7 +183,7 @@ final readonly class UserRegistration
 
 ```php
 // これがあれば...
-final class EmailConfirmation
+final readonly class EmailConfirmation
 {
     #[Validate]
     public function validate(string $email, string $confirmEmail): void
@@ -231,7 +231,7 @@ try {
 コンストラクタの引数は事前条件を表し、プロパティは事後条件を表します：
 
 ```php
-final class ProcessedOrder
+final readonly class ProcessedOrder
 {
     public function __construct(
         #[Input] #[Verified] string $productCode,    // 事前条件：検証済み商品コード
@@ -243,12 +243,12 @@ final class ProcessedOrder
         $this->processedAt = new DateTime();
     }
     
-    public readonly string $orderNumber;    // 事後条件：注文番号は必ず存在
-    public readonly DateTime $processedAt;  // 事後条件：処理時刻は必ず存在
+    public string $orderNumber;    // 事後条件：注文番号は必ず存在
+    public DateTime $processedAt;  // 事後条件：処理時刻は必ず存在
 }
 ```
 
-コンストラクタの引数は**事前条件**（このオブジェクトが存在するために満たされなければならない条件）を表し、`public readonly`プロパティは**事後条件**（このオブジェクトが保証する状態）を表現します。
+コンストラクタの引数は**事前条件**（このオブジェクトが存在するために満たされなければならない条件）を表し、`public`プロパティは**事後条件**（このオブジェクトが保証する状態）を表現します。
 
 防御的プログラミングは不要になります。引数の検証、null チェック、範囲確認、在庫確認、地理的制約—これらはすべて意味変数が保証します。コードは本来の目的であるビジネスロジックの実装に集中できるのです。
 
@@ -256,6 +256,6 @@ final class ProcessedOrder
 
 ---
 
-**次へ**: オブジェクトが自身の性質を発見する[型駆動変容](07-type-driven-metamorphosis.html)について学びましょう。
+**次へ**: オブジェクトが自身の性質を発見する[型駆動変容](./07-type-driven-metamorphosis.html)について学びましょう。
 
 *「意味変数はデータを検証するだけでなく、意味のある存在のみが存在できることを保証します。」*

@@ -48,11 +48,11 @@ try {
 ```php
 abstract class DomainException extends Exception {}
 
-final class EmptyNameException extends DomainException {}
+final readonly class EmptyNameException extends DomainException {}
 
-final class InvalidEmailFormatException extends DomainException
+final readonly class InvalidEmailFormatException extends DomainException
 {
-    public function __construct(public readonly string $invalidEmail)
+    public function __construct(public string $invalidEmail)
     {
         parent::__construct("メール形式が無効です: {$invalidEmail}");
     }
@@ -60,8 +60,8 @@ final class InvalidEmailFormatException extends DomainException
 
 // 年齢関連の存在失敗
 abstract class AgeException extends DomainException {}
-final class NegativeAgeException extends AgeException {}
-final class AgeTooHighException extends AgeException {}
+final readonly class NegativeAgeException extends AgeException {}
+final readonly class AgeTooHighException extends AgeException {}
 ```
 
 ## 多言語エラーメッセージ
@@ -74,18 +74,18 @@ final class AgeTooHighException extends AgeException {}
     'ja' => '名前は空にできません。',
     'es' => 'El nombre no puede estar vacío.'
 ])]
-final class EmptyNameException extends DomainException {}
+final readonly class EmptyNameException extends DomainException {}
 
 #[Message([
     'en' => 'Age must be between {min} and {max} years.',
     'ja' => '年齢は{min}歳から{max}歳の間でなければなりません。'
 ])]
-final class AgeOutOfRangeException extends DomainException
+final readonly class AgeOutOfRangeException extends DomainException
 {
     public function __construct(
-        public readonly int $age,
-        public readonly int $min = 0,
-        public readonly int $max = 150
+        public int $age,
+        public int $min = 0,
+        public int $max = 150
     ) {}
 }
 ```
@@ -95,7 +95,7 @@ final class AgeOutOfRangeException extends DomainException
 フレームワークは投げる前に**すべての検証失敗**を収集します：
 
 ```php
-final class UserValidation
+final readonly class UserValidation
 {
     public function __construct(
         #[Input] string $name,      // EmptyNameExceptionを投げる可能性
@@ -116,9 +116,9 @@ final class UserValidation
 
 ```php
 #[Be([ValidUser::class, InvalidUser::class])]
-final class UserValidation
+final readonly class UserValidation
 {
-    public readonly ValidUser|InvalidUser $being;
+    public ValidUser|InvalidUser $being;
     
     public function __construct(
         #[Input] string $name,
@@ -192,6 +192,6 @@ public function testCollectsAllValidationErrors(): void
 
 ---
 
-**次へ**: オブジェクト変容の記録について[意味的ログ](10-semantic-logging.html)について学びましょう。
+**次へ**: オブジェクト変容の記録について[意味的ログ](./10-semantic-logging.html)について学びましょう。
 
 *「意味的例外は失敗を報告するだけではありません—存在できないものの意味を保持します。」*

@@ -23,9 +23,9 @@ Beフレームワークは、オブジェクトの変容プロセスを構造化
 ```php
 // オブジェクトの変容が...
 #[Be(RegisteredUser::class)]
-final class UserInput { /* ... */ }
+final readonly class UserInput { /* ... */ }
 
-final class RegisteredUser { /* ... */ }
+final readonly class RegisteredUser { /* ... */ }
 
 // 自動的に構造化ログとして記録される
 {

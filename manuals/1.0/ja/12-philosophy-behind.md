@@ -30,11 +30,11 @@ Beフレームワークの実装を学んだ今、その根底に流れる深い
 ```php
 // 存在の問い：この状態は可能か？
 #[Be(ValidatedUser::class)]  // 存在の運命を宣言
-final class UserInput
+final readonly class UserInput
 {
     public function __construct(
-        public readonly string $email,    // 存在条件1
-        public readonly int $age          // 存在条件2
+        public string $email,    // 存在条件1
+        public int $age          // 存在条件2
     ) {}
 }
 
@@ -63,16 +63,16 @@ Beフレームワークのオブジェクトも同様の構造を持ちます：
 ```php
 // 被投性：選択できない初期条件
 #[Be(UserProfile::class)]
-final class UserInput     // 投げ込まれた存在
+final readonly class UserInput     // 投げ込まれた存在
 {
     public function __construct(
-        public readonly string $name,     // 与えられた条件
-        public readonly string $email     // 与えられた状況
+        public string $name,     // 与えられた条件
+        public string $email     // 与えられた状況
     ) {}
 }
 
 // 企投性：未来への可能性
-final class UserProfile   // 可能性への投企
+final readonly class UserProfile   // 可能性への投企
 {
     public function __construct(
         #[Input] string $name,                    // 被投された過去
@@ -82,7 +82,7 @@ final class UserProfile   // 可能性への投企
         $this->displayName = $formatter->format($name);  // 新しい存在
     }
     
-    public readonly string $displayName;
+    public string $displayName;
 }
 ```
 
@@ -98,10 +98,10 @@ final class UserProfile   // 可能性への投企
 ```php
 // 現存在的オブジェクト：時間の中で自己を理解する
 #[Be([ApprovedLoan::class, RejectedLoan::class])]  // 存在可能性の理解
-final class LoanApplication
+final readonly class LoanApplication
 {
     // 自己の運命を決定する実存的選択
-    public readonly ApprovedLoan|RejectedLoan $being;
+    public ApprovedLoan|RejectedLoan $being;
     
     public function __construct(
         #[Input] Money $amount,                   // 被投された条件
@@ -126,7 +126,7 @@ final class LoanApplication
 
 ```php
 // 無為の実践：強制しない、自然に流れる
-final class OrderProcessing
+final readonly class OrderProcessing
 {
     public function __construct(
         #[Input] Order $order,                    // 自然な前提
@@ -169,7 +169,7 @@ $result = $becoming(new ApplicationInput($data));
 
 ```php
 // エンテレケイア：潜在性の完全実現
-final class MatureUser     // 完全実現された存在
+final readonly class MatureUser     // 完全実現された存在
 {
     public function __construct(
         #[Input] UserData $potentiality,         // 潜在性
@@ -179,7 +179,7 @@ final class MatureUser     // 完全実現された存在
         $this->actualizedProfile = $actuator->actualize($potentiality);
     }
     
-    public readonly UserProfile $actualizedProfile;  // 現実化された存在
+    public UserProfile $actualizedProfile;  // 現実化された存在
 }
 ```
 
@@ -206,7 +206,7 @@ public function __construct(
 Beフレームワークでは、この哲学が**存在理由層**として実現されています：
 
 ```php
-final class ValidatedUser
+final readonly class ValidatedUser
 {
     public function __construct(
         #[Input] string $email,                 // 内在的性質
@@ -235,7 +235,7 @@ final class ValidatedUser
 スピノザは現実を一つの実体の二つのアスペクトとして捉えました：**内在（Immanence）**と**超越（Transcendence）**。
 
 ```php
-final class UserProfile
+final readonly class UserProfile
 {
     public function __construct(
         #[Input] string $name,              // 内在：既に持っているもの
@@ -268,9 +268,9 @@ final class UserProfile
 
 ```php
 #[Be([Success::class, Failure::class])]  // 成功と失敗は同等の可能性
-final class PaymentAttempt
+final readonly class PaymentAttempt
 {
-    public readonly Success|Failure $being;  // 両方とも有効な存在
+    public Success|Failure $being;  // 両方とも有効な存在
     
     public function __construct(/* ... */) {
         // 成功も失敗も、どちらも完全な存在として扱われる
@@ -292,14 +292,14 @@ final class PaymentAttempt
 ```php
 // 時間 T0: 原初の存在
 #[Be(EmailValidation::class)]
-final class EmailInput { /* ... */ }
+final readonly class EmailInput { /* ... */ }
 
 // 時間 T1: 第一変容（T0は既に過去）
 #[Be(UserCreation::class)]  
-final class EmailValidation { /* ... */ }
+final readonly class EmailValidation { /* ... */ }
 
 // 時間 T2: 最終存在（すべての過去を内包）
-final class UserCreation { /* ... */ }
+final readonly class UserCreation { /* ... */ }
 ```
 
 各瞬間は二度と戻らず、オブジェクトは時間の流れの中で自然に変容していきます。
@@ -310,7 +310,7 @@ final class UserCreation { /* ... */ }
 
 ```php
 // 対立の統一：活性化と非活性化は同じ現実の両面
-public readonly ActiveUser|InactiveUser $being;
+public ActiveUser|InactiveUser $being;
 ```
 
 ## 9. 仏教の縁起：相互依存の存在
@@ -322,7 +322,7 @@ public readonly ActiveUser|InactiveUser $being;
 Beフレームワークのオブジェクトは、まさにこの縁起的存在です：
 
 ```php
-final class UserProfile    // 縁起的存在
+final readonly class UserProfile    // 縁起的存在
 {
     public function __construct(
         #[Input] string $name,              // 他の存在に依存
@@ -340,7 +340,7 @@ final class UserProfile    // 縁起的存在
 
 Beフレームワークでは：
 - オブジェクトに固定した「本質」はありません
-- `public readonly` により状態は変化しません
+- `public` により状態は変化しません
 - 各段階は完全に独立した存在として現れます
 - 「自己」は関係性（依存性注入）によって構成されます
 

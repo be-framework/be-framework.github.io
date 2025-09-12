@@ -22,18 +22,18 @@ permalink: /manuals/1.0/ja/05-metamorphosis.html
 ```php
 // 時間 T0: 入力の誕生
 #[Be(EmailValidation::class)]
-final class EmailInput { /* ... */ }
+final readonly class EmailInput { /* ... */ }
 
 // 時間 T1: 第一変容（T0は既に過去）
 #[Be(UserCreation::class)]
-final class EmailValidation { /* ... */ }
+final readonly class EmailValidation { /* ... */ }
 
 // 時間 T2: 第二変容（T1は記憶となる）
 #[Be(WelcomeMessage::class)]
-final class UserCreation { /* ... */ }
+final readonly class UserCreation { /* ... */ }
 
 // 時間 T3: 最終存在（すべての過去を内包）
-final class WelcomeMessage { /* ... */ }
+final readonly class WelcomeMessage { /* ... */ }
 ```
 
 各瞬間は二度と戻らず、新しい存在は前の形態をその内部に記憶として保持します。川が流れるように、時間は一方向にのみ流れます。
@@ -44,9 +44,9 @@ final class WelcomeMessage { /* ... */ }
 
 ```php
 #[Be([ApprovedApplication::class, RejectedApplication::class])]
-final class ApplicationReview
+final readonly class ApplicationReview
 {
-    public readonly ApprovedApplication|RejectedApplication $being;
+    public ApprovedApplication|RejectedApplication $being;
     
     public function __construct(
         #[Input] array $documents,                // 内在的性質
@@ -68,10 +68,10 @@ final class ApplicationReview
 複雑なオブジェクトは独自の変容チェーンを含むことができます：
 
 ```php
-final class OrderProcessing
+final readonly class OrderProcessing
 {
-    public readonly PaymentResult $payment;
-    public readonly ShippingResult $shipping;
+    public PaymentResult $payment;
+    public ShippingResult $shipping;
     
     public function __construct(
         #[Input] Order $order,                    // 内在的
@@ -143,9 +143,9 @@ match (true) {
 ```php
 // 実装例：支払い能力による機能差
 #[Be([FullAccess::class, LimitedAccess::class, ReadOnlyAccess::class])]
-final class AccessDetermination
+final readonly class AccessDetermination
 {
-    public readonly FullAccess|LimitedAccess|ReadOnlyAccess $being;
+    public FullAccess|LimitedAccess|ReadOnlyAccess $being;
     
     public function __construct(
         #[Input] User $user,
@@ -165,7 +165,7 @@ final class AccessDetermination
 複数の独立した処理を並行して実行し、それぞれの結果を集約する場合：
 
 ```php
-final class OrderCompletion
+final readonly class OrderCompletion
 {
     public function __construct(
         #[Input] OrderData $order,

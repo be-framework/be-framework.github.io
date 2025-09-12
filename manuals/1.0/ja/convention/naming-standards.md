@@ -28,15 +28,15 @@ permalink: /manuals/1.0/ja/convention/naming-standards.html
 
 ```php
 // ✅ 正しい
-final class UserInput
-final class OrderInput  
-final class DataInput
-final class PaymentInput
+final readonly class UserInput
+final readonly class OrderInput  
+final readonly class DataInput
+final readonly class PaymentInput
 
 // ❌ 避けるべき
-final class UserData          // 一般的すぎる
-final class CreateUserRequest // 行動指向
-final class UserDto           // 技術指向
+final readonly class UserData          // 一般的すぎる
+final readonly class CreateUserRequest // 行動指向
+final readonly class UserDto           // 技術指向
 ```
 
 ### 存在クラス
@@ -45,14 +45,14 @@ final class UserDto           // 技術指向
 
 ```php
 // ✅ 正しい
-final class ValidatedUser
-final class AuthenticatedUser
-final class ProcessedOrder
-final class VerifiedPayment
+final readonly class ValidatedUser
+final readonly class AuthenticatedUser
+final readonly class ProcessedOrder
+final readonly class VerifiedPayment
 
 // ❌ 避けるべき
-final class UserValidator     // サービス的
-final class OrderProcessor    // 行動指向
+final readonly class UserValidator     // サービス的
+final readonly class OrderProcessor    // 行動指向
 ```
 
 ### 最終オブジェクト
@@ -61,14 +61,14 @@ final class OrderProcessor    // 行動指向
 
 ```php
 // ✅ 正しい
-final class RegisteredUser
-final class CompletedOrder
-final class SuccessfulPayment
-final class PublishedArticle
+final readonly class RegisteredUser
+final readonly class CompletedOrder
+final readonly class SuccessfulPayment
+final readonly class PublishedArticle
 
 // ❌ 避けるべき
-final class UserEntity       // 技術指向
-final class OrderResult      // 結果指向
+final readonly class UserEntity       // 技術指向
+final readonly class OrderResult      // 結果指向
 ```
 
 ## プロパティ命名
@@ -88,8 +88,8 @@ final class OrderResult      // 結果指向
 **目的**: オブジェクトの次の存在状態を表現
 
 ```php
-public readonly SuccessfulPayment|FailedPayment $being;
-public readonly ActiveUser|SuspendedUser $being;
+public SuccessfulPayment|FailedPayment $being;
+public ActiveUser|SuspendedUser $being;
 ```
 
 ## メソッド命名原則
@@ -105,7 +105,7 @@ class User {
 }
 
 // ✅ Be Frameworkスタイル
-final class ValidatedUser {
+final readonly class ValidatedUser {
     public function __construct(UserInput $input) {
         // バリデーションは存在の前提条件として実行される
     }
@@ -132,7 +132,7 @@ $data = processInput($rawInput);    // 一般的すぎる
 **パターン**: `{インターフェース名}`（Serviceサフィックスなし）
 
 ```php
-final class AuthenticatedUser {
+final readonly class AuthenticatedUser {
     public function __construct(
         #[Input] UserInput $input,
         #[Inject] PasswordHasher $hasher,        // ✅ 能力として
@@ -176,8 +176,8 @@ src/Domain/
 ### 1. 存在優先
 ```php
 // 行動ではなく存在を表現
-final class DeletedUser    // ✅ 削除された状態の存在
-final class UserDeleter    // ❌ 削除する行動
+final readonly class DeletedUser    // ✅ 削除された状態の存在
+final readonly class UserDeleter    // ❌ 削除する行動
 ```
 
 ### 2. 時間の方向性

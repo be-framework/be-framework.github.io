@@ -41,13 +41,13 @@ Be Frameworkでは、オブジェクトの時間的存在を二つの軸で捉�
 
 ### 内在的自己証明を持つ結果
 ```php
-final class SuccessfulOrder
+final readonly class SuccessfulOrder
 {
-    public readonly string $orderId;
-    public readonly string $confirmationCode;
-    public readonly DateTimeImmutable $timestamp;
-    public readonly string $message;
-    public readonly BeenProcessed $been;          // 自己証明
+    public string $orderId;
+    public string $confirmationCode;
+    public DateTimeImmutable $timestamp;
+    public string $message;
+    public BeenProcessed $been;          // 自己証明
     
     public function __construct(
         #[Input] Money $total,                    // 内在的性質
@@ -78,12 +78,12 @@ final class SuccessfulOrder
 
 ### エラー状態の自己証明
 ```php
-final class FailedOrder
+final readonly class FailedOrder
 {
-    public readonly string $errorCode;
-    public readonly string $message;
-    public readonly DateTimeImmutable $timestamp;
-    public readonly BeenRejected $been;          // 失敗の自己証明
+    public string $errorCode;
+    public string $message;
+    public DateTimeImmutable $timestamp;
+    public BeenRejected $been;          // 失敗の自己証明
     
     public function __construct(
         #[Input] array $errors,                   // 内在的性質
@@ -127,7 +127,7 @@ final class FailedOrder
 
 ```php
 // OrderValidationの存在プロパティから：
-public readonly SuccessfulOrder|FailedOrder $being;
+public SuccessfulOrder|FailedOrder $being;
 
 // 使用方法：
 $order = $becoming(new OrderInput($items, $card));

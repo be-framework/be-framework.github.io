@@ -17,9 +17,9 @@ permalink: /manuals/1.0/ja/07-type-driven-metamorphosis.html
 
 ```php
 #[Be([Success::class, Failure::class])]
-final class PaymentAttempt
+final readonly class PaymentAttempt
 {
-    public readonly Success|Failure $being;
+    public Success|Failure $being;
     
     public function __construct(
         #[Input] Money $amount,
@@ -41,7 +41,7 @@ final class PaymentAttempt
 `$being`プロパティは次の変容先を示すプロパティです：
 
 ```php
-public readonly Success|Failure|Pending $being;
+public Success|Failure|Pending $being;
 ```
 
 次のクラスのコンストラクタでこの型シグネチャがマッチするクラスが選ばれます。
@@ -58,9 +58,9 @@ class NextStep {
 
 ```php
 #[Be([VIPUser::class, RegularUser::class, SuspendedUser::class])]
-final class UserClassification
+final readonly class UserClassification
 {
-    public readonly VIPUser|RegularUser|SuspendedUser $being;
+    public VIPUser|RegularUser|SuspendedUser $being;
     
     public function __construct(
         #[Input] UserActivity $activity,
@@ -97,9 +97,9 @@ $notification = $becoming($evaluation);  // $evaluation->beingが自動選択さ
 // 将来構想
 #[Accept]  // 未実装：専門家への委譲
 #[Be([Approved::class, Rejected::class, Undetermined::class])]
-final class ComplexDecision
+final readonly class ComplexDecision
 {
-    public readonly Approved|Rejected|Undetermined $being;
+    public Approved|Rejected|Undetermined $being;
     
     // AIと人間の協調による拡張意思決定
 }
@@ -126,7 +126,7 @@ if ($score > 800) {
 型駆動変容では、これらがユニオン型で表現されます：
 
 ```php
-public readonly Approved|Rejected|Review $being;
+public Approved|Rejected|Review $being;
 ```
 
 ## 型システムとの統合
@@ -137,6 +137,6 @@ public readonly Approved|Rejected|Review $being;
 
 ---
 
-**次へ**: 変容を支える依存性注入の哲学について[理性層: 存在論的能力](08-reason-layer.html)で学びましょう。
+**次へ**: 変容を支える依存性注入の哲学について[存在理由層](./08-reason-layer.html)で学びましょう。
 
 > 「型駆動変容は、複雑な制御フローを型システムに統合する手法です。」

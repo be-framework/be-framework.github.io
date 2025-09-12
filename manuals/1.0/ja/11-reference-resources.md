@@ -28,9 +28,9 @@ Be Frameworkでのプロジェクト開発に必要なリソースとリンク�
 
 ### 命名規約
 プロジェクト開発時の命名標準：
-- [**Be Framework命名規約**](convention/naming-standards.html) - 存在指向の命名原則
+- [**Be Framework命名規約**](./convention/naming-standards.html) - 存在指向の命名原則
 
 ### 理論的背景
 Be Frameworkの哲学的基盤について：
-- [**背後にある哲学**](12-philosophy-behind.html) - 老子の無為、存在論的プログラミングの思想的ルーツ
+- [**背後にある哲学**](./12-philosophy-behind.html) - 老子の無為、存在論的プログラミングの思想的ルーツ
 

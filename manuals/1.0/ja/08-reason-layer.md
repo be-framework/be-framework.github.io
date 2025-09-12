@@ -20,9 +20,9 @@ permalink: /manuals/1.0/ja/08-reason-layer.html
 まず、次の変容先を決定する判断基準としての理由：
 
 ```php
-final class BeGreeting
+final readonly class BeGreeting
 {
-    public readonly CasualStyle|FormalStyle $being;
+    public CasualStyle|FormalStyle $being;
     
     public function __construct(
         #[Input] string $name,
@@ -41,14 +41,14 @@ final class BeGreeting
 次に、オブジェクトがその存在でいるための根拠としての理由：
 
 ```php
-final class FormalGreeting
+final readonly class FormalGreeting
 {
-    public readonly string $greeting;
-    public readonly string $businessCard;
+    public string $greeting;
+    public string $businessCard;
     
     public function __construct(
         #[Input] string $name,           // 内在的性質
-        #[Input] FormalStyle $being      // 存在理由
+        #[Reason] FormalStyle $being     // 存在理由
     ) {
         // FormalStyleが、このオブジェクトがFormalGreetingでいる理由を提供
         $this->greeting = $being->formalGreeting($name);
@@ -66,7 +66,7 @@ final class FormalGreeting
 ```php
 namespace App\Reason;
 
-final class FormalStyle
+final readonly class FormalStyle
 {
     public function formalGreeting(string $name): string
     {
@@ -79,7 +79,7 @@ final class FormalStyle
     }
 }
 
-final class CasualStyle  
+final readonly class CasualStyle  
 {
     public function casualGreeting(string $name): string
     {
@@ -98,11 +98,11 @@ final class CasualStyle
 存在理由層は、オブジェクトの**raison d'être**（レーゾンデートル：存在理由）を提供します。
 
 ```php
-final class ValidatedUser
+final readonly class ValidatedUser
 {
     public function __construct(
         #[Input] string $email,
-        #[Input] ValidationReason $raisonDEtre    // この存在の raison d'être
+        #[Reason] ValidationReason $raisonDEtre    // この存在の raison d'être
     ) {
         // ValidationReasonが、ValidatedUserの存在理由を提供
     }
@@ -138,7 +138,7 @@ public function __construct(
 ```php
 public function __construct(
     #[Input] string $email,
-    #[Input] UserValidationReason $reason    // 関連道具がまとまった存在理由
+    #[Reason] UserValidationReason $reason    // 関連道具がまとまった存在理由
 ) {
     // ValidatedUserになるための道具一式が提供される
     $this->result = $reason->validateUser($email, $this);
@@ -159,11 +159,11 @@ public function __construct(
 存在理由層では、オブジェクトが自身の状態実現を存在理由に委譲します：
 
 ```php
-final class SavedUser
+final readonly class SavedUser
 {
     public function __construct(
         #[Input] UserData $data,
-        #[Input] SaveReason $reason    // 存在理由を受け取り
+        #[Reason] SaveReason $reason    // 存在理由を受け取り
     ) {
         // 保存処理を存在理由に委譲
         $this->result = $reason->saveUser($data);
@@ -177,6 +177,6 @@ final class SavedUser
 
 ---
 
-**次へ**: エラーの意味保持について[検証とエラーハンドリング](09-error-handling.html)で学びましょう。
+**次へ**: エラーの意味保持について[検証とエラーハンドリング](./09-error-handling.html)で学びましょう。
 
 > 「存在理由層は、オブジェクトがその存在様式を実現するために必要な道具セットを提供します。」

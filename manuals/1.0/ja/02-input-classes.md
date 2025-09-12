@@ -21,11 +21,11 @@ permalink: /manuals/1.0/ja/02-input-classes.html
 
 ```php
 #[Be(UserProfile::class)]  // 変容の運命
-final class UserInput
+final readonly class UserInput
 {
     public function __construct(
-        public readonly string $name,     // 内在的
-        public readonly string $email     // 内在的
+        public string $name,     // 内在的
+        public string $email     // 内在的
     ) {}
 }
 ```
@@ -43,11 +43,11 @@ final class UserInput
 ### 単純なデータ入力
 ```php
 #[Be(OrderCalculation::class)]
-final class OrderInput
+final readonly class OrderInput
 {
     public function __construct(
-        public readonly array $items,        // 内在的
-        public readonly string $currency     // 内在的
+        public array $items,        // 内在的
+        public string $currency     // 内在的
     ) {}
 }
 ```
@@ -55,12 +55,12 @@ final class OrderInput
 ### 複雑な構造化入力
 ```php
 #[Be(PaymentProcessing::class)]
-final class PaymentInput
+final readonly class PaymentInput
 {
     public function __construct(
-        public readonly Money $amount,           // 内在的
-        public readonly CreditCard $card,        // 内在的
-        public readonly Address $billing         // 内在的
+        public Money $amount,           // 内在的
+        public CreditCard $card,        // 内在的
+        public Address $billing         // 内在的
     ) {}
 }
 ```
@@ -73,4 +73,4 @@ final class PaymentInput
 
 ---
 
-**次へ**: イマナンスが世界と出会う[存在クラス](03-being-classes.html)について学びましょう。
+**次へ**: イマナンスが世界と出会う[存在クラス](./03-being-classes.html)について学びましょう。

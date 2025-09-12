@@ -20,10 +20,10 @@ permalink: /manuals/1.0/ja/03-being-classes.html
 ## 基本構造
 
 ```php
-final class UserProfile
+final readonly class UserProfile
 {
-    public readonly string $displayName;
-    public readonly bool $isValid;
+    public string $displayName;
+    public bool $isValid;
     
     public function __construct(
         #[Input] string $name,                    // 内在的
@@ -52,11 +52,11 @@ final class UserProfile
 コンストラクタは新しい自己が生まれる特別な場所です。なるべき自己になるために、内在的性質と、自らは持たないが世界から与えられる超越的な力が出会い、変容のロジックが働きます。
 
 ```php
-final class OrderCalculation
+final readonly class OrderCalculation
 {
-    public readonly Money $subtotal;
-    public readonly Money $tax;
-    public readonly Money $total;
+    public Money $subtotal;
+    public Money $tax;
+    public Money $total;
     
     public function __construct(
         #[Input] array $items,                    // 内在的
@@ -83,11 +83,11 @@ final class OrderCalculation
 
 ```php
 #[Be([SuccessfulOrder::class, FailedOrder::class])]  // 複数の運命
-final class OrderValidation
+final readonly class OrderValidation
 {
-    public readonly bool $isValid;
-    public readonly array $errors;
-    public readonly SuccessfulOrder|FailedOrder $being;  // 存在プロパティ
+    public bool $isValid;
+    public array $errors;
+    public SuccessfulOrder|FailedOrder $being;  // 存在プロパティ
     
     public function __construct(
         #[Input] Money $total,                    // 内在的
