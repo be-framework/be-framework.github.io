@@ -36,11 +36,11 @@ Understanding transcendent capabilities and contextual ontologies
 ## [9. Error Handling & Validation](09-error-handling.html)
 Semantic exceptions and multilingual error messages
 
-## [10. From Doing to Being: The Bigger Picture](10-from-doing-to-being-final.html)
-Understanding the paradigm shift and its place in programming history
-
-## [11. Semantic Logging](11-semantic-logging.html)
+## [10. Semantic Logging](10-semantic-logging.html)
 Structured recording and audit trails of object metamorphosis
+
+## [11. Reference & Development Resources](11-reference-resources.html)
+Essential resources and links for framework development
 
 ---
 

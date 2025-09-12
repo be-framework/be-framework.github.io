@@ -1,8 +1,8 @@
 ---
 layout: docs-en
-title: "11. Semantic Logging"
+title: "10. Semantic Logging"
 category: Manual
-permalink: /manuals/1.0/en/11-semantic-logging.html
+permalink: /manuals/1.0/en/10-semantic-logging.html
 ---
 
 # Semantic Logging
