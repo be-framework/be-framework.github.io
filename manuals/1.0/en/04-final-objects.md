@@ -23,9 +23,20 @@ Final Objects represent the destination of metamorphosis—complete, transformed
 
 **Rich State**: Unlike Input Classes, Final Objects contain the full richness of transformed data.
 
+## Temporal Completeness
+
+Here's an intriguing question: What if objects had such completeness that they needed no external testing?
+
+The Be Framework captures the temporal existence of objects along two axes:
+
+- **`#[Be]`**: The intended self, the destination (future directionality)
+- **`$been`**: The completed self (past perfect self-evidence)
+
+Traditional programming verifies whether objects have been processed correctly through external tests. But what if objects themselves contained evidence of their completion? Instead of external verification, intrinsic self-evidence becomes possible.
+
 ## Examples
 
-### Successful Outcomes
+### Intrinsic Self-Evidence
 ```php
 final class SuccessfulOrder
 {
@@ -33,42 +44,70 @@ final class SuccessfulOrder
     public readonly string $confirmationCode;
     public readonly DateTimeImmutable $timestamp;
     public readonly string $message;
+    public readonly BeenProcessed $been;          // Self-evidence
     
     public function __construct(
-        #[Input] Money $total,                    // Immanent from validation
-        #[Input] CreditCard $card,                // Immanent from validation
-        #[Inject] OrderIdGenerator $generator,    // Transcendent
-        #[Inject] Receipt $receipt                // Transcendent
+        #[Input] Money $total,                    // Immanent nature
+        #[Input] CreditCard $card,                // Immanent nature
+        #[Inject] OrderIdGenerator $generator,    // Transcendent force
+        #[Inject] Receipt $receipt                // Transcendent force
     ) {
-        $this->orderId = $generator->generate();              // New Immanent
-        $this->confirmationCode = $receipt->generate($total); // New Immanent
-        $this->timestamp = new DateTimeImmutable();          // New Immanent
-        $this->message = "Order confirmed: {$this->orderId}"; // New Immanent
+        $this->orderId = $generator->generate();              // New immanent nature
+        $this->confirmationCode = $receipt->generate($total); // New immanent nature
+        $this->timestamp = new DateTimeImmutable();           // New immanent nature
+        $this->message = "Order confirmed: {$this->orderId}"; // New immanent nature
+        
+        // Self-evidence of completion
+        $this->been = new BeenProcessed(
+            actor: $card->getHolderName(),
+            timestamp: $this->timestamp,
+            evidence: [
+                'total' => $total->getAmount(),
+                'payment_method' => $card->getType(),
+                'confirmation' => $this->confirmationCode
+            ]
+        );
     }
 }
 ```
 
-### Error States as Final Objects
+This object requires no external testing. The `$been` property contains complete evidence of completion.
+
+### Error States with Self-Evidence
 ```php
 final class FailedOrder
 {
     public readonly string $errorCode;
     public readonly string $message;
     public readonly DateTimeImmutable $timestamp;
+    public readonly BeenRejected $been;          // Self-evidence of failure
     
     public function __construct(
-        #[Input] array $errors,                   // Immanent from validation
-        #[Inject] Logger $logger,                 // Transcendent
-        #[Inject] ErrorCodeGenerator $generator   // Transcendent
+        #[Input] array $errors,                   // Immanent nature
+        #[Inject] Logger $logger,                 // Transcendent force
+        #[Inject] ErrorCodeGenerator $generator   // Transcendent force
     ) {
         $this->errorCode = $generator->generate();
         $this->message = "Order failed: " . implode(', ', $errors);
         $this->timestamp = new DateTimeImmutable();
         
+        // Self-evidence of failure
+        $this->been = new BeenRejected(
+            reason: 'validation_failed',
+            timestamp: $this->timestamp,
+            evidence: [
+                'error_count' => count($errors),
+                'error_types' => array_keys($errors),
+                'error_code' => $this->errorCode
+            ]
+        );
+        
         $logger->logOrderFailure($this->errorCode, $errors);  // Side effect
     }
 }
 ```
+
+Both success and failure carry their own self-evidence of completion. Instead of external tests, the objects themselves maintain complete records of what occurred.
 
 ## Final Objects vs Input Classes
 
@@ -105,8 +144,12 @@ The path from Input to Final Object represents a complete transformation journey
 2. **Being Classes**: Transformation stages ("Here's how I change")  
 3. **Final Object**: Complete result ("Here's what I became")
 
-Users primarily care about Input (what they provide) and Final Objects (what they get back). The Being Classes in between are the framework's responsibility—the machinery of transformation that creates the bridge between intention and result.
+Users primarily care about Input (what they provide) and Final Objects (what they get back). The Being Classes in between are our responsibility as designers. It's crucial to understand the temporal transformation of the domain well and design the mechanisms of that transformation to bridge intention and result.
 
-## Natural Completion
+## Transformation Complete
 
-Final Objects embody the completion of natural transformation. They don't need to "do" anything more—they simply *are* the result that was meant to emerge from the original input's encounter with the world's capabilities.
+Final Objects express the state of entelecheia (complete realization). They are fully realized beings that no longer need transformation.
+
+The immanent nature that began with Input Classes, through encounters with various transcendent forces and natural transformation, finally reaches this completed form. There is no more "trying to become" or "intending to change." Everything is complete, and the value that users truly sought is realized here. This is the essential value of our system.
+
+This is the destination that Be Framework aims for in programming—existence that embodies not "what to do" but "what to be."
