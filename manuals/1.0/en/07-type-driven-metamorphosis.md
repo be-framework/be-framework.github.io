@@ -7,144 +7,134 @@ permalink: /manuals/1.0/en/07-type-driven-metamorphosis.html
 
 # Type-Driven Metamorphosis
 
-> "The object knows its own nature. We merely create the conditions for its becoming."
+> "The Tao gives birth to one, one gives birth to two, two gives birth to three, three gives birth to all things"
+>
+> 　　—Laozi, *Tao Te Ching*, Chapter 42 (6th century BCE)
 
-Type-Driven Metamorphosis represents the deepest transformation—where objects **discover their own destiny** through their nature.
-
-## Beyond Fixed Paths
-
-Traditional metamorphosis follows predetermined routes:
+Type-driven metamorphosis enables objects to choose from multiple possible types based on conditions. Multiple classes are declared as arrays using the `#[Be()]` attribute, with the selection expressed through the being property:
 
 ```php
-#[Be(UserProfile::class)]  // Single destiny
-final class UserInput
+#[Be([Success::class, Failure::class])]
+final class PaymentAttempt
 {
-    // Always becomes UserProfile, regardless of content
-}
-```
-
-## Self-Determining Beings
-
-Type-Driven Metamorphosis allows objects to **choose their own becoming**:
-
-```php
-#[Be([ActiveUser::class, InactiveUser::class])]
-final class UserValidation
-{
-    public readonly ActiveUser|InactiveUser $being;  // Being Property
+    public readonly Success|Failure $being;
     
     public function __construct(
-        #[Input] string $email,
-        #[Input] DateTime $lastLogin,
-        #[Inject] UserRepository $repository
+        #[Input] Money $amount,
+        #[Input] CreditCard $card,
+        #[Inject] PaymentGateway $gateway
     ) {
-        $daysSinceLogin = $lastLogin->diff(new DateTime())->days;
+        $result = $gateway->process($amount, $card);
         
-        // Self-determination of destiny
-        $this->being = $daysSinceLogin < 30 
-            ? new ActiveUser($email, $lastLogin)
-            : new InactiveUser($email, $lastLogin);
+        // Branching based on results
+        $this->being = $result->isSuccessful() 
+            ? new Success($result)
+            : new Failure($result->getError());
     }
 }
 ```
 
 ## The Being Property
 
-The **Being Property** is where self-determination manifests:
-
-- Must be a **union type** of all possible destinations
-- Must be named exactly `being`
-- Contains the object's chosen destiny
+The `$being` property indicates the next transformation destination:
 
 ```php
-public readonly SuccessfulPayment|FailedPayment $being;
+public readonly Success|Failure|Pending $being;
 ```
 
-## Natural Branching
-
-Objects choose their path based on **inner nature**:
+Classes are chosen when this type signature matches the constructor of the next class.
+For example, if `$being` is of type `Success`, a class with the following constructor would be selected:
 
 ```php
-#[Be([ChildAccount::class, AdultAccount::class, SeniorAccount::class])]
-final class AgeBasedAccount
+class NextStep {
+    public function __construct(#[Input] Success $being) {
+```
+
+`#[Be]` completely expresses all possibilities of an object. Types become the specification for workflows and use cases.
+
+## Multiple Type Selection Example
+
+```php
+#[Be([VIPUser::class, RegularUser::class, SuspendedUser::class])]
+final class UserClassification
 {
-    public readonly ChildAccount|AdultAccount|SeniorAccount $being;
+    public readonly VIPUser|RegularUser|SuspendedUser $being;
     
     public function __construct(
-        #[Input] int $age,
-        #[Input] string $name,
-        #[Inject] AccountFactory $factory
+        #[Input] UserActivity $activity,
+        #[Input] array $violations,
+        #[Inject] UserPolicy $policy
     ) {
         $this->being = match (true) {
-            $age < 18 => $factory->createChild($name, $age),
-            $age < 65 => $factory->createAdult($name, $age),
-            default => $factory->createSenior($name, $age)
+            $policy->shouldSuspend($violations) => new SuspendedUser($violations),
+            $activity->qualifiesForVIP() => new VIPUser($activity),
+            default => new RegularUser($activity)
         };
     }
 }
 ```
 
-## Error States as Valid Beings
+## Continuation Processing Mechanism
 
-Failure is not an exception—it's a **valid form of existence**:
+The advantage of type-driven processing lies in automatic continuation processing:
 
 ```php
-#[Be([SuccessfulRegistration::class, FailedRegistration::class])]
-final class UserRegistration
+$evaluation = $becoming(new UserInput($data));
+$notification = $becoming($evaluation);  // $evaluation->being is automatically selected
+```
+
+The framework detects the `$being` property and performs the next processing based on its type. External conditional branching becomes unnecessary.
+
+## Extended Decision-Making Prospects
+
+⚠️ **Note**: AMD (Advanced Decision-Making) is currently an unimplemented future concept.
+
+Beyond deterministic judgment, a new paradigm that embraces uncertainty is being prepared:
+
+```php
+// Future concept
+#[Accept]  // Unimplemented: delegation to experts
+#[Be([Approved::class, Rejected::class, Undetermined::class])]
+final class ComplexDecision
 {
-    public readonly SuccessfulRegistration|FailedRegistration $being;
+    public readonly Approved|Rejected|Undetermined $being;
     
-    public function __construct(
-        #[Input] string $email,
-        #[Input] string $password,
-        #[Inject] UserService $userService
-    ) {
-        try {
-            $user = $userService->register($email, $password);
-            $this->being = new SuccessfulRegistration($user);
-        } catch (RegistrationException $e) {
-            $this->being = new FailedRegistration($e->getErrors());
-        }
-    }
+    // Extended decision-making through AI-human collaboration
 }
 ```
 
-Both success and failure are **equally valid beings**.
+A decision system where determinable things are decided by types, and indeterminate things are delegated to experts.
 
-## Metamorphosis Continuation
+## Elimination of Control Structures
 
-The framework automatically extracts the Being Property for continued transformation:
+Be Framework eliminates traditional "complex control structures within methods". The framework follows flows declared with `#[Be]` and selects the next class through type matching.
+
+Traditional complex conditional branching:
 
 ```php
-$classification = $becoming(new OrderInput($data));
-$processedOrder = $becoming($classification);  // Uses being property automatically
+if ($score > 800) {
+    return new Approved($amount);
+} elseif ($score < 400) {
+    return new Rejected("Low score");
+} else {
+    return new Review($amount);
+}
 ```
 
-## Philosophical Implications
+In type-driven metamorphosis, these are expressed as union types:
 
-### Objects as Conscious Entities
-
-Type-Driven Metamorphosis treats objects as **conscious beings** that understand their own nature.
-
-### Wu Wei in Code
-
-The programmer doesn't **force** transformation—they create conditions where objects naturally become what they are meant to be.
-
-### Elimination of Control Flow
-
-No `if-else` chains in business logic. The object's nature **is** the logic.
-
-## The Revolution
-
-Being Property signatures become **documentation**:
 ```php
-public readonly Success|Warning|Error $being;  // All possibilities visible
+public readonly Approved|Rejected|Review $being;
 ```
 
-Objects **self-determine** their destiny based on their essential nature, not external control.
+## Integration with Type System
+
+Type-driven metamorphosis integrates complex decision logic into the type system. Union types make possible results explicit, while constructors handle the actual branching. This makes decision logic understandable and maintainable code.
+
+From the simple principle "if types match, proceed to the next", a rich workflow system that handles real-world complexity is constructed.
 
 ---
 
-**Next**: Learn about [Reason Layer: Ontological Capabilities](07-reason-layer.md) where contextual capabilities shape transformation.
+**Next**: Learn about the philosophy of dependency injection that supports metamorphosis in [Reason Layer: Ontological Capabilities](08-reason-layer.html).
 
-*"We don't decide what objects become—we discover what they already are, in their deepest nature."*
+*"Type-driven metamorphosis is a technique that integrates complex control flow into the type system itself."*

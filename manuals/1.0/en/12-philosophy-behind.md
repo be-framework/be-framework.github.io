@@ -1,8 +1,8 @@
 ---
 layout: docs-en
-title: "10. The Philosophy Behind"
-category: Manual
-permalink: /manuals/1.0/en/10-philosophy-behind.html
+title: "12. The Philosophy Behind"
+category: Philosophy
+permalink: /manuals/1.0/en/12-philosophy-behind.html
 ---
 
 # The Philosophy Behind

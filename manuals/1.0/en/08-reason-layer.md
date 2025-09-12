@@ -5,185 +5,178 @@ category: Manual
 permalink: /manuals/1.0/en/08-reason-layer.html
 ---
 
-# Reason Layer: Ontological Capabilities
+# Reason Layer
 
-> "Context is not decoration—it is the very condition of existence."
+> "Everything that exists has a reason for its existence"
+>
+> 　　—Leibniz, *Principle of Sufficient Reason* (1714)
 
-The Reason Layer embodies **Transcendent** forces—the contextual capabilities that shape how beings transform.
+## Why This Name?
 
-## Beyond Simple Services
+The Reason Layer has two meanings of "reason":
 
-Traditional dependency injection provides tools:
+### 1. Reason for Type Matching
 
-```php
-public function __construct(
-    EmailService $emailService,     // Just a tool
-    DatabaseService $database       // Just a tool
-) {}
-```
-
-## Ontological Capabilities
-
-The Reason Layer provides **contextual being-capabilities**:
+First, the reason as criteria for determining the next transformation destination:
 
 ```php
-public function __construct(
-    #[Input] string $message,                    // Immanent
-    #[Inject] #[English] CulturalGreeting $greeting,  // Transcendent capability
-    #[Inject] #[Formal] BusinessProtocol $protocol     // Transcendent context
-) {
-    // Capability and context shape the transformation
+final class BeGreeting
+{
+    public readonly CasualStyle|FormalStyle $being;
+    
+    public function __construct(
+        #[Input] string $name,
+        #[Input] string $style
+    ) {
+        // The condition 'formal' is the reason for choosing FormalStyle
+        $this->being = $style === 'formal' 
+            ? new FormalStyle() 
+            : new CasualStyle();
+    }
 }
 ```
 
-## Reason Classes: Ways of Being
+### 2. Reason for Existence
 
-Reason classes are **not services**—they are contextual ways of being:
+Next, the reason as the foundation for why an object can be in that existence:
+
+```php
+final class FormalGreeting
+{
+    public readonly string $greeting;
+    public readonly string $businessCard;
+    
+    public function __construct(
+        #[Input] string $name,           // Immanent property
+        #[Input] FormalStyle $being      // Reason for existence
+    ) {
+        // FormalStyle provides the reason why this object can be FormalGreeting
+        $this->greeting = $being->formalGreeting($name);
+        $this->businessCard = $being->formalBusinessCard($name);
+    }
+}
+```
+
+`FormalGreeting` can exist as `FormalGreeting` because `FormalStyle` provides the necessary behaviors. This is the reason for existence.
+
+## Defining Reason Classes
+
+Reason classes provide methods that realize specific modes of existence:
 
 ```php
 namespace App\Reason;
 
-final class CasualStyle
+final class FormalStyle
 {
-    public function format(string $message): string
+    public function formalGreeting(string $name): string
     {
-        return strtolower($message) . " 😊";
+        return "Good morning, Mr./Ms. {$name}.";
     }
     
-    public function getGreeting(): string
+    public function formalBusinessCard(string $name): string
     {
-        return "Hey there!";
+        return "【{$name}】\nI would like to extend my formal greetings.";
     }
 }
 
-final class FormalStyle  
+final class CasualStyle  
 {
-    public function format(string $message): string
+    public function casualGreeting(string $name): string
     {
-        return ucfirst($message) . ".";
+        return "Hey, {$name}!";
     }
     
-    public function getGreeting(): string
+    public function casualMessage(string $name): string
     {
-        return "Good day.";
+        return "Hi {$name}! 😊 Nice to meet you!";
     }
 }
 ```
 
-These are **ontological modes**—different ways of existing in specific contexts.
+## Reason for Existence as Raison d'être
 
-## Context-Driven Transformation
-
-The same object transforms differently based on contextual capabilities:
+The Reason Layer provides the **raison d'être** of objects.
 
 ```php
-final class FormattedGreeting
-{
-    public readonly string $greeting;
-    public readonly string $signature;
-    
-    public function __construct(
-        #[Input] string $name,
-        #[Input] string $message,
-        #[Inject] StyleReason $style       // Context shapes transformation
-    ) {
-        $this->greeting = $style->getGreeting() . " " . $name;
-        $this->signature = $style->format($message);
-    }
-}
-```
-
-## Cultural Context Ontologies
-
-Applications naturally adapt to cultural contexts:
-
-```php
-final class JapaneseEtiquette
-{
-    public function addHonorific(string $name): string
-    {
-        return $name . "-san";
-    }
-    
-    public function formatGreeting(string $message): string
-    {
-        return "いつもお世話になっております。" . $message;
-    }
-}
-
-final class AmericanEtiquette
-{
-    public function addHonorific(string $name): string
-    {
-        return $name;  // No honorific needed
-    }
-}
-```
-
-## Strategy as Ontology
-
-Unlike the Strategy pattern, Reason classes represent **ways of being**, not algorithms:
-
-```php
-interface PricingOntology
-{
-    public function interpretValue(Money $price): PriceCategory;
-}
-
-final class LuxuryMarketOntology implements PricingOntology
-{
-    // In luxury context, high price means exclusivity
-}
-
-final class MassMarketOntology implements PricingOntology  
-{
-    // In mass market, high price means barrier
-}
-```
-
-## Multiple Contextual Capabilities
-
-```php
-final class InternationalMessage
+final class ValidatedUser
 {
     public function __construct(
-        #[Input] string $recipientName,
-        #[Input] string $message,
-        #[Inject] CulturalEtiquette $culture,     // Cultural context
-        #[Inject] CommunicationProtocol $protocol, // Communication context
-        #[Inject] FormalityLevel $formality       // Formality context
+        #[Input] string $email,
+        #[Input] ValidationReason $raisonDEtre    // The raison d'être of this existence
     ) {
-        $name = $culture->addHonorific($recipientName);
-        $greeting = $culture->formatGreeting($message);
-        $styled = $formality->apply($greeting);
-        
-        $this->content = $protocol->format($styled);
+        // ValidationReason provides the raison d'être for ValidatedUser
     }
 }
 ```
 
-## Dependency Resolution
+**raison d'être** means:
+- Why an object can exist in that state
+- The raison d'être of `ValidatedUser` is validation capability
+- The raison d'être of `SavedUser` is saving capability  
+- The raison d'être of `DeletedUser` is deletion/archival capability
 
-Context-aware binding through dependency injection:
+Reason objects provide the tool set necessary for an object to exist in that state. This is the origin of the name "Reason Layer" in the Be Framework.
 
+## Difference from #[Inject]
+
+The unique value of the Reason Layer becomes clear when compared to traditional dependency injection:
+
+**Traditional Inject**:
 ```php
-$injector->bind(PaymentGateway::class)
-    ->annotatedWith(Production::class)
-    ->to(StripeGateway::class);
-    
-$injector->bind(PaymentGateway::class)
-    ->annotatedWith(Testing::class)
-    ->to(MockGateway::class);
+public function __construct(
+    #[Input] string $email,
+    #[Inject] EmailValidator $emailValidator,
+    #[Inject] PasswordChecker $passwordChecker, 
+    #[Inject] SecurityAuditor $auditor,
+    #[Inject] DatabaseSaver $saver
+) {
+    // Using scattered tools individually
+}
 ```
 
-## The Revolution
+**Reason Layer**:
+```php
+public function __construct(
+    #[Input] string $email,
+    #[Input] UserValidationReason $reason    // Related tools bundled as reason for existence
+) {
+    // A complete tool set for becoming ValidatedUser is provided
+    $this->result = $reason->validateUser($email, $this);
+}
+```
 
-The Reason Layer transforms dependency injection from **tool provision** to **ontological context**.
+**Differences**:
+- **Inject**: Individual tools injected separately
+- **Reason Layer**: Provided as a semantically coherent "tool set for achieving that state"
 
-Objects don't just receive services—they receive **ways of being** appropriate to their environment.
+**Value**:
+- **Conceptual coherence**: "What is needed to become ValidatedUser?" is clear
+- **Simplified testing**: Mock one reason object instead of many
+- **Separation of concerns**: Related tools are consolidated in one place
+
+## State Realization Through Delegation
+
+In the Reason Layer, objects delegate the realization of their state to reason objects:
+
+```php
+final class SavedUser
+{
+    public function __construct(
+        #[Input] UserData $data,
+        #[Input] SaveReason $reason    // Receive reason for existence
+    ) {
+        // Delegate saving process to reason for existence
+        $this->result = $reason->saveUser($data);
+    }
+}
+```
+
+Objects themselves declare "what to become", while reason objects realize "how to achieve that state". This separation clearly divides state definition from realization means.
+
+`SavedUser` requires a saving tool set, `ValidatedUser` requires a validation tool set. Reason objects clearly organize "what is needed to achieve this state?" and follow the single responsibility principle, making tests concise as well.
 
 ---
 
-**Next**: Learn about [Error Handling & Validation](08-error-handling.md) where semantic exceptions preserve meaning.
+**Next**: Learn about meaning preservation in errors through [Validation and Error Handling](09-error-handling.html).
 
-*"The Reason Layer is where the world's capabilities meet the object's nature—as contextual condition for meaningful becoming."*
+*"The Reason Layer provides the tool set necessary for objects to realize their mode of existence."*

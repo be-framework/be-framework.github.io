@@ -7,144 +7,136 @@ permalink: /manuals/1.0/ja/07-type-driven-metamorphosis.html
 
 # 型駆動変容
 
-> 「オブジェクトは自身の性質を知っています。私たちは単に、その成長のための条件を作り出すだけです。」
+> 「道生一、一生二、二生三、三生万物」
+>
+> 　　—老子『道徳経』第四十二章（紀元前6世紀）
 
-型駆動変容は最も深い変容を表します—オブジェクトがその性質を通して**自身の運命を発見する**場所です。
+## 型駆動による変容
 
-## 固定されたパスを超えて
-
-従来の変容は予め決められたルートに従います：
-
-```php
-#[Be(UserProfile::class)]  // 単一の運命
-final class UserInput
-{
-    // 内容に関係なく、常にUserProfileになる
-}
-```
-
-## 自己決定する存在
-
-型駆動変容はオブジェクトが**自身の成長を選択する**ことを許可します：
+型駆動変容では、オブジェクトが複数の可能な型から条件に応じて選択します。`#[Be()]`属性で複数のクラスを配列として宣言し、beingプロパティでその選択を表現します：
 
 ```php
-#[Be([ActiveUser::class, InactiveUser::class])]
-final class UserValidation
+#[Be([Success::class, Failure::class])]
+final class PaymentAttempt
 {
-    public readonly ActiveUser|InactiveUser $being;  // 存在プロパティ
+    public readonly Success|Failure $being;
     
     public function __construct(
-        #[Input] string $email,
-        #[Input] DateTime $lastLogin,
-        #[Inject] UserRepository $repository
+        #[Input] Money $amount,
+        #[Input] CreditCard $card,
+        #[Inject] PaymentGateway $gateway
     ) {
-        $daysSinceLogin = $lastLogin->diff(new DateTime())->days;
+        $result = $gateway->process($amount, $card);
         
-        // 運命の自己決定
-        $this->being = $daysSinceLogin < 30 
-            ? new ActiveUser($email, $lastLogin)
-            : new InactiveUser($email, $lastLogin);
+        // 結果に応じた分岐
+        $this->being = $result->isSuccessful() 
+            ? new Success($result)
+            : new Failure($result->getError());
     }
 }
 ```
 
-## 存在プロパティ
+## beingプロパティ
 
-**存在プロパティ**は自己決定が現れる場所です：
-
-- すべての可能な目的地の**ユニオン型**でなければなりません
-- 正確に`being`と名付けられなければなりません
-- オブジェクトの選択された運命を含みます
+`$being`プロパティは次の変容先を示すプロパティです：
 
 ```php
-public readonly SuccessfulPayment|FailedPayment $being;
+public readonly Success|Failure|Pending $being;
 ```
 
-## 自然な分岐
-
-オブジェクトは**内なる性質**に基づいて自身の道を選択します：
+次のクラスのコンストラクタでこの型シグネチャがマッチするクラスが選ばれます。
+例えば`$being`が`Success`型なら、以下のコンストラクタを持つクラスが選択されます：
 
 ```php
-#[Be([ChildAccount::class, AdultAccount::class, SeniorAccount::class])]
-final class AgeBasedAccount
+class NextStep {
+    public function __construct(#[Input] Success $being) {
+```
+
+`#[Be]`がオブジェクトの全ての可能性を完全に表現します。型がワークフローやユースケースの仕様になります。
+
+## 複数型の選択例
+
+```php
+#[Be([VIPUser::class, RegularUser::class, SuspendedUser::class])]
+final class UserClassification
 {
-    public readonly ChildAccount|AdultAccount|SeniorAccount $being;
+    public readonly VIPUser|RegularUser|SuspendedUser $being;
     
     public function __construct(
-        #[Input] int $age,
-        #[Input] string $name,
-        #[Inject] AccountFactory $factory
+        #[Input] UserActivity $activity,
+        #[Input] array $violations,
+        #[Inject] UserPolicy $policy
     ) {
         $this->being = match (true) {
-            $age < 18 => $factory->createChild($name, $age),
-            $age < 65 => $factory->createAdult($name, $age),
-            default => $factory->createSenior($name, $age)
+            $policy->shouldSuspend($violations) => new SuspendedUser($violations),
+            $activity->qualifiesForVIP() => new VIPUser($activity),
+            default => new RegularUser($activity)
         };
     }
 }
 ```
 
-## 有効な存在としてのエラー状態
+## 継続処理の仕組み
 
-失敗は例外ではありません—それは**有効な存在形態**です：
+型駆動処理の利点は、自動的な継続処理にあります：
 
 ```php
-#[Be([SuccessfulRegistration::class, FailedRegistration::class])]
-final class UserRegistration
+$evaluation = $becoming(new UserInput($data));
+$notification = $becoming($evaluation);  // $evaluation->beingが自動選択される
+```
+
+フレームワークは`$being`プロパティを検出し、その型に応じて次の処理を行います。外部の条件分岐は不要になります。
+
+## 拡張意思決定の展望
+
+⚠️ **注記**: AMD（拡張意思決定）は現在未実装の将来構想です。
+
+確定的判断を超えて、不確実性を受容する新しいパラダイムが準備されています：
+
+```php
+// 将来構想
+#[Accept]  // 未実装：専門家への委譲
+#[Be([Approved::class, Rejected::class, Undetermined::class])]
+final class ComplexDecision
 {
-    public readonly SuccessfulRegistration|FailedRegistration $being;
+    public readonly Approved|Rejected|Undetermined $being;
     
-    public function __construct(
-        #[Input] string $email,
-        #[Input] string $password,
-        #[Inject] UserService $userService
-    ) {
-        try {
-            $user = $userService->register($email, $password);
-            $this->being = new SuccessfulRegistration($user);
-        } catch (RegistrationException $e) {
-            $this->being = new FailedRegistration($e->getErrors());
-        }
-    }
+    // AIと人間の協調による拡張意思決定
 }
 ```
 
-成功と失敗の両方が**等しく有効な存在**です。
+確定できるものは型で決定し、不確定なものは専門家に委譲する意思決定システムです。
 
-## 変容の継続
+## 制御構造の排除
 
-フレームワークは継続的な変容のために存在プロパティを自動的に抽出します：
+Be Frameworkは従来の"メソッドの中にある複雑な制御構造"を排除します。フレームワークは`#[Be]`で宣言された流れに従い、型マッチングで次のクラスを選択します。
+
+従来の複雑な条件分岐：
 
 ```php
-$classification = $becoming(new OrderInput($data));
-$processedOrder = $becoming($classification);  // 自動的に存在プロパティを使用
+if ($score > 800) {
+    return new Approved($amount);
+} elseif ($score < 400) {
+    return new Rejected("Low score");
+} else {
+    return new Review($amount);
+}
 ```
 
-## 哲学的含意
+型駆動変容では、これらがユニオン型で表現されます：
 
-### 意識的エンティティとしてのオブジェクト
-
-型駆動変容はオブジェクトを自身の性質を理解する**意識的存在**として扱います。
-
-### コードにおける無為
-
-プログラマは変容を**強制**しません—オブジェクトが自然にあるべき姿になる条件を作り出します。
-
-### 制御フローの排除
-
-ビジネスロジックに`if-else`チェーンはありません。オブジェクトの性質**が**ロジックです。
-
-## 革命
-
-存在プロパティシグネチャは**ドキュメント**になります：
 ```php
-public readonly Success|Warning|Error $being;  // すべての可能性が見える
+public readonly Approved|Rejected|Review $being;
 ```
 
-オブジェクトは外部制御ではなく、本質的な性質に基づいて運命を**自己決定**します。
+## 型システムとの統合
+
+型駆動変容により、複雑な決定ロジックが型システムに統合されます。ユニオン型が可能な結果を明示し、コンストラクタが実際の分岐を処理します。これにより、決定ロジックが理解しやすく、保守しやすいコードになります。
+
+「型がマッチすれば次に進む」という単純な原理から、現実の複雑さに対応する豊かなワークフローシステムが構築されます。
 
 ---
 
-**次へ**: 文脈的能力が変容を形作る[理性層: 存在論的能力](08-reason-layer.html)について学びましょう。
+**次へ**: 変容を支える依存性注入の哲学について[理性層: 存在論的能力](08-reason-layer.html)で学びましょう。
 
-> 「私たちはオブジェクトが何になるかを決定するのではありません—オブジェクトが最も深い性質においてすでに何であるかを発見するのです。」
+> 「型駆動変容は、複雑な制御フローを型システムに統合する手法です。」

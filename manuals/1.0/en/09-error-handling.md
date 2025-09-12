@@ -5,68 +5,76 @@ category: Manual
 permalink: /manuals/1.0/en/09-error-handling.html
 ---
 
-# Error Handling & Validation
+# Error Handling
 
-> "What cannot be must be understood. Failure preserves meaning through clear language."
+> "I have not failed. I've just found 10,000 ways that won't work"
+>
+> 　　—Thomas Edison (1847-1931)
 
-Error handling in Be Framework is not about catching exceptions—it's about **preserving meaning when existence fails**.
+## Meaningful Failures
 
-## Beyond Generic Exceptions
-
-Traditional error handling loses meaning:
+In Be Framework, errors are not mere "failures" but **specific reasons why existence is impossible**. We use semantic exceptions instead of generic ones:
 
 ```php
-try {
-    $user = new User($name, $email, $age);
-} catch (Exception $e) {
-    // What went wrong? Why? How to fix it?
+// Traditional generic error
+catch (Exception $e) {
     echo $e->getMessage();  // "Validation failed"
 }
-```
 
-## Semantic Exceptions: Meaning in Failure
-
-Every failure carries **specific ontological meaning**:
-
-```php
-try {
-    $user = $becoming(new UserInput($name, $email, $age));
-} catch (SemanticVariableException $e) {
+// Semantic exceptions
+catch (SemanticVariableException $e) {
     foreach ($e->getErrors()->exceptions as $exception) {
         echo get_class($exception) . ": " . $exception->getMessage();
-        // EmptyNameException: Name cannot be empty.
-        // InvalidEmailFormatException: Email format is invalid.
-        // AgeTooYoungException: Age must be at least 13.
+        // EmptyNameException: Name cannot be empty
+        // InvalidEmailException: Invalid email format
     }
 }
 ```
 
-## Exception Hierarchy
+## Domain Exception Classes
 
-Domain exceptions form meaningful categories:
+In Be Framework, all exceptions inherit from `DomainException`:
 
 ```php
 abstract class DomainException extends Exception {}
 
 final class EmptyNameException extends DomainException {}
 
-final class InvalidEmailFormatException extends DomainException
+final class InvalidEmailException extends DomainException
 {
     public function __construct(public readonly string $invalidEmail)
     {
-        parent::__construct("Email format is invalid: {$invalidEmail}");
+        parent::__construct("Invalid email format: {$invalidEmail}");
     }
 }
 
-// Age-related existence failures
-abstract class AgeException extends DomainException {}
-final class NegativeAgeException extends AgeException {}
-final class AgeTooHighException extends AgeException {}
+final class AgeTooYoungException extends DomainException
+{
+    public function __construct(public readonly int $age, public readonly int $min = 13)
+    {
+        parent::__construct("Age insufficient: {$age} years (minimum {$min} years)");
+    }
+}
+```
+
+Since all exceptions are domain exceptions, technical exceptions (`RuntimeException`, `InvalidArgumentException`, etc.) are not used. Failures are always expressed as **failures with domain meaning**.
+
+Domain exceptions hold not just messages but **structured data**. From the `$invalidEmail` property, programs can access the invalid email address value and utilize it for various purposes: human-readable display, API JSON responses, AI analysis, etc.
+
+```php
+catch (InvalidEmailException $e) {
+    $logData = [
+        'invalid_email' => $e->invalidEmail,    // Programmatically accessible
+        'user_ip' => $request->getClientIp(),
+        'timestamp' => now()
+    ];
+    Logger::warning('Invalid email attempt', $logData);
+}
 ```
 
 ## Multilingual Error Messages
 
-Semantic exceptions speak the user's language:
+The `#[Message]` attribute enables multilingual error messages:
 
 ```php
 #[Message([
@@ -77,42 +85,38 @@ Semantic exceptions speak the user's language:
 final class EmptyNameException extends DomainException {}
 
 #[Message([
-    'en' => 'Age must be between {min} and {max} years.',
-    'ja' => '年齢は{min}歳から{max}歳の間でなければなりません。'
+    'en' => 'Age must be at least {min} years.',
+    'ja' => '年齢は最低{min}歳でなければなりません。'
 ])]
-final class AgeOutOfRangeException extends DomainException
+final class AgeTooYoungException extends DomainException
 {
-    public function __construct(
-        public readonly int $age,
-        public readonly int $min = 0,
-        public readonly int $max = 150
-    ) {}
+    public function __construct(public readonly int $min = 13) {}
 }
 ```
 
-## Automatic Error Collection
+## Automatic Collection of All Errors
 
-The framework collects **all validation failures** before throwing:
+The framework collects **all validation errors** before throwing an exception:
 
 ```php
-final class UserValidation
-{
-    public function __construct(
-        #[Input] string $name,      // May throw EmptyNameException
-        #[Input] string $email,     // May throw InvalidEmailFormatException  
-        #[Input] int $age           // May throw NegativeAgeException
-    ) {
-        // If ANY validation fails, ALL errors are collected
-        // Single SemanticVariableException contains everything
-    }
+try {
+    $user = $becoming(new UserInput('', 'invalid-email', 10));
+} catch (SemanticVariableException $e) {
+    // Three errors are collected simultaneously:
+    // - EmptyNameException
+    // - InvalidEmailException  
+    // - AgeTooYoungException
+    
+    $messages = $e->getErrors()->getMessages('en');
+    // ["Name cannot be empty", "Invalid email format", "Age must be at least 13"]
 }
 ```
 
-No "fail fast"—**fail completely with full understanding**.
+Rather than "stop at first error", you can **understand all problems at once**.
 
-## Error Recovery Patterns
+## Metamorphosis Including Errors
 
-Errors become **valid beings** in their own right:
+Error states can also be treated as valid metamorphosis results:
 
 ```php
 #[Be([ValidUser::class, InvalidUser::class])]
@@ -120,13 +124,10 @@ final class UserValidation
 {
     public readonly ValidUser|InvalidUser $being;
     
-    public function __construct(
-        #[Input] string $name,
-        #[Input] string $email,
-        #[Input] int $age
-    ) {
+    public function __construct(#[Input] string $data)
+    {
         try {
-            $this->being = new ValidUser($name, $email, $age);
+            $this->being = new ValidUser($data);
         } catch (ValidationException $e) {
             $this->being = new InvalidUser($e->getErrors());
         }
@@ -134,64 +135,12 @@ final class UserValidation
 }
 ```
 
-## Semantic Logging Integration
+Errors can be expressed as types rather than stopping execution with exceptions.
 
-Validation failures are automatically logged with context:
-
-```php
-{
-    "event": "metamorphosis_failed",
-    "source_class": "UserInput",
-    "destination_class": "UserProfile", 
-    "errors": [
-        {
-            "exception": "EmptyNameException",
-            "message": "Name cannot be empty",
-            "field": "name",
-            "value": ""
-        }
-    ]
-}
-```
-
-## Development vs Production
-
-```php
-// Development: Verbose error details
-if (app()->environment('local')) {
-    $errors->getDetailedMessages();
-}
-
-// Production: User-friendly messages
-$errors->getMessages('en');
-// ["Name cannot be empty.", "Email format is invalid."]
-```
-
-## Testing Error Conditions
-
-```php
-public function testCollectsAllValidationErrors(): void
-{
-    try {
-        $becoming(new UserInput('', 'invalid-email', -5));
-        $this->fail('Expected SemanticVariableException');
-    } catch (SemanticVariableException $e) {
-        $errors = $e->getErrors();
-        $this->assertCount(3, $errors->exceptions);
-    }
-}
-```
-
-## The Revolution
-
-Semantic exceptions transform error handling from **problem reporting** to **meaning preservation**.
-
-When existence fails, the reason becomes **clear, actionable, and multilingual**.
-
-Errors are not obstacles—they are **valid beings** that guide users toward successful transformation.
+Semantic exceptions make failure reasons clear, enabling users to understand specific correction methods. Error handling changes from problem reporting to **guidance toward problem resolution**.
 
 ---
 
-**Next**: Learn about [The Philosophy Behind](09-philosophy-behind.md) to understand the deeper principles.
+**Next**: Learn about the evolution of programming paradigms in [From Doing to Being](10-from-doing-to-being-final.html).
 
-*"Semantic exceptions don't just report failure—they preserve the meaning of what cannot exist."*
+*"Semantic exceptions specifically teach us why existence is impossible."*
