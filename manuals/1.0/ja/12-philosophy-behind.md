@@ -1,7 +1,7 @@
 ---
 layout: docs-ja
 title: "12. 背後にある哲学"
-category: Philosophy
+category: Manual
 permalink: /manuals/1.0/ja/12-philosophy-behind.html
 ---
 

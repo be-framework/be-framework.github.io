@@ -41,6 +41,9 @@ permalink: /manuals/1.0/ja/
 ## [11. リファレンス](./11-reference-resources.html)
 フレームワーク開発に必要なリソースとリンク集
 
+## [FAQ](./faq.html)
+よくある質問と回答集
+
 ---
 
 > Be, Don't Do
