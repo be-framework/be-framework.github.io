@@ -7,35 +7,49 @@ permalink: /manuals/1.0/ja/06-semantic-variables.html
 
 # 意味変数
 
-> 「存在すべきものは有効でなければなりません。存在できないものは決して生まれることはありません。」
+> 「存在するものは必然的に存在し、存在しないものは必然的に存在しない」
+>
+> 　　—スピノザ『エチカ』第1部定理29（1677年）
 
-意味変数はBeフレームワークの最も深い原理を体現します：**意味のある存在のみが存在できる**。
+データの妥当性はどこで保証されるべきでしょうか？コントローラー？モデル？バリデーター？
 
-## 問題
+Be Frameworkの答えは明確です：**名前そのものが制約を持つべき**と考えます。
+`$email`は単なる文字列ではなく、**有効なメールアドレス**であるべきです。`$age`にはマイナスの値は存在できません。
 
-従来の型は無意味なものから守ります：
+意味変数は、情報の識別子であり、意味を表し、制約を持つ**完全な情報モデル**です。
 
-```php
-function createUser(string $name, string $email, int $age) {
-    if (empty($name)) throw new Exception();
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new Exception();
-    // ... 無限の防御的プログラミング
-}
-```
+## 問題：分散した不完全性
 
-## 解決法
-
-意味変数は「これは有効ですか？」から「これは存在できますか？」へと根本的な問いを変えます。
+従来のアプローチでは、意味の定義が散在しています：
 
 ```php
-function createUser(PersonName $name, EmailAddress $email, Age $age) {
-    // ここに到達すれば、存在は既に保証されています
-}
+// コントローラー/model/validator...
+if (empty($name)) throw new Exception("error.name.empty");
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new Exception("error.email.invalid");
+
+// messages/ja.yml
+error.name.empty: "名前を入力してください"
+error.email.invalid: "有効なメールアドレスを入力してください"
+
+// README.md
+// "名前は1-100文字で空白のみは不可..."
 ```
+
+以下の問題が発生します：
+- **バリデーション**：コントローラーに散在
+- **エラーメッセージ**：別ファイルで管理
+- **制約ルール**：複数の場所に重複
+- **意味定義**：ドキュメントにのみ存在
+
+システムが扱う意味を集中して見ることのできる場所がありません。
+
+## 解決法：意味的完全性
+
+Be Frameworkは、分散した定義を**完全な情報モデル**として統合します。コンストラクタの引数やクラスのプロパティには、登録された**意味変数**のみを使用できます。
 
 ## 存在の定義
 
-すべての意味変数はそのドメインで何が存在できるかを定義します：
+意味変数は専用フォルダにクラスとして定義されます：
 
 ```php
 final class Name
@@ -50,25 +64,45 @@ final class Name
 }
 ```
 
-複数の検証コンテキストが自然に存在します：
+## 検証コンテキスト
+
+異なるビジネスコンテキストには異なるルールが適用されることがあります。意味変数は複数の検証コンテキストを自然にサポートします：
 
 ```php
 final class ProductCode
 {
     #[Validate]
-    public function validate(string $code): void { /* 標準ルール */ }
+    public function validate(string $code): void 
+    { 
+        // 標準的な商品コード検証（例：8桁の英数字）
+        if (!preg_match('/^[A-Z0-9]{8}$/', $code)) {
+            throw new InvalidProductCodeException();
+        }
+    }
 
     #[Validate] 
-    public function validateLegacy(#[Legacy] string $code): void { /* レガシールール */ }
+    public function validateLegacy(#[Legacy] string $code): void 
+    { 
+        // レガシーシステム用の緩い検証（例：6-10桁の英数字）
+        if (!preg_match('/^[A-Z0-9]{6,10}$/', $code)) {
+            throw new InvalidLegacyProductCodeException();
+        }
+    }
 
     #[Validate]
-    public function validatePremium(#[Premium] string $code): void { /* プレミアムルール */ }
+    public function validatePremium(#[Premium] string $code): void 
+    { 
+        // プレミアム商品用の厳格な検証（例：特定のプレフィックス必須）
+        if (!preg_match('/^PREM[A-Z0-9]{4}$/', $code)) {
+            throw new InvalidPremiumProductCodeException();
+        }
+    }
 }
 ```
 
-## 意味のある失敗
+## 失敗の意味
 
-存在が失敗したとき、意味は保持されなければなりません：
+存在が失敗したとき、失敗の意味が保持されなければなりません：
 
 ```php
 #[Message([
@@ -78,18 +112,18 @@ final class ProductCode
 final class EmptyNameException extends DomainException {}
 ```
 
-フレームワークは投げる前に**すべての検証エラー**を収集し、何が存在できないかの完全な理解を作り出します。
+フレームワークは最初に投げられる例外だけでなく、**すべての検証エラー**を例外の集合として収集し、なぜ存在できないかの完全な理解を作り出します。
 
 ## 自然な統合
 
-意味変数は存在コンストラクタで自動的に動作します：
+意味変数はコンストラクタで自動的に動作します：
 
 ```php
 final readonly class UserProfile
 {
     public function __construct(
         #[Input] #[English] public string $name,    // 英語名として自動検証
-        #[Input] string $emailAddress,              // メールとして自動検証
+        #[Input] string $emailAddress,              // メールアドレスとして自動検証
         #[Inject] NameFormatter $formatter
     ) {
         // この時点で、すべての入力が有効であることが保証されています
@@ -97,9 +131,11 @@ final readonly class UserProfile
 }
 ```
 
+変数名`$name`は`Name`意味変数クラスと、`$emailAddress`は`EmailAddress`意味変数クラスと自動的に関連付けられます。
+
 ## 階層的検証
 
-意味変数は互いに構築できます：
+意味変数は他の意味変数を基盤として構築できます。これはビジネスルールの自然な階層構造を型システムで表現する強力な手法です。
 
 ```php
 final class TeenAge  
@@ -107,12 +143,67 @@ final class TeenAge
     #[Validate]
     public function validate(#[Teen] int $age): void
     {
-        // 基本的なAge検証を継承し、ティーン固有のルールを追加
+        // まず基本的なAge検証が実行される（#[Teen]により自動的に呼び出される）
+        // その後、ティーン固有のルールを追加
         if ($age < 13) throw new TeenAgeTooYoungException();
         if ($age > 19) throw new TeenAgeTooOldException();
     }
 }
 ```
+
+この階層的アプローチにより、豊かな意味の階層が構築されます：
+
+- `Email` → `CorporateEmail`（企業ドメイン必須）→ `ExecutiveEmail`（役員レベルの制約）
+- `Price` → `DiscountPrice`（割引率制限）→ `MemberPrice`（会員特価ルール）
+- `Password` → `AdminPassword`（管理者要件）→ `SystemPassword`（システム管理者の厳格要件）
+- `Address` → `ShippingAddress`（配送可能地域）→ `InternationalAddress`（国際配送対応）
+
+各階層は前の層の制約を継承し、さらに固有の制約を追加します。基本的な`Email`検証が通らないものは、決して`ExecutiveEmail`として存在できません。これは単なる検証の組み合わせではなく、**概念の自然な精緻化**です。
+
+## 関係性制約
+
+意味変数は単独で存在するだけでなく、他の意味変数との関係性も制約として持てます。特筆すべきは**その記述の容易さ**です：
+
+```php
+final readonly class UserRegistration
+{
+    public function __construct(
+        #[Input] string $email,
+        #[Input] string $confirmEmail,
+        #[Input] string $password,
+        #[Input] string $confirmPassword,
+    ) {
+        // 何も書く必要はありません！
+        // フレームワークが自動的に関係性を検証します
+    }
+}
+```
+
+フレームワークは、対象のコンストラクタのシグネチャと**部分マッチ**する検証クラスを自動的に発見し、適用します。
+
+```php
+// これがあれば...
+final class EmailConfirmation
+{
+    #[Validate]
+    public function validate(string $email, string $confirmEmail): void
+    {
+        if ($email !== $confirmEmail) {
+            throw new EmailMismatchException();
+        }
+    }
+}
+
+// $email, $confirmEmail を持つ任意のコンストラクタで自動適用される！
+```
+
+関係性制約の例：
+- `$startDate` と `$endDate`：開始日は終了日より前でなければならない
+- `$minPrice` と `$maxPrice`：最小価格は最大価格以下でなければならない
+- `$email` と `$confirmEmail`：メールアドレスの確認一致が必要
+- `$currentPassword` と `$newPassword`：新しいパスワードは現在のものと異なる必要
+
+開発者はビジネスルールを一度定義するだけで、該当するシグネチャを持つ全てのオブジェクトで自動的に適用されます。これらの制約は、オブジェクトが存在する**前提条件**として機能します。前提が満たされない限り、そのオブジェクトは存在することすらできません。
 
 ## エラーハンドリング
 
@@ -127,19 +218,28 @@ try {
 }
 ```
 
-## 革命
+## 意味がもたらすもの
 
-意味変数は**不可能な状態を不可能にする**ことで防御的プログラミングを排除します。
+**名前は、意味、制約の識別子です。**この単純な原理だけで、フレームワークといえるほどの豊かな世界が実現されます。
 
-型システムは**ドメイン言語**になります—各型があなたのビジネスドメインで何が存在できるかの意味を運びます。
+意味変数により、**不可能な状態が不可能になります**。無効なメールアドレスは`$email`として存在できず、負の年齢は`$age`として生まれることすらありません。在庫のない商品は`$orderId`として注文されることなく、東京23区外の住所は`$city`として配送先に指定されることもありません。
 
-関数シグネチャは**ドキュメント**になります：
+型システムそのものが**ドメイン言語**となり、各型があなたのビジネスドメインで何が存在可能かを語ります。
+
+関数シグネチャを見れば、それが仕様書になります：
+
 ```php
 function processOrder(ProductCode $product, PaymentAmount $amount, CustomerAge $age)
 {
     // シグネチャが仕様です
 }
 ```
+
+この関数は有効な商品コード、正の金額、有効な年齢のみを受け入れます。ドキュメントを読む必要はありません—型が全てを物語っています。
+
+防御的プログラミングは不要になります。引数の検証、null チェック、範囲確認、在庫確認、地理的制約—これらはすべて意味変数が保証します。コードは本来の目的であるビジネスロジックの実装に集中できるのです。
+
+単なる命名規約から始まった概念が、階層的検証、関係性制約、外部リソース統合まで発展し、完全なドメイン保証システムを構築します。**名前に込められた意味が、システム全体の整合性を支えるのです。**
 
 ---
 
