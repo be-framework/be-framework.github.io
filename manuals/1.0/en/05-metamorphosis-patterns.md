@@ -1,46 +1,46 @@
 ---
 layout: docs-en
-title: "5. Metamorphosis Patterns"
+title: "5. Metamorphosis"
 category: Manual
-permalink: /manuals/1.0/en/05-metamorphosis-patterns.html
+permalink: /manuals/1.0/en/05-metamorphosis.html
 ---
 
-# Metamorphosis Patterns
+# Metamorphosis
 
-> "No man ever steps in the same river twice."
+> "Space and time cannot be defined independently of each other."
 > 
-> —Heraclitus, Fragments (c. 500 BC)
+> —Albert Einstein, The Foundation of the General Theory of Relativity (1916)
 
-## Patterns of Change
+## Time and Domain Are Inseparable
 
-Be Framework supports various patterns of transformation, from simple linear chains to complex branching. Understanding these patterns helps you design natural transformation flows.
+Just as Einstein discovered the inseparability of time and space, the Be Framework considers time and domain as a single entity that cannot be divided. Approval processes have their approval time, payments have their payment time, and transformation naturally emerges along the unique temporal axis that each domain logic possesses.
 
-## Linear Metamorphic Chain
+## Irreversible Flow of Time
 
-The simplest pattern: A → B → C → D
+Object metamorphosis follows the arrow of time in a unidirectional flow. There is no returning to the past, no remaining in the same moment:
 
 ```php
-// Input
+// Time T0: Birth of input
 #[Be(EmailValidation::class)]
 final class EmailInput { /* ... */ }
 
-// First transformation
+// Time T1: First metamorphosis (T0 is already past)
 #[Be(UserCreation::class)]
 final class EmailValidation { /* ... */ }
 
-// Second transformation  
+// Time T2: Second metamorphosis (T1 becomes memory)
 #[Be(WelcomeMessage::class)]
 final class UserCreation { /* ... */ }
 
-// Final result
+// Time T3: Final existence (encompassing all past)
 final class WelcomeMessage { /* ... */ }
 ```
 
-Each stage naturally leads to the next, like a river flowing to the sea.
+Each moment never returns, and new existence preserves previous forms as memory within itself. Like a river flowing, time moves only in one direction.
 
-## Conditional Branching Pattern
+## Self-Determination of Destiny
 
-Objects can have multiple possible futures based on their nature. This is natural transformation that branches into different types based on conditions:
+Like living beings in reality, objects determine their own destiny through the interaction between intrinsic nature and external environment. This is not following a predetermined route, but natural metamorphosis responding to the circumstances of that moment:
 
 ```php
 #[Be([ApprovedApplication::class, RejectedApplication::class])]
@@ -49,42 +49,18 @@ final class ApplicationReview
     public readonly ApprovedApplication|RejectedApplication $being;
     
     public function __construct(
-        #[Input] array $documents,                // Immanent
-        #[Inject] ReviewService $reviewer         // Transcendent
+        #[Input] array $documents,                // Intrinsic nature
+        #[Inject] ReviewService $reviewer         // External environment
     ) {
         $result = $reviewer->evaluate($documents);
         
+        // Destiny is decided at this very moment
         $this->being = $result->isApproved()
             ? new ApprovedApplication($documents, $result->getScore())
             : new RejectedApplication($result->getReasons());
     }
 }
 ```
-
-### Other Conditional Branching Examples
-
-Feature levels and permissions follow the same pattern:
-
-```php
-#[Be([PremiumFeatures::class, BasicFeatures::class])]
-final class FeatureActivation
-{
-    public readonly PremiumFeatures|BasicFeatures $being;
-    
-    public function __construct(
-        #[Input] User $user,                      // Immanent
-        #[Inject] SubscriptionService $service    // Transcendent
-    ) {
-        $subscription = $service->getSubscription($user);
-        
-        $this->being = $subscription->isPremium()
-            ? new PremiumFeatures($user, $subscription)
-            : new BasicFeatures($user);
-    }
-}
-```
-
-The object determines its own destiny through **Type-Driven Metamorphosis**.
 
 
 
@@ -149,12 +125,71 @@ This self-organization provides:
 - Capabilities provided through dependency injection
 - Testable independent components
 
-## Pattern Selection
+## Implementation Guidelines
 
-Choose patterns based on your domain's natural flow:
+### When to Choose Linear Metamorphosis
 
-- **Linear**: Sequential processes (validation → processing → completion)
-- **Conditional Branching**: Decision points (approve/reject, success/failure, permission levels)
-- **Nested**: Complex operations with sub-processes
+For sequential processing where each stage prepares the data needed for the next:
 
-The key is to let transformation emerge naturally from the domain's flow, not force it into artificial patterns.
+```php
+User Registration → Email Verification → Account Activation → Welcome Notification
+```
+
+This is suitable when failure at any stage should halt the entire process.
+
+### When to Choose Conditional Branching
+
+When the same input branches into different results based on nature or permissions:
+
+```php
+// Implementation example: Feature differentiation by payment capability
+#[Be([FullAccess::class, LimitedAccess::class, ReadOnlyAccess::class])]
+final class AccessDetermination
+{
+    public readonly FullAccess|LimitedAccess|ReadOnlyAccess $being;
+    
+    public function __construct(
+        #[Input] User $user,
+        #[Inject] PaymentStatus $payment
+    ) {
+        $this->being = match($payment->getStatus()) {
+            'premium' => new FullAccess($user, $payment->getFeatures()),
+            'basic' => new LimitedAccess($user, $payment->getLimits()),
+            default => new ReadOnlyAccess($user)
+        };
+    }
+}
+```
+
+### When to Choose Nested Metamorphosis
+
+When executing multiple independent processes in parallel and aggregating their results:
+
+```php
+final class OrderCompletion
+{
+    public function __construct(
+        #[Input] OrderData $order,
+        #[Inject] Becoming $becoming
+    ) {
+        // Independent parallel processing
+        $this->inventory = $becoming(new InventoryCheck($order->items));
+        $this->payment = $becoming(new PaymentProcess($order->payment));
+        $this->shipping = $becoming(new ShippingArrange($order->address));
+    }
+}
+```
+
+## Design Principles
+
+Choose metamorphosis patterns according to the natural flow of domain logic:
+
+- **Don't Force**: Don't force into artificial patterns
+- **Keep Simple**: Choose the most simple and understandable form
+- **Testable**: Each metamorphosis stage can be tested independently
+- **Type Safe**: Next type is guaranteed by `#[Be()]`
+
+Objects govern their own metamorphosis.
+
+Heraclitus said "the river flows" is not correct, but rather "the flowing is the river." He believed that existence cannot be separated from change. Be Framework likewise believes that to capture essence, domain and time cannot be separated.
+Domains are temporal existence. There are possibilities and being at each moment. Capturing how input classes, being classes, and final objects naturally metamorphose along the flow of time is the core of the Be Framework.

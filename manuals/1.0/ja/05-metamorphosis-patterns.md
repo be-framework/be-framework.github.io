@@ -1,46 +1,46 @@
 ---
 layout: docs-ja
-title: "5. 変容パターン"
+title: "5. メタモルフォーシス"
 category: Manual
-permalink: /manuals/1.0/ja/05-metamorphosis-patterns.html
+permalink: /manuals/1.0/ja/05-metamorphosis.html
 ---
 
-# 変容パターン
+# メタモルフォーシス
 
-> 「同じ川に二度入ることはできない」
+> 「空間と時間は独立に定義できない」
 > 
-> 　　—ヘラクレイトス『断片』（紀元前500年頃）
+> 　　—アルベルト・アインシュタイン『一般相対性理論の基礎』（1916年）
 
-## 変容の流れ
+## 時間とドメインは分割できない
 
-Beフレームワークは、単純な線形チェーンから複雑な分岐まで、様々な変容パターンをサポートします。これらのパターンを理解することで、自然な変容フローを設計できます。
+アインシュタインが時間と空間の不可分性を発見したように、Beフレームワークでは時間とドメインは分割できない一つの実体です。承認プロセスには承認の時間が、決済には決済の時間があり、それぞれのドメインロジックが持つ固有の時間軸に沿って変容が自然に現れます。
 
-## 線形変容チェーン
+## 不可逆的時間の流れ
 
-最もシンプルなパターン：A → B → C → D
+オブジェクトの変容は時間の矢に沿った一方向の流れです。過去に戻ることも、同じ瞬間に留まることもできません：
 
 ```php
-// 入力
+// 時間 T0: 入力の誕生
 #[Be(EmailValidation::class)]
 final class EmailInput { /* ... */ }
 
-// 第一変容
+// 時間 T1: 第一変容（T0は既に過去）
 #[Be(UserCreation::class)]
 final class EmailValidation { /* ... */ }
 
-// 第二変容
+// 時間 T2: 第二変容（T1は記憶となる）
 #[Be(WelcomeMessage::class)]
 final class UserCreation { /* ... */ }
 
-// 最終結果
+// 時間 T3: 最終存在（すべての過去を内包）
 final class WelcomeMessage { /* ... */ }
 ```
 
-各段階は自然に次へと導かれ、川が海に流れるようです。
+各瞬間は二度と戻らず、新しい存在は前の形態をその内部に記憶として保持します。川が流れるように、時間は一方向にのみ流れます。
 
-## 条件分岐パターン
+## 運命の自己決定
 
-オブジェクトはその性質に基づいて複数の可能な未来を持つことができます。これは条件によって異なる型へと分岐する自然な変容です：
+現実の生物と同様に、オブジェクトは内在的な性質と外部環境の相互作用によって、自身の運命を決定します。これは予め決められたルートを辿るのではなく、その瞬間の状況に応じた自然な変容です：
 
 ```php
 #[Be([ApprovedApplication::class, RejectedApplication::class])]
@@ -49,42 +49,18 @@ final class ApplicationReview
     public readonly ApprovedApplication|RejectedApplication $being;
     
     public function __construct(
-        #[Input] array $documents,                // 内在的
-        #[Inject] ReviewService $reviewer         // 超越的
+        #[Input] array $documents,                // 内在的性質
+        #[Inject] ReviewService $reviewer         // 外部環境
     ) {
         $result = $reviewer->evaluate($documents);
         
+        // 運命は今この瞬間に決まる
         $this->being = $result->isApproved()
             ? new ApprovedApplication($documents, $result->getScore())
             : new RejectedApplication($result->getReasons());
     }
 }
 ```
-
-### 他の条件分岐例
-
-機能レベルや権限による分岐も同様のパターンです：
-
-```php
-#[Be([PremiumFeatures::class, BasicFeatures::class])]
-final class FeatureActivation
-{
-    public readonly PremiumFeatures|BasicFeatures $being;
-    
-    public function __construct(
-        #[Input] User $user,                      // 内在的
-        #[Inject] SubscriptionService $service    // 超越的
-    ) {
-        $subscription = $service->getSubscription($user);
-        
-        $this->being = $subscription->isPremium()
-            ? new PremiumFeatures($user, $subscription)
-            : new BasicFeatures($user);
-    }
-}
-```
-
-オブジェクトは**型駆動変容**を通して自身の運命を決定します。
 
 
 ## ネストした変容
@@ -148,12 +124,74 @@ match (true) {
 - 依存性注入による能力の提供
 - テスト可能な独立したコンポーネント
 
-## パターンの選択
+## 実装上の選択指針
 
-ドメインの自然な流れに基づいてパターンを選択してください：
+### いつ線形変容を選ぶか
 
-- **線形**: 順次プロセス（検証 → 処理 → 完了）
-- **条件分岐**: 決定ポイント（承認/拒否、成功/失敗、権限レベル）
-- **ネストした**: サブプロセスを持つ複雑な操作
+シーケンシャルな処理で、各段階が次に必要なデータを準備する場合：
 
-重要なのは、変容をドメインの自然な流れから生まれさせることであり、人工的なパターンに強制することではありません。
+```php
+ユーザー登録 → メール検証 → アカウント有効化 → ウェルカム通知
+```
+
+各段階での失敗は全体を停止させる必要がある場合に適しています。
+
+### いつ条件分岐を選ぶか
+
+同じ入力から性質や権限によって異なる結果に分岐する場合：
+
+```php
+// 実装例：支払い能力による機能差
+#[Be([FullAccess::class, LimitedAccess::class, ReadOnlyAccess::class])]
+final class AccessDetermination
+{
+    public readonly FullAccess|LimitedAccess|ReadOnlyAccess $being;
+    
+    public function __construct(
+        #[Input] User $user,
+        #[Inject] PaymentStatus $payment
+    ) {
+        $this->being = match($payment->getStatus()) {
+            'premium' => new FullAccess($user, $payment->getFeatures()),
+            'basic' => new LimitedAccess($user, $payment->getLimits()),
+            default => new ReadOnlyAccess($user)
+        };
+    }
+}
+```
+
+### いつネストした変容を選ぶか
+
+複数の独立した処理を並行して実行し、それぞれの結果を集約する場合：
+
+```php
+final class OrderCompletion
+{
+    public function __construct(
+        #[Input] OrderData $order,
+        #[Inject] Becoming $becoming
+    ) {
+        // 独立した処理を並行実行
+        $this->inventory = $becoming(new InventoryCheck($order->items));
+        $this->payment = $becoming(new PaymentProcess($order->payment));
+        $this->shipping = $becoming(new ShippingArrange($order->address));
+    }
+}
+```
+
+## 設計原則
+
+変容パターンの選択は、ドメインロジックの自然な流れに従ってください：
+
+- **強制しない**: 人工的なパターンに無理やり当てはめない
+- **シンプルに**: 最も単純で理解しやすい形を選ぶ
+- **テスト可能**: 各変容段階が独立してテストできる
+- **型安全**: `#[Be()]` によって次の型が保証される
+
+オブジェクトは自らが自らの変容を規定します。
+
+ヘラクレイトスは『川が流れている』のではなく『流れているのが川だ』と言いました。存在は変化とは切り離せないと考えたのです。Be Frameworkも同じように本質を捉えるためにはドメインと時間は切り離せないものと考えました。
+ドメインは時間的存在です。その時その時の可能性と存在があります。入力クラス、存在クラス、最終オブジェクトが時間の流れに沿って自然に変容していく様を捉えることが、Beフレームワークの核心です。
+
+
+
