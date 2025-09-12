@@ -7,6 +7,12 @@ permalink: /manuals/1.0/en/03-being-classes.html
 
 # Being Classes
 
+> "The Tao does nothing, yet nothing is left undone."
+> 
+> —Laozi, Tao Te Ching, Chapter 37 (6th century BC)
+
+## Immanence Meets Transcendence
+
 Being Classes are where transformation actually occurs.
 
 The object's own nature (**Immanent Nature**) meets forces provided from the outside (**Transcendent Forces**), and a new being is born. If Input Classes are the "beginning," Being Classes express the "moment of change."

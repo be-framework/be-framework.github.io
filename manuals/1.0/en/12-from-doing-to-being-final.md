@@ -7,7 +7,11 @@ permalink: /manuals/1.0/en/12-from-doing-to-being-final.html
 
 # From Doing to Being: The Bigger Picture
 
-> *"The real voyage of discovery consists not in seeking new landscapes, but in having new eyes."* — Marcel Proust
+> "All things that exist are in the process of becoming."
+> 
+> —Heraclitus, Fragments (c. 500 BC)
+
+## What You Have Discovered
 
 You've written Input Classes, created Being Classes, and watched objects transform rather than mutate.
 

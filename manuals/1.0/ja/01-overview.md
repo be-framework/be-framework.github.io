@@ -5,7 +5,11 @@ category: Manual
 permalink: /manuals/1.0/ja/01-overview.html
 ---
 
-## 概要: 新しいパラダイム
+# 概要
+
+> 「真の発見の航海は、新しい風景を求めることではなく、新しい目を持つことにある。」
+> 
+> 　　—マルセル・プルースト『囚われの女』（À la recherche du temps perdu 第5巻）1923年
 
 ## まず、これを見てください
 
