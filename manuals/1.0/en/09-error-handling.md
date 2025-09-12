@@ -141,6 +141,6 @@ Semantic exceptions make failure reasons clear, enabling users to understand spe
 
 ---
 
-**Next**: Learn about the evolution of programming paradigms in [From Doing to Being](10-from-doing-to-being-final.html).
+**Next**: Learn about recording object metamorphosis in [Semantic Logging](10-semantic-logging.html).
 
 *"Semantic exceptions specifically teach us why existence is impossible."*
