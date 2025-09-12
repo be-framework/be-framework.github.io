@@ -7,7 +7,13 @@ permalink: /manuals/1.0/ja/05-metamorphosis-patterns.html
 
 # 変容パターン
 
-Beフレームワークは、単純な線形チェーンから複雑な分岐する運命まで、様々な変容パターンをサポートします。これらのパターンを理解することで、自然な変容フローを設計できます。
+> 「同じ川に二度入ることはできない」
+> 
+> 　　—ヘラクレイトス『断片』（紀元前500年頃）
+
+## 変容の流れ
+
+Beフレームワークは、単純な線形チェーンから複雑な分岐まで、様々な変容パターンをサポートします。これらのパターンを理解することで、自然な変容フローを設計できます。
 
 ## 線形変容チェーン
 
@@ -32,9 +38,9 @@ final class WelcomeMessage { /* ... */ }
 
 各段階は自然に次へと導かれ、川が海に流れるようです。
 
-## 分岐する運命
+## 条件分岐パターン
 
-オブジェクトはその性質に基づいて複数の可能な未来を持つことができます：
+オブジェクトはその性質に基づいて複数の可能な未来を持つことができます。これは条件によって異なる型へと分岐する自然な変容です：
 
 ```php
 #[Be([ApprovedApplication::class, RejectedApplication::class])]
@@ -55,42 +61,9 @@ final class ApplicationReview
 }
 ```
 
-オブジェクトは**型駆動変容**を通して自身の運命を決定します。
+### 他の条件分岐例
 
-## フォーク・ジョインパターン
-
-単一の入力が並列変容に分岐し、後に収束します：
-
-```php
-#[Be(PersonalizedRecommendation::class)]
-final class UserAnalysis
-{
-    public readonly PersonalizedRecommendation $being;
-    
-    public function __construct(
-        #[Input] string $userId,                  // 内在的
-        #[Inject] BehaviorAnalyzer $behavior,     // 超越的
-        #[Inject] PreferenceAnalyzer $preference, // 超越的
-        #[Inject] SocialAnalyzer $social          // 超越的
-    ) {
-        // 並列分析
-        $behaviorScore = $behavior->analyze($userId);
-        $preferenceScore = $preference->analyze($userId);
-        $socialScore = $social->analyze($userId);
-        
-        // 収束
-        $this->being = new PersonalizedRecommendation(
-            $behaviorScore,
-            $preferenceScore, 
-            $socialScore
-        );
-    }
-}
-```
-
-## 条件付き変容
-
-時として変容はランタイム条件に依存します：
+機能レベルや権限による分岐も同様のパターンです：
 
 ```php
 #[Be([PremiumFeatures::class, BasicFeatures::class])]
@@ -110,6 +83,9 @@ final class FeatureActivation
     }
 }
 ```
+
+オブジェクトは**型駆動変容**を通して自身の運命を決定します。
+
 
 ## ネストした変容
 
@@ -134,7 +110,26 @@ final class OrderProcessing
 
 ## 自己組織化パイプライン
 
-これらのパターンの美しさは、それらが**自己組織化**であることです。オブジェクトは自身の運命を宣言し、フレームワークは外部のオーケストレーションなしに自然に変容パスに従います。
+これらのパターンの美しさは、それらが**自己組織化**であることです。Unixパイプが単純なコマンドを組み合わせて強力なシステムを作るように、Beフレームワークは型付きオブジェクトを組み合わせて自然な変容の流れを作ります。
+
+### Unixパイプとの比較
+
+```bash
+# Unix: テキストが流れる外部制御のパイプライン
+cat access.log | grep "404" | awk '{print $7}' | sort | uniq -c
+```
+
+```php
+// Be Framework: リッチなオブジェクトが流れる内在的制御のパイプライン
+$finalObject = $becoming(new ApplicationInput($documents));
+// オブジェクト自身が次の変容先を知っている
+```
+
+重要な進化：
+- **Unix**: 外部のshellがパイプを制御
+- **Be Framework**: オブジェクト自身が`#[Be()]`で運命を宣言
+
+### 自己組織化の実現
 
 ```php
 // コントローラーもオーケストレーターもなし—ただ自然な流れ
@@ -147,14 +142,18 @@ match (true) {
 };
 ```
 
+この自己組織化により：
+- 外部オーケストレーションが不要
+- 型安全性が保たれる
+- 依存性注入による能力の提供
+- テスト可能な独立したコンポーネント
+
 ## パターンの選択
 
 ドメインの自然な流れに基づいてパターンを選択してください：
 
 - **線形**: 順次プロセス（検証 → 処理 → 完了）
-- **分岐**: 決定ポイント（承認/拒否、成功/失敗）
-- **フォーク・ジョイン**: 収束する並列分析
-- **条件付き**: 機能フラグ、権限、サブスクリプション
+- **条件分岐**: 決定ポイント（承認/拒否、成功/失敗、権限レベル）
 - **ネストした**: サブプロセスを持つ複雑な操作
 
-重要なのは、変容をドメインロジックから自然に生まれさせることであり、人工的なパターンに強制することではありません。
+重要なのは、変容をドメインの自然な流れから生まれさせることであり、人工的なパターンに強制することではありません。
