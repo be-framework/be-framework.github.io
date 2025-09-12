@@ -59,7 +59,7 @@ final class AgeTooYoungException extends DomainException
 
 Since all exceptions are domain exceptions, technical exceptions (`RuntimeException`, `InvalidArgumentException`, etc.) are not used. Failures are always expressed as **failures with domain meaning**.
 
-Domain exceptions hold not just messages but **structured data**. From the `$invalidEmail` property, programs can access the invalid email address value:
+Domain exceptions hold not just messages but **structured data**. From the `$invalidEmail` property, programs can access the invalid email address value and utilize it for various purposes: human-readable display, API JSON responses, AI analysis, etc.
 
 ```php
 catch (InvalidEmailException $e) {
@@ -143,4 +143,4 @@ Semantic exceptions make failure reasons clear, enabling users to understand spe
 
 **Next**: Learn about Be Framework's philosophical foundations in [The Philosophy Behind](10-philosophy-behind.html).
 
-*"Semantic exceptions clearly teach us why existence is impossible."*
+*"Semantic exceptions specifically teach us why existence is impossible."*
