@@ -8,7 +8,7 @@ permalink: /manuals/1.0/ja/
 
 > 変容を通じて存在を理解する
 
-## [1. 概要: コードについて異なる思考法](01-overview.html)
+## [1. 概要: 新しいパラダイム](01-overview.html)
 存在指向プログラミングとの初めての出会い
 
 ## [2. 入力クラス](02-input-classes.html)
@@ -29,8 +29,8 @@ permalink: /manuals/1.0/ja/
 ## [7. 型駆動変容](07-type-driven-metamorphosis.html)
 ユニオン型と存在プロパティによる自己決定オブジェクト
 
-## [8. 理性層: 存在論的能力](08-reason-layer.html)
-超越的能力と文脈的存在論の理解
+## [8. 存在理由層](08-reason-layer.html)
+オブジェクトの存在を可能にする理由とreason d'être
 
 ## [9. エラーハンドリング & 検証](09-error-handling.html)
 意味的例外と多言語エラーメッセージ

@@ -30,8 +30,8 @@ Domain-specific validation and ontological type safety
 ## [7. Type-Driven Metamorphosis](07-type-driven-metamorphosis.html)
 Self-determining objects with union types and the Being Property
 
-## [8. Reason Layer: Ontological Capabilities](08-reason-layer.html)
-Understanding transcendent capabilities and contextual ontologies
+## [8. Reason Layer](08-reason-layer.html)
+Raison d'être and the reasons that enable object existence
 
 ## [9. Error Handling & Validation](09-error-handling.html)
 Semantic exceptions and multilingual error messages
