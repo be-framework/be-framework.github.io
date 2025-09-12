@@ -93,4 +93,12 @@
         --bg-delete:#3a1919;
     }
     .highlight{ background:#0b1020; }
+    
+    /* diff用色調整：ダークモードで可読性確保 */
+    .highlight .gd{ color:#fff; }  /* Deleted: 白文字で読みやすく */
+    .highlight .gi{ color:#fff; }  /* Inserted: 白文字で読みやすく */
+    .highlight .gr, .highlight .gt{ color:#ff6b6b; }  /* Error/Traceback: 明るい赤 */
+    .highlight .gh, .highlight .gu{ color:#c9c9c9; }  /* Heading/Subheading: 明るいグレー */
+    .highlight .go{ color:#b0b0b0; }  /* Output: 明るいグレー */
+    .highlight .gp{ color:#d0d0d0; }  /* Prompt: 明るいグレー */
 }
