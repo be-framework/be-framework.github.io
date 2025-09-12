@@ -9,3 +9,16 @@ markdown: kramdown
 redcarpet:
   extensions: ["autolink", "no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript", "with_toc_data", "tables"]
 highlighter: rouge
+repository: be-framework/be-framework.github.io
+
+# Process manuals as first-class pages (needed for sidebar/nav)
+include:
+  - "manuals"
+
+# Default settings for different file types
+defaults:
+  - scope:
+      path: "manuals"
+      type: "pages"
+    values:
+      sitemap: false

@@ -7,7 +7,9 @@ permalink: /manuals/1.0/en/03-being-classes.html
 
 # Being Classes
 
-Being Classes are where transformation happens. They receive **Immanent** identity from previous stages and **Transcendent** forces from the world, creating new forms of existence.
+Being Classes are where transformation actually occurs.
+
+The object's own nature (**Immanent Nature**) meets forces provided from the outside (**Transcendent Forces**), and a new being is born. If Input Classes are the "beginning," Being Classes express the "moment of change."
 
 ## Basic Structure
 
@@ -31,21 +33,17 @@ final class UserProfile
 
 ## The Transformation Pattern
 
-Every Being Class follows the same ontological pattern:
+Every Being Class follows the same flow of transformation:
 
-**Immanent** (`#[Input]`) + **Transcendent** (`#[Inject]`) → **New Immanent**
+**Immanent Nature** (`#[Input]`) + **Transcendent Forces** (`#[Inject]`) → **New Immanent Nature**
 
 - **Immanent factors**: What the object inherits from its previous form
 - **Transcendent factors**: External capabilities and context provided by the world
 - **New Immanent**: The transformed being that emerges from this interaction
 
-## Constructor as Workshop
+## Entelecheia - Becoming Who You're Meant to Be
 
-The constructor is where metamorphosis occurs. It's a complete workshop where:
-
-1. Identity meets capability
-2. Transformation logic resides
-3. New immutable being emerges
+The constructor is where a new self is born. To become the intended self, **Immanent Nature** meets **Transcendent Forces** that the self doesn't possess, and transformation logic unfolds.
 
 ```php
 final class OrderCalculation
@@ -66,6 +64,12 @@ final class OrderCalculation
     }
 }
 ```
+
+1. Properties inherited from previous classes become constructor arguments and meet injected external capabilities.
+2. They interact, and the transformation logic unfolds.
+3. Through property assignment, a new being is born.
+
+Entelecheia is a philosophical concept proposed by Aristotle, representing the process by which potentiality transitions to actuality. It's the moment when an object's possibilities are realized through interaction with external forces. In the Be Framework, this transformation process in the constructor is considered the realization of entelecheia.
 
 ## Bridging to Final Objects
 
@@ -98,4 +102,4 @@ final class OrderValidation
 
 ## Natural Flow
 
-Being Classes don't "do" things—they naturally become what they're meant to be through the interaction of their nature with the world's capabilities. This embodies the principle of natural transformation without forced control.
+Being Classes don't "do" things—they naturally become what they're meant to be through the interaction of their **Immanent Nature** with **Transcendent Forces** provided by the world. This is the principle of wu wei (無為) from Taoist philosophy. They don't change other things; they transform themselves.
