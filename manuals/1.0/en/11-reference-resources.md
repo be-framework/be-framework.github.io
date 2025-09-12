@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "11. Reference"
+title: "11. PR"
 category: Manual
 permalink: /manuals/1.0/en/11-reference-resources.html
 ---
