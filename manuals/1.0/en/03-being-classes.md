@@ -7,7 +7,7 @@ permalink: /manuals/1.0/en/03-being-classes.html
 
 # Being Classes
 
-> "The Way constantly does nothing, yet nothing is left undone."
+> "The Tao does nothing, yet nothing is left undone."
 > 
 > —Laozi, Tao Te Ching, Chapter 37 (6th century BC)
 
