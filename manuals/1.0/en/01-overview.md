@@ -19,22 +19,20 @@ $activeUser = User::find($id);
 $deletedUser = new DeletedUser($activeUser);
 ```
 
-**DeletedUser?**
+**DeletedUser?** What is that?
 
-Feel puzzled by `DeletedUser`? That's perfectly natural.
+This question is actually your doorway into a new world of programming—one that invites you to think in **completely different ways**.
 
-This confusion is actually the gateway to a new world of programming—one that explores **ways you never considered before**.
+## From 'What to Do' to 'What to Be'
 
-## The Difference
-
-Traditional programming focuses on **actions**:
+Traditional programming focuses on **DOING (actions)**:
 ```php
 $user->validate();
 $user->save();
 $user->notify();
 ```
 
-Be Framework focuses on **existence**:
+Be Framework focuses on **BEING (existence)**:
 ```php
 $rawData = new UserInput($_POST);
 $validatedUser = new ValidatedUser($rawData);
@@ -42,7 +40,7 @@ $savedUser = new SavedUser($validatedUser);
 ```
 
 One tells objects what to DO.
-The other defines what can BE.
+The other defines what they can BE.
 
 ## Why This Matters
 
@@ -75,11 +73,11 @@ This manual will show you how to:
 
 1. **Design "what objects are"** instead of "what they should do"
 2. **Make invalid states impossible to create** instead of checking for them
-3. **Express natural object metamorphosis** instead of forcing changes
+3. **Express natural transformation (self-metamorphosis)** instead of forcing changes
 4. **Trust correct states** instead of defending against errors
 
 ## Ready?
 
-Let's start with the foundation: [Input Classes →](./01-input-classes.md)
+Let's start with the foundation: [Input Classes →]({{ '/manuals/1.0/en/02-input-classes.html' | relative_url }})
 
 You'll build your first Being—and discover why `DeletedUser` makes perfect sense.

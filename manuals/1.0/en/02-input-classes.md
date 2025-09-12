@@ -7,9 +7,9 @@ permalink: /manuals/1.0/en/02-input-classes.html
 
 # Input Classes
 
-Input Classes are the starting point of every metamorphosis in Be Framework.
+Input Classes are the starting point of every transformation in Be Framework.
 
-They contain only what the object itself possesses—no external dependencies. Think of it as the object's identity. Since these elements exist within the object, we call this **Immanent** nature.
+They contain only what the object itself possesses—no external dependencies. Think of it as the object's identity. These elements exist within the object, forming what we call the object's **Immanent Nature**.
 
 ## Basic Structure
 
@@ -18,8 +18,8 @@ They contain only what the object itself possesses—no external dependencies. T
 final class UserInput
 {
     public function __construct(
-        public readonly string $name,     // Immanent
-        public readonly string $email     // Immanent
+        public readonly string $name,     // Immanent Nature
+        public readonly string $email     // Immanent Nature
     ) {}
 }
 ```
@@ -40,8 +40,8 @@ final class UserInput
 final class OrderInput
 {
     public function __construct(
-        public readonly array $items,        // Immanent
-        public readonly string $currency     // Immanent
+        public readonly array $items,        // Immanent Nature
+        public readonly string $currency     // Immanent Nature
     ) {}
 }
 ```
@@ -52,17 +52,19 @@ final class OrderInput
 final class PaymentInput
 {
     public function __construct(
-        public readonly Money $amount,           // Immanent
-        public readonly CreditCard $card,        // Immanent
-        public readonly Address $billing         // Immanent
+        public readonly Money $amount,           // Immanent Nature
+        public readonly CreditCard $card,        // Immanent Nature
+        public readonly Address $billing         // Immanent Nature
     ) {}
 }
 ```
 
-## The Role of Immanent
+## The Role of Immanent Nature
 
-Input Classes contain only **Immanent** elements. These are the object's own data, independent of external dependencies.
+Input Classes contain only **Immanent Nature** elements. These are the object's own data, independent of external dependencies.
 
-**Transcendent** elements (powers that the object cannot achieve by itself) are not included here. They appear in Being Classes, which we'll learn about next.
+**Transcendent Forces** (powers that the object cannot achieve by itself) are not included here. They appear in Being Classes, which we'll learn about next.
 
-Input Classes represent the starting point of metamorphosis—the object's initial form.
+Input Classes represent the starting point of transformation—the object's initial form.
+
+[Next: Being Classes →]({{ '/manuals/1.0/en/03-being-classes.html' | relative_url }})
