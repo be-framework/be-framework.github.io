@@ -16,15 +16,20 @@
     </div>
     <div class="collapse navbar-collapse" id="Navber">
         <ul class="navbar-nav mr-auto">
-            {% assign en_pages = site.pages | where: "layout", "docs-en" | where: "category", "Manual" | sort: "path" %}
+            {% assign all_pages = site.pages | where: "category", "Manual" %}
+            {% assign en_pages = all_pages | where: "layout", "docs-en" %}
             {% for item in en_pages %}
             {% unless item.path contains "/index.md" or item.path contains "/convention/" %}
+            {% unless item.path contains "/ja/" %}
+            {% if item.path contains "/en/" %}
             {% assign item_link = item.permalink | default: item.url %}
             <li class="nav-item">
                 <a class="nav-link {% if page.permalink == item_link %}active{% endif %}"
                    {% if page.permalink == item_link %}aria-current="page"{% endif %}
                    href="{{ item_link | relative_url }}">{{ item.title | escape }}</a>
             </li>
+            {% endif %}
+            {% endunless %}
             {% endunless %}
             {% endfor %}
         </ul>
