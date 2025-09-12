@@ -1,11 +1,11 @@
 ---
 layout: docs-en
-title: "11. Reference & Development Resources"
+title: "11. Reference"
 category: Manual
 permalink: /manuals/1.0/en/11-reference-resources.html
 ---
 
-# Reference & Development Resources
+# Reference
 
 > "Knowledge is only completed through practice"
 > 

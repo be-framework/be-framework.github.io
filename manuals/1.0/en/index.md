@@ -39,7 +39,7 @@ Semantic exceptions and multilingual error messages
 ## [10. Semantic Logging](10-semantic-logging.html)
 Structured recording and audit trails of object metamorphosis
 
-## [11. Reference & Development Resources](11-reference-resources.html)
+## [11. Reference](11-reference-resources.html)
 Essential resources and links for framework development
 
 ---
