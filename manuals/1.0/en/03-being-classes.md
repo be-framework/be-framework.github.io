@@ -65,9 +65,9 @@ final class OrderCalculation
 }
 ```
 
-1. Properties inherited from previous classes become constructor arguments and meet injected external capabilities
-2. They interact with each other and transformation logic works
-3. Through property assignment, a new being is born
+1. Properties inherited from previous classes become constructor arguments and meet injected external capabilities.
+2. They interact, and the transformation logic unfolds.
+3. Through property assignment, a new being is born.
 
 Entelecheia is a philosophical concept proposed by Aristotle, representing the process by which potentiality transitions to actuality. It's the moment when an object's possibilities are realized through interaction with external forces. In the Be Framework, this transformation process in the constructor is considered the realization of entelecheia.
 
