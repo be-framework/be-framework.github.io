@@ -10,10 +10,10 @@
     --c-default: #0b3da6; /* default: 識別子/変数/演算子 */
     --c-keyword: #1a7f37; /* keyword: final/public/readonly/function/new/match など */
     --c-string : #c62828; /* string: "…" '…' */
-    --c-comment: #d35400; /* comment: 焦げオレンジ */
+    --c-comment: #bb5200; /* comment: 焦げオレンジ */
     --c-punc   : #222222; /* 記号/括弧 */
     --c-func   : #6b1b1b; /* 関数名: 目立ち過ぎない赤茶。完全php.netなら default に */
-    --c-number : #0a8f8f; /* 数値 */
+    --c-number : #0a7a7a; /* 数値 */
     --bg-insert: #ddffdd;
     --bg-delete: #ffdddd;
 }
@@ -96,7 +96,7 @@
         --bg-insert:#12351a;
         --bg-delete:#3a1919;
     }
-    
+
     /* diff用色調整：ダークモードで可読性確保 */
     .highlight .gd{ color:#fff; }  /* Deleted: 白文字で読みやすく */
     .highlight .gi{ color:#fff; }  /* Inserted: 白文字で読みやすく */
