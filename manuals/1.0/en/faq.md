@@ -147,19 +147,6 @@ A. `$been` (self-proof) + semantic logging can provide **complete audit trails**
 
 ---
 
-## 6) Modeling Guidelines & Anti-patterns
-
-**Q22. Common pitfalls?**
-
-* Dumping everything into Reason (bloating)
-* Mixing external dependencies into `Input` (polluting immanence)  
-* "Ambiguous state names" with unclear temporality (ambiguous words like `Processed?`)
-
-**Q23. When not to use Be?**
-A. For one-off scripts / ultra-lightweight CRUD where **temporality and existence conditions are thin**, traditional approaches may be faster.
-
----
-
 ## 7) Migration
 
 **Q24. Migration steps for existing code? (Minimal steps)**
