@@ -9,8 +9,8 @@ permalink: /manuals/1.0/en/
 
 > Understanding existence through transformation
 
-## [1. Overview: A Different Way to Think About Code](./01-overview.html)
-First encounter with being-oriented programming
+## [1. Overview](./01-overview.html)
+New Paradigm: First encounter with being-oriented programming
 
 ## [2. Input Classes](./02-input-classes.html)
 Starting point of transformation - pure Immanent nature
