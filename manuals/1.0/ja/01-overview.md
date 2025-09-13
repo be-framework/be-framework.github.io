@@ -5,7 +5,7 @@ category: Manual
 permalink: /manuals/1.0/ja/01-overview.html
 ---
 
-# 概要
+# 新しい考え方
 
 > 「真の発見の航海は、新しい風景を求めることではなく、新しい目を持つことにある。」
 > 
