@@ -18,7 +18,7 @@
         <ul class="navbar-nav mr-auto">
             {% assign ja_pages = site.pages | where: "layout", "docs-ja" | where: "category", "Manual" | sort: "path" %}
             {% for item in ja_pages %}
-            {% unless item.path contains "/index.md" or item.path contains "/convention/" %}
+            {% unless item.path contains "/index.md" or item.path contains "/convention/" or item.path contains "12-philosophy-behind.md" %}
             {% assign item_link = item.permalink | default: item.url %}
             <li class="nav-item">
                 <a class="nav-link {% if page.permalink == item_link %}active{% endif %}"
