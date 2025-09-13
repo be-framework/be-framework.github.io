@@ -200,14 +200,25 @@ $profile = $becoming(new UserInput($name, $email));
 
 ---
 
-## 10) Quick Term Index
+## 10) Detailed Term Explanations
 
-* **Being-oriented / Ontological**: Design perspective making existence possibility and time primary abstractions.
-* **Immanence / Transcendence**: Intrinsic properties / Forces provided from outside.
-* **Entelecheia**: The "moment of transformation" when potential moves to actual.
-* **Reason Layer**: Foundation (tool set) for state establishment.
-* **Semantic Variables**: Name = meaning = constraints.
-* **Semantic Exceptions / Semantic Logging**: Holding failures and history with meaning.
+### Being-oriented / Ontological
+A design philosophy that treats existence possibility and time as primary abstractions. It's a way of thinking that centers on "what can exist" rather than the traditional "what to do," understanding program states as temporal existence.
+
+### Immanence / Transcendence
+Immanence refers to the intrinsic properties and information that an object naturally possesses. Transcendence refers to capabilities and information provided by the external environment or dependencies. In Be Framework, new existence emerges from the combination of these two.
+
+### Entelecheia
+A concept derived from Aristotelian philosophy, representing the "moment of transformation" when potentiality moves to actuality. In Be Framework, it refers to the moment when immanence and transcendence meet in the constructor to complete a new existence.
+
+### Reason Layer
+An aggregation of the foundation and tool set necessary for establishing a certain existence state as objects. It enhances testability and maintainability by meaningfully bundling traditional DI (Dependency Injection).
+
+### Semantic Variables
+A concept where variable names themselves express meaning and constraints. For example, `$validEmail` expresses the constraint that it must be a "valid Email" to exist, integrating scattered validation logic at the type level.
+
+### Semantic Exceptions / Semantic Logging
+A mechanism for holding failures and history not as simple strings, but as structured data with meaning. It supports multilingual compatibility and audit requirements, making system behavior traceable at the semantic level.
 
 ---
 
