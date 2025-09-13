@@ -17,24 +17,26 @@ permalink: /manuals/1.0/ja/08-reason-layer.html
 
 ### 1. 型マッチングの理由
 
-まず、次の変容先を決定する判断基準としての理由：
+まず、フレームワークが次の変容先を決定する際の根拠となる型：
 
 ```php
-final readonly class BeGreeting
+final readonly class CasualGreeting
 {
-    public CasualStyle|FormalStyle $being;
-    
+    public string $greeting;
+    public string $emoji;
+
     public function __construct(
-        #[Input] string $name,
-        #[Input] string $style
+        #[Input] public string $name,        // 内在的性質
+        #[Input] public CasualStyle $being   // この$beingがCasualStyle型であること
     ) {
-        // 'formal'という条件が FormalStyle を選ぶ理由
-        $this->being = $style === 'formal' 
-            ? new FormalStyle() 
-            : new CasualStyle();
+        // $beingがCasualStyle型だからCasualGreetingに変容した
+        $this->greeting = $this->being->casualGreeting($name);
+        $this->emoji = $this->being->casualEmoji();
     }
 }
 ```
+
+`CasualStyle $being`という**型そのもの**が、なぜ`CasualGreeting`になるのかの理由です。フレームワークはこの型を読み取り、対応する変容先を自動選択します。
 
 ### 2. 存在の理由
 
@@ -50,7 +52,7 @@ final readonly class FormalGreeting
         #[Input] string $name,           // 内在的性質
         #[Reason] FormalStyle $being     // 存在理由
     ) {
-        // FormalStyleが、このオブジェクトがFormalGreetingでいる理由を提供
+        // FormalStyleはformalGreeting()やformalBusinessCard()ができるからこそFormalStyleでいられる
         $this->greeting = $being->formalGreeting($name);
         $this->businessCard = $being->formalBusinessCard($name);
     }

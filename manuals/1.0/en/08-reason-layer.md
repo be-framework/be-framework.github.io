@@ -17,24 +17,26 @@ The Reason Layer has two meanings of "reason":
 
 ### 1. Reason for Type Matching
 
-First, the reason as criteria for determining the next transformation destination:
+First, the type itself that serves as the basis for the framework to determine the next transformation destination:
 
 ```php
-final readonly class BeGreeting
+final readonly class CasualGreeting
 {
-    public CasualStyle|FormalStyle $being;
-    
+    public string $greeting;
+    public string $emoji;
+
     public function __construct(
-        #[Input] string $name,
-        #[Input] string $style
+        #[Input] public string $name,        // Immanent property
+        #[Input] public CasualStyle $being   // This being CasualStyle type
     ) {
-        // The condition 'formal' is the reason for choosing FormalStyle
-        $this->being = $style === 'formal' 
-            ? new FormalStyle() 
-            : new CasualStyle();
+        // $being transformed to CasualGreeting because it's CasualStyle type
+        $this->greeting = $this->being->casualGreeting($name);
+        $this->emoji = $this->being->casualEmoji();
     }
 }
 ```
+
+The **type itself** `CasualStyle $being` is the reason why it becomes `CasualGreeting`. The framework reads this type and automatically selects the corresponding transformation destination.
 
 ### 2. Reason for Existence
 
@@ -48,9 +50,9 @@ final readonly class FormalGreeting
     
     public function __construct(
         #[Input] string $name,           // Immanent property
-        #[Input] FormalStyle $being      // Reason for existence
+        #[Reason] FormalStyle $being     // Reason for existence
     ) {
-        // FormalStyle provides the reason why this object can be FormalGreeting
+        // FormalStyle can be FormalStyle because it can do formalGreeting() and formalBusinessCard()
         $this->greeting = $being->formalGreeting($name);
         $this->businessCard = $being->formalBusinessCard($name);
     }
