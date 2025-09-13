@@ -1,89 +1,157 @@
 /* ===========================
-   Be Framework / php.net 風 Syntax
-   - コメントはオレンジ！
-   - JSONと関数名を最小強調
+   php.net inspired style Syntax
+   - Comments in orange
+   - JSON keys/values minimal emphasis
+   - Function names minimally emphasized
    =========================== */
 
-:root{
-    --bg-code  : #fff;
+:root {
+    --bg-code: #fff;
     --border-code: transparent;
-    --c-default: #0b3da6; /* default: 識別子/変数/演算子 */
-    --c-keyword: #1a7f37; /* keyword: final/public/readonly/function/new/match など */
-    --c-string : #c62828; /* string: "…" '…' */
-    --c-comment: #bb5200; /* comment: 焦げオレンジ */
-    --c-punc   : #222222; /* 記号/括弧 */
-    --c-func   : #6b1b1b; /* 関数名: 目立ち過ぎない赤茶。完全php.netなら default に */
-    --c-number : #0a7a7a; /* 数値 */
+    --c-default: #0b3da6;  /* identifiers / variables / operators */
+    --c-keyword: #1a7f37;  /* keywords: final/public/readonly/function/new/match */
+    --c-string: #c62828;   /* strings */
+    --c-comment: #bb5200;  /* comments (orange) */
+    --c-punc: #222222;     /* punctuation/brackets */
+    --c-func: #6b1b1b;     /* function names (subtle red-brown) */
+    --c-number: #0a7a7a;   /* numbers */
     --bg-insert: #ddffdd;
     --bg-delete: #ffdddd;
 }
 
-.highlight{ background:var(--bg-code); color:var(--c-default); border-radius:6px; color-scheme: light dark; }
-.highlight pre{ margin:0; padding:1rem 1.25rem; overflow-x:auto; tab-size: 2; line-height: 1.5; }
-.highlight, .highlight pre, .highlight code{ font-variant-ligatures:none; }
-
-/* --- コメント（オレンジ!） --- */
-.highlight .c, .highlight .c1, .highlight .cm, .highlight .cs, .highlight .cp{
-    color:var(--c-comment); font-style: normal;
+.highlight {
+    background: var(--bg-code);
+    color: var(--c-default);
+    border-radius: 6px;
+    color-scheme: light dark;
 }
 
-/* --- 文字列 --- */
-.highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc,
-.highlight .sd, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr{
-    color:var(--c-string);
+.highlight pre {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    tab-size: 2;
+    line-height: 1.5;
 }
 
-/* --- キーワード --- */
-.highlight .k, .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt{
-    color:var(--c-keyword); font-weight: normal;
+.highlight,
+.highlight pre,
+.highlight code {
+    font-variant-ligatures: none;
 }
 
-/* --- 数値 --- */
-.highlight .m, .highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo, .highlight .il{
-    color:var(--c-number);
+/* Comments */
+.highlight .c,
+.highlight .c1,
+.highlight .cm,
+.highlight .cs,
+.highlight .cp {
+    color: var(--c-comment);
+    font-style: normal;
 }
 
-/* --- デフォルト（識別子/演算子/括弧/名前空間 等） --- */
-.highlight .n, .highlight .na, .highlight .nb, .highlight .bp, .highlight .nc, .highlight .no,
-.highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi, .highlight .nn, .highlight .nx,
-.highlight .nt, .highlight .o, .highlight .p, .highlight .w{
-    color:var(--c-default);
+/* Strings */
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sx,
+.highlight .sr {
+    color: var(--c-string);
 }
-/* --- 記号/演算子 --- */
-.highlight .p{ color:var(--c-punc); }   /* {}, (), :, ; など */
-.highlight .o{ color:var(--c-default); }/* -> :: => などは php.net 風に青 */
 
-/* --- 関数名（最小強調）：php.net 完全準拠でデフォルト色 --- */
-/* --- 属性 #[...] を default 扱いに（#の色ブレ防止） --- */
-.highlight .na, .highlight .nd, .highlight .nf { color: var(--c-default); font-weight: normal; }
+/* Keywords */
+.highlight .k,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt {
+    color: var(--c-keyword);
+    font-weight: normal;
+}
 
-/* --- JSON 読みやすさ：キー=青, 値=赤, 記号=黒 --- */
-.highlight .nt{ color:var(--c-default); } /* "key" */
-.highlight .s { color:var(--c-string);  } /* "value" */
-.highlight .p { color:var(--c-punc);    } /* { } [ ] : , */
+/* Numbers */
+.highlight .m,
+.highlight .mi,
+.highlight .mf,
+.highlight .mh,
+.highlight .mo,
+.highlight .il {
+    color: var(--c-number);
+}
 
-/* --- Generic（diffなど） --- */
-.highlight .gd{ color:#000; background:var(--bg-delete); }  /* Deleted */
-.highlight .gi{ color:#000; background:var(--bg-insert); }  /* Inserted */
-.highlight .gr, .highlight .gt{ color:#aa0000; }            /* Error/Traceback */
-.highlight .gh, .highlight .gu{ color:#9aa0a6; }            /* Heading/Subheading */
-.highlight .go{ color:#888888; }                            /* Output */
-.highlight .gp{ color:#555555; }                            /* Prompt */
-.highlight .gs{ font-weight:bold; }                         /* Strong */
-.highlight .ge{ font-style:italic; }                        /* Emphasis */
+/* Default (identifiers, operators, namespaces, etc.) */
+.highlight .n,
+.highlight .na,
+.highlight .nb,
+.highlight .bp,
+.highlight .nc,
+.highlight .no,
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi,
+.highlight .nn,
+.highlight .nx,
+.highlight .nt,
+.highlight .o,
+.highlight .p,
+.highlight .w {
+    color: var(--c-default);
+}
 
-/* --- 互換調整 --- */
-.highlight .kc,.highlight .kd,.highlight .kp,.highlight .kr{ font-weight:normal; }
-.highlight .kt{ color:var(--c-keyword); font-weight:normal; }
-.highlight .nb,.highlight .bp{ color:var(--c-default); }
-.highlight .nc{ color:var(--c-default); font-weight:normal; }
-.highlight .ne{ color:var(--c-func);   font-weight:normal; }
-.highlight .nn{ color:var(--c-default); }
-.highlight .nt{ color:var(--c-default); }
+/* Punctuation / operators */
+.highlight .p { color: var(--c-punc); }
+.highlight .o { color: var(--c-default); } /* -> :: => etc. */
 
+/* Functions / attributes minimal emphasis */
+.highlight .na,
+.highlight .nd,
+.highlight .nf {
+    color: var(--c-default);
+    font-weight: normal;
+}
 
-@media (forced-colors: active){
-  .highlight { background: Canvas; color: CanvasText; }
-  .highlight .gd{ background: none; outline: 2px solid ButtonBorder; }
-  .highlight .gi{ background: none; outline: 2px solid Highlight; }
+/* JSON readability */
+.highlight .nt { color: var(--c-default); } /* key */
+.highlight .s  { color: var(--c-string); }  /* value */
+.highlight .p  { color: var(--c-punc); }    /* braces, commas */
+
+/* Generic (diff, error, headings, etc.) */
+.highlight .gd { color: #000; background: var(--bg-delete); }
+.highlight .gi { color: #000; background: var(--bg-insert); }
+.highlight .gr,
+.highlight .gt { color: #aa0000; }
+.highlight .gh,
+.highlight .gu { color: #9aa0a6; }
+.highlight .go { color: #888888; }
+.highlight .gp { color: #555555; }
+.highlight .gs { font-weight: bold; }
+.highlight .ge { font-style: italic; }
+
+/* Compatibility adjustments */
+.highlight .kc,
+.highlight .kd,
+.highlight .kp,
+.highlight .kr { font-weight: normal; }
+
+.highlight .kt { color: var(--c-keyword); font-weight: normal; }
+.highlight .nb,
+.highlight .bp { color: var(--c-default); }
+.highlight .nc { color: var(--c-default); font-weight: normal; }
+.highlight .ne { color: var(--c-func); font-weight: normal; }
+.highlight .nn { color: var(--c-default); }
+.highlight .nt { color: var(--c-default); }
+
+/* Forced colors mode (Windows High Contrast, etc.) */
+@media (forced-colors: active) {
+    .highlight { background: Canvas; color: CanvasText; }
+    .highlight .gd { background: none; outline: 2px solid ButtonBorder; }
+    .highlight .gi { background: none; outline: 2px solid Highlight; }
 }
