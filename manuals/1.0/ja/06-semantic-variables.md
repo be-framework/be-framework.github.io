@@ -256,6 +256,4 @@ final readonly class ProcessedOrder
 
 ---
 
-**次へ**: オブジェクトが自身の性質を発見する[型駆動変容](./07-type-driven-metamorphosis.html)について学びましょう。
-
-*「意味変数はデータを検証するだけでなく、意味のある存在のみが存在できることを保証します。」*
+オブジェクト自身が次の変容先を知っています。その仕組み、[型駆動変容](./07-type-driven-metamorphosis.html)へ ➡️

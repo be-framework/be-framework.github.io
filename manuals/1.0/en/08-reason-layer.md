@@ -179,6 +179,4 @@ Objects themselves declare "what to become", while reason objects realize "how t
 
 ---
 
-**Next**: Learn about meaning preservation in errors through [Validation and Error Handling](./09-error-handling.html).
-
-*"The Reason Layer provides the tool set necessary for objects to realize their mode of existence."*
+The inability to exist is itself an existence. Learn how to handle this in [Validation and Error Handling](./09-error-handling.html) ➡️

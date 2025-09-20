@@ -135,6 +135,4 @@ From the simple principle "if types match, proceed to the next", a rich workflow
 
 ---
 
-**Next**: Learn about the philosophy of dependency injection that supports metamorphosis in [Reason Layer](./08-reason-layer.html).
-
-*"Type-driven metamorphosis is a technique that integrates complex control flow into the type system itself."*
+No existence exists without reason. Let's explore the [Reason Layer](./08-reason-layer.html) ➡️

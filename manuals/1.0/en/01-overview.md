@@ -83,6 +83,6 @@ This manual will show you how to:
 
 ## Ready?
 
-Let's start with the foundation: [Input Classes →]({% link manuals/1.0/en/02-input-classes.md %})
+Let's start with the foundation. Everything begins with [Input Classes]({% link manuals/1.0/en/02-input-classes.md %}) →
 
 You'll build your first Being—and discover why `DeletedUser` makes perfect sense.

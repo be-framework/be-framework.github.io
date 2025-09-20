@@ -109,3 +109,7 @@ final readonly class OrderValidation
 ## Natural Flow
 
 Being Classes don't "do" things—they naturally become what they're meant to be through the interaction of their **Immanent Nature** with **Transcendent Forces** provided by the world. This is the principle of wu wei (無為) from Taoist philosophy. They don't change other things; they transform themselves.
+
+---
+
+Where transformation leads, to [Final Objects](./04-final-objects.html) ➡️

@@ -141,6 +141,4 @@ Semantic exceptions make failure reasons clear, enabling users to understand spe
 
 ---
 
-**Next**: Learn about recording object metamorphosis in [Semantic Logging](./10-semantic-logging.html).
-
-*"Semantic exceptions specifically teach us why existence is impossible."*
+Every transformation is recorded as a story, as [Semantic Logging](./10-semantic-logging.html) ➡️

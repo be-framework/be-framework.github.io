@@ -84,6 +84,6 @@ function archiveUser(DeletedUser $user) { }
 
 ## さあ、始めましょう
 
-基礎から学んでいきます：[入力クラス →]({{ '/manuals/1.0/ja/02-input-classes.html' | relative_url }})
+基礎から学んでいきましょう。全ては[入力クラス]({{ '/manuals/1.0/ja/02-input-classes.html' | relative_url }})から始まります →
 
 最初のオブジェクトを作りながら、なぜ『`DeletedUser`』なのかを体感してください。

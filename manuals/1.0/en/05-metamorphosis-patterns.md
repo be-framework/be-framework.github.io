@@ -194,3 +194,7 @@ Objects govern their own metamorphosis.
 
 Heraclitus said "the river flows" is not correct, but rather "the flowing is the river." He believed that existence cannot be separated from change. Be Framework likewise believes that to capture essence, domain and time cannot be separated.
 Domains are temporal existence. There are possibilities and being at each moment. Capturing how input classes, being classes, and final objects naturally metamorphose along the flow of time is the core of the Be Framework.
+
+---
+
+Variable names that carry constraints and contracts, [Semantic Variables](./06-semantic-variables.html) ➡️

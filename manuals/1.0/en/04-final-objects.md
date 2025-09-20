@@ -153,3 +153,7 @@ Final Objects express the state of entelecheia (complete realization). They are 
 The immanent nature that began with Input Classes, through encounters with various transcendent forces and natural transformation, finally reaches this completed form. There is no more "trying to become" or "intending to change." Everything is complete, and the value that users truly sought is realized here. This is the essential value of our system.
 
 This is the destination that Be Framework aims for in programming—existence that embodies not "what to do" but "what to be."
+
+---
+
+There's not just one path. Learn the various paths in [Metamorphosis Patterns](./05-metamorphosis-patterns.html) ➡️

@@ -73,4 +73,4 @@ final readonly class PaymentInput
 
 ---
 
-**次へ**: イマナンスが世界と出会う[存在クラス](./03-being-classes.html)について学びましょう。
+入力クラスが外の世界と出会い、変容を始めます。その過程を[存在クラス](./03-being-classes.html)で見ていきます ➡️

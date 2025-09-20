@@ -73,4 +73,6 @@ Input Classes contain only **Immanent Nature** elements. These are the object's 
 
 Input Classes represent the starting point of transformation—the object's initial form.
 
-[Next: Being Classes →]({{ '/manuals/1.0/en/03-being-classes.html' | relative_url }})
+---
+
+Input Classes meet the outside world and begin their transformation. We'll see this process in [Being Classes]({{ '/manuals/1.0/en/03-being-classes.html' | relative_url }}) ➡️
