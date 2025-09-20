@@ -15,7 +15,11 @@ permalink: /manuals/1.0/en/03-being-classes.html
 
 Being Classes are where transformation actually occurs.
 
-The object's own nature (**Immanent Nature**) meets forces provided from the outside (**Transcendent Forces**), and a new being is born. If Input Classes are the "beginning," Being Classes express the "moment of change."
+The object's own nature (**Immanent Nature**) meets forces provided from the outside (**Transcendent Forces**), and a new being is born.
+
+For example, a `UserInput` with email and name (immanence) meets an email validation service and formatter (transcendence), creating a "validated user profile" as a new being. The data itself doesn't change, but through validation—a transcendent force the object doesn't possess—it transforms itself anew.
+
+If Input Classes are the "beginning," Being Classes express the "moment of change."
 
 ## Basic Structure
 
@@ -43,9 +47,15 @@ Every Being Class follows the same flow of transformation:
 
 **Immanent Nature** (`#[Input]`) + **Transcendent Forces** (`#[Inject]`) → **New Immanent Nature**
 
+It's like cooking. Ingredients (immanent nature) combined with fire and seasoning (transcendent forces) create a dish (new immanent nature). Flour alone isn't edible, but with yeast and an oven's power, it becomes bread. The ingredients don't change, yet they become something entirely new.
+
 - **Immanent factors**: What the object inherits from its previous form
 - **Transcendent factors**: External capabilities and context provided by the world
 - **New Immanent**: The transformed being that emerges from this interaction
+
+This pattern appears everywhere in nature. A seed (immanent) meets soil, water, and sunlight (transcendent) to become a flower. A student (immanent) meets teachers and materials (transcendent) to become an expert. All growth, all learning, all change follows this pattern. The Be Framework expresses this universal law of transformation in code.
+
+The programming world is the same. `$cartItems` (immanent) meets tax calculation services (transcendent) to become billing amounts. `$zipCode` (immanent) meets address lookup APIs (transcendent) to become complete addresses. `$rawImage` (immanent) meets image processing engines (transcendent) to become thumbnails. Data cannot change by itself. Only by borrowing external forces can it become something new.
 
 ## Entelecheia - Becoming Who You're Meant to Be
 
@@ -75,7 +85,11 @@ final readonly class OrderCalculation
 2. They interact, and the transformation logic unfolds.
 3. Through property assignment, a new being is born.
 
-Entelecheia is a philosophical concept proposed by Aristotle, representing the process by which potentiality transitions to actuality. It's the moment when an object's possibilities are realized through interaction with external forces. In the Be Framework, this transformation process in the constructor is considered the realization of entelecheia.
+Entelecheia (ἐντελέχεια) is a philosophical concept proposed by Aristotle, meaning "having purpose within." An acorn is born to become an oak tree, an egg exists to become a bird. Each harbors its "intended self" within. The egg as potentiality becomes the bird as actuality. In other words, the egg exists for the entelecheia of becoming a bird.
+
+The Be Framework is the same. This constructor transformation process is precisely the realization of entelecheia. `OrderCalculation` wants to become a calculated order. `ValidatedUser` wants to become a verified user. Each class becomes its "intended self" through the constructor. The Be Framework focuses not on actions (DOING) but on being (BEING). Actions are not the purpose—they are the means to become the intended being.
+
+Life is the same. Reading books is to become "a person with deep insight," practicing instruments is to become "a person who moves hearts through music." Actions are means; being is the purpose. Focusing not on "what to do" but "what to become"—the Be Framework expresses this way of thinking in code.
 
 ## Bridging to Final Objects
 
@@ -108,7 +122,7 @@ final readonly class OrderValidation
 
 ## Natural Flow
 
-Being Classes don't "do" things—they naturally become what they're meant to be through the interaction of their **Immanent Nature** with **Transcendent Forces** provided by the world. This is the principle of wu wei (無為) from Taoist philosophy. They don't change other things; they transform themselves.
+Being Classes don't "do" things. What they possess (immanence) meets forces given from outside (transcendence), naturally transforming into what they should be. This is the same as Laozi's teaching at the beginning: "The Tao does nothing, yet nothing is left undone"—without forcing, everything is accomplished in the natural flow. They don't change other things; they transform themselves.
 
 ---
 
