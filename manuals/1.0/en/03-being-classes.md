@@ -17,7 +17,7 @@ Being Classes are where transformation actually occurs.
 
 The object's own nature (**Immanent Nature**) meets forces provided from the outside (**Transcendent Forces**), and a new being is born.
 
-For example, a `UserInput` with email and name (immanence) meets an email validation service and formatter (transcendence), creating a "validated user profile" as a new being. The data itself doesn't change, but through validation—a transcendent force the object doesn't possess—it transforms itself anew.
+For example, a `UserInput` with email and name (immanence) meets an email validation service and formatter (transcendence), creating a "validated user profile" as a new being. The original data remains immutable; by meeting validation—a transcendent force the object doesn't possess—a new being emerges.
 
 If Input Classes are the "beginning," Being Classes express the "moment of change."
 
@@ -47,7 +47,7 @@ Every Being Class follows the same flow of transformation:
 
 **Immanent Nature** (`#[Input]`) + **Transcendent Forces** (`#[Inject]`) → **New Immanent Nature**
 
-It's like cooking. Ingredients (immanent nature) combined with fire and seasoning (transcendent forces) create a dish (new immanent nature). Flour alone isn't edible, but with yeast and an oven's power, it becomes bread. The ingredients don't change, yet they become something entirely new.
+It's like cooking. Ingredients (immanent nature) combined with fire and seasoning (transcendent forces) create a dish (new immanent nature). Flour alone isn't bread; with yeast and an oven's power, it becomes bread. The ingredients persist, yet their form becomes something new.
 
 - **Immanent factors**: What the object inherits from its previous form
 - **Transcendent factors**: External capabilities and context provided by the world
