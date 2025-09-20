@@ -159,4 +159,4 @@ if ($order->being instanceof SuccessfulOrder) {
 
 ---
 
-道は１つではありません。[変容パターン](./05-metamorphosis-patterns.html)で様々な道を学びます ➡️
+道は１つではありません。[変容](./05-metamorphosis.html)で様々な道を学びます ➡️

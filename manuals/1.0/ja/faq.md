@@ -43,7 +43,7 @@ A. 不正状態を事前に生成不能にできます。
 
 A. `ValidatedUser`、`SavedUser`、`DeletedUser`など、進行中の特定の時を型名で表現しています。
 
-Be Frameworkは時間とドメインは不可分と考えます。詳細は[メタモルフォーシス](./05-metamorphosis.html)をご覧ください。
+Be Frameworkは時間とドメインは不可分と考えます。詳細は[変容](./05-metamorphosis.html)をご覧ください。
 
 ---
 
@@ -299,7 +299,7 @@ $profile = $becoming(new UserInput($name, $email));
 ## 11) 関連章へのリンク
 
 * **[概要](./01-overview.html)**: 存在指向プログラミングとの出会い
-* **[メタモルフォーシス](./05-metamorphosis.html)**: 時間とドメインの不可分性
+* **[変容](./05-metamorphosis.html)**: 時間とドメインの不可分性
 * **[意味変数](./06-semantic-variables.html)**: ドメイン固有の検証と型安全性
 * **[型駆動変容](./07-type-driven-metamorphosis.html)**: 自己決定オブジェクト
 * **[存在理由層](./08-reason-layer.html)**: オブジェクトの存在根拠

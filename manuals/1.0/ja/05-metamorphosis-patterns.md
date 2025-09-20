@@ -1,11 +1,11 @@
 ---
 layout: docs-ja
-title: "5. メタモルフォーシス"
+title: "5. 変容"
 category: Manual
 permalink: /manuals/1.0/ja/05-metamorphosis.html
 ---
 
-# メタモルフォーシス
+# 変容
 
 > 「空間と時間は独立に定義できない」
 > 

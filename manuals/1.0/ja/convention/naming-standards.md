@@ -24,7 +24,7 @@ permalink: /manuals/1.0/ja/convention/naming-standards.html
 
 ### 入力クラス
 **パターン**: `{ドメイン}Input`
-**目的**: メタモルフォーシスの出発点を表す純粋なデータコンテナ
+**目的**: 変容の出発点を表す純粋なデータコンテナ
 
 ```php
 // ✅ 正しい
