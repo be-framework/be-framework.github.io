@@ -71,6 +71,8 @@ Input Classes contain only **Immanent Nature** elements. These are the object's 
 
 **Transcendent Forces** (powers that the object cannot achieve by itself) are not included here. They appear in Being Classes, which we'll learn about next.
 
+For example, a `UserInput` class holds only raw data like email address and name. The power to validate whether the email is valid, the power to save to a database, the power to send notifications—these are all transcendent forces and do not exist in Input Classes. Input Classes simply declare "this is the data I am."
+
 Input Classes represent the starting point of transformation—the object's initial form.
 
 ---
