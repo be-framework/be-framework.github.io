@@ -147,7 +147,7 @@ final readonly class AuthenticatedUser {
 **場所**: `src/Domain/SemanticVariable/`
 **命名**: 単語の組み合わせ、PascalCase
 
-```
+```txt
 src/Domain/SemanticVariable/
 ├── EmailAddress.php
 ├── UserName.php
@@ -159,7 +159,7 @@ src/Domain/SemanticVariable/
 **場所**: `src/Domain/`
 **命名**: 存在状態を反映
 
-```
+```txt
 src/Domain/
 ├── User/
 │   ├── UserInput.php
