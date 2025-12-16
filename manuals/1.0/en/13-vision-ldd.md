@@ -8,7 +8,6 @@ permalink: /manuals/1.0/en/13-vision-ldd.html
 # Log-Driven Development (LDD)
 
 > "Once Zhuang Zhou dreamt he was a butterfly... Suddenly he awoke and there he was, solid and unmistakable Zhuang Zhou. But he didn't know if he was Zhuang Zhou who had dreamt he was a butterfly, or a butterfly dreaming he was Zhuang Zhou."
->
 > —Zhuangzi, 'The Adjustment of Controversies' (Qi Wu Lun) (Circa 4th Century BC)
 
 > **Note**: This chapter describes the "Future Vision" that Be Framework aims for. Not everything is implemented in the current version.
