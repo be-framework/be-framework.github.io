@@ -7,36 +7,36 @@ permalink: /manuals/1.0/en/02-input-classes.html
 
 # Input Classes
 
-> "We begin from conditions we did not choose, and from there we build our existence."
-> 
-> —From Heidegger's concept of Geworfenheit (thrownness) in 'Being and Time' (1927)
+> "We begin from conditions we cannot choose, and build our existence from there."
+>
+> —From Heidegger's concept of Thrownness (Geworfenheit) ('Being and Time', 1927)
 
-## The Beginning
+## The Starting Point
 
-Input Classes are the starting point of every transformation in Be Framework.
+Input Classes are the starting point of all transformations in the Be Framework.
 
-They contain only what the object itself possesses—no external dependencies. Think of it as the object's identity. These elements exist within the object, forming what we call the object's **Immanent Nature**.
+This contains only the elements that the object itself possesses, with no external dependencies. It is, so to speak, the identity of the object. Since it is inside the object, we call this **Immanence**.
 
 ## Basic Structure
 
 ```php
-#[Be(UserProfile::class)]  // The object's destiny
+#[Be(UserProfile::class)]  // Destiny of Metamorphosis
 final readonly class UserInput
 {
     public function __construct(
-        public string $name,     // Immanent Nature
-        public string $email     // Immanent Nature
+        public string $name,     // Immanent
+        public string $email     // Immanent
     ) {}
 }
 ```
 
 ## Key Characteristics
 
-**Pure Identity**: Input Classes contain only what the object fundamentally *is*—no external dependencies, no complex logic.
+**Pure Identity**: Input Classes contain only *what the object fundamentally is*—no external dependencies or complex logic.
 
-**Metamorphosis Destiny**: The `#[Be()]` attribute declares what this input will become.
+**Destination (Object's Destiny)**: The `#[Be()]` attribute declares what this input will become.
 
-**Readonly Properties**: All data is immutable, representing fixed identity that will transform, not mutate.
+**Read-only Properties**: All data is immutable, representing a fixed identity that transforms rather than mutates.
 
 ## Examples
 
@@ -46,8 +46,8 @@ final readonly class UserInput
 final readonly class OrderInput
 {
     public function __construct(
-        public array $items,        // Immanent Nature
-        public string $currency     // Immanent Nature
+        public array $items,        // Immanent
+        public string $currency     // Immanent
     ) {}
 }
 ```
@@ -58,23 +58,21 @@ final readonly class OrderInput
 final readonly class PaymentInput
 {
     public function __construct(
-        public Money $amount,           // Immanent Nature
-        public CreditCard $card,        // Immanent Nature
-        public Address $billing         // Immanent Nature
+        public Money $amount,           // Immanent
+        public CreditCard $card,        // Immanent
+        public Address $billing         // Immanent
     ) {}
 }
 ```
 
-## The Role of Immanent Nature
+## The Role of Immanence
 
-Input Classes contain only **Immanent Nature** elements. These are the object's own data, independent of external dependencies.
+In Input Classes, everything is **Immanence**. There is no **Transcendence (transcendent power)** here. Transcendence explains powers provided from the outside that cannot be realized by oneself, and they appear later in **Being Classes**.
 
-**Transcendent Forces** (powers that the object cannot achieve by itself) are not included here. They appear in Being Classes, which we'll learn about next.
+For example, the `UserInput` class holds only raw data like email address and name. The power to validate if this email is valid, the power to save to the database, the power to send notifications—these are all Transcendence and do not exist in the Input Class. The Input Class simply declares "I am this kind of data".
 
-For example, a `UserInput` class holds only raw data like email address and name. The power to validate whether the email is valid, the power to save to a database, the power to send notifications—these are all transcendent forces and do not exist in Input Classes. Input Classes simply declare "this is the data I am."
-
-Input Classes represent the starting point of transformation—the object's initial form.
+Input Classes are the starting point of transformation. They represent the first form that meets something beyond itself and changes into something new.
 
 ---
 
-Input Classes meet the outside world and begin their transformation. We'll see this process in [Being Classes]({{ '/manuals/1.0/en/03-being-classes.html' | relative_url }}) ➡️
+The Input Class meets the outside world and begins transformation. We will see that process in [Being Classes](./03-being-classes.html) ➡️
