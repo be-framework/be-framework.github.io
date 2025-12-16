@@ -86,8 +86,8 @@ A Controller has "omnipotent freedom" to access all models and components, but h
 Be Framework adopts a different approach, incorporating the philosophy of "Wu Wei" (Non-doing) from Eastern philosophy. Rather than operations creating the target data, simple input objects like seeds meet other objects, grow naturally, and "transform themselves (Metamorphosis)" into the target final objects.
 
 ### Commander to Gardener:
-  * The Commander orders subordinates (objects) to "Move!". But it is impossible to keep ordering all complex autonomous movements.
-  * The Gardener does not order plants. They only prepare the environment like water and light.
+* The Commander orders subordinates (objects) to "Move!". But it is impossible to keep ordering all complex autonomous movements.
+* The Gardener does not order plants. They only prepare the environment like water and light.
 
 Plants care only about their own transformation. They do not try to change others, but accept the environment and transform themselves autonomously (Metamorphosis) to become what they should be. Be Framework also prepares an environment where, once given input, objects become final objects by themselves. Let go of control and entrust to autonomous transformation. This is the core concept of Be Framework.
 
