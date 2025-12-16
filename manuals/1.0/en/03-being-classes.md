@@ -7,19 +7,39 @@ permalink: /manuals/1.0/en/03-being-classes.html
 
 # Being Classes
 
-> "The Tao does nothing, yet nothing is left undone."
-> 
-> —Laozi, Tao Te Ching, Chapter 37 (6th century BC)
+> "The Way constantly does nothing, yet there is nothing it does not do."
+>
+> —Laozi, 'Tao Te Ching', Chapter 37 (6th Century BC)
 
-## Immanence Meets Transcendence
+## Immanence and Transcendence
 
-Being Classes are where transformation actually occurs.
+Being Classes are where metamorphosis actually happens.
 
-The object's own nature (**Immanent Nature**) meets forces provided from the outside (**Transcendent Forces**), and a new being is born.
+The properties that the object itself possesses (**Immanence**) meet the powers provided from the outside (**Transcendence**), and a new Being is born.
 
-For example, a `UserInput` with email and name (immanence) meets an email validation service and formatter (transcendence), creating a "validated user profile" as a new being. The original data remains immutable; by meeting validation—a transcendent force the object doesn't possess—a new being emerges.
+For example, the email address and name (Immanence) held by `UserInput` meet the email validation service or formatter (Transcendence), and a new being called "Validated User Profile" is born. The original data remains unchanged, but through the encounter with the transcendent power of validation that it does not possess, a new existence arises.
 
-If Input Classes are the "beginning," Being Classes express the "moment of change."
+If Input Classes are the "Beginning", Being Classes express the "Moment of Change".
+
+## Objects as Temporal Beings
+
+In Be Framework, objects are not treated as static data structures, but as "Life" living in time.
+
+### Lifecycle: Birth, Life, and "Becoming the self you want to be"
+
+1.  **Birth (Constructor)**:
+    *   The constructor is where objects are born. Here, Immanence and Transcendence meet, and new Immanence is born.
+    *   The moment it is born, the object's identity and state are determined and become Immutable.
+2.  **Life (Being)**:
+    *   The object exposes its "form as it should be" to the world as `public readonly` properties. But no one touches those properties except its future self.
+    *   This state is the crystallization of the encounter between Immanence and Transcendence.
+3.  **Becoming the self you want to be**:
+    *   All transformations are journeys to become the final "Self you want to be (Final Object)".
+    *   The Transcendence encountered influences the new Immanence and disappears. Like a childhood friend, they shape me and become part of me, but as a **temporal being only at that moment**, they are no longer there.
+    *   The life of an object in Be Framework exists for this self-realization (Entelechy).
+
+> "Becoming the self you want to be"
+> Objects are reborn into the self they want to be, according to their own will (type definition). Code is the story of this "Self-realization".
 
 ## Basic Structure
 
@@ -30,36 +50,36 @@ final readonly class UserProfile
     public bool $isValid;
     
     public function __construct(
-        #[Input] string $name,                    // Immanent
-        #[Input] string $email,                   // Immanent
-        #[Inject] NameFormatter $formatter,       // Transcendent
-        #[Inject] EmailValidator $validator       // Transcendent
+        #[Input] string $name,                    // Immanence
+        #[Input] string $email,                   // Immanence
+        #[Inject] NameFormatter $formatter,       // Transcendence
+        #[Inject] EmailValidator $validator       // Transcendence
     ) {
-        $this->displayName = $formatter->format($name);     // New Immanent
-        $this->isValid = $validator->validate($email);      // New Immanent
+        $this->displayName = $formatter->format($name);     // New Immanence
+        $this->isValid = $validator->validate($email);      // New Immanence
     }
 }
 ```
 
-## The Transformation Pattern
+## Metamorphosis Pattern
 
-Every Being Class follows the same flow of transformation:
+All Being Classes follow the same flow of transformation:
 
-**Immanent Nature** (`#[Input]`) + **Transcendent Forces** (`#[Inject]`) → **New Immanent Nature**
+Immanence (`#[Input]`) + Transcendence (`#[Inject]`) → New Immanence
 
-It's like cooking. Ingredients (immanent nature) combined with fire and seasoning (transcendent forces) create a dish (new immanent nature). Flour alone isn't bread; with yeast and an oven's power, it becomes bread. The ingredients persist, yet their form becomes something new.
+It's like cooking. By adding fire and seasoning (Transcendence) to ingredients (Immanence), a dish (New Immanence) is created. Flour alone does not become bread, but with the help of yeast and an oven, it becomes bread. Even if the ingredients are the same, it becomes a completely new existence.
 
-- **Immanent factors**: What the object inherits from its previous form
-- **Transcendent factors**: External capabilities and context provided by the world
-- **New Immanent**: The transformed being that emerges from this interaction
+- **Immanent Factor**: What the object inherits from its previous form
+- **Transcendent Factor**: External capabilities and context provided by the world
+- **New Immanence**: Transformed existence born from this interaction
 
-This pattern appears everywhere in nature. A seed (immanent) meets soil, water, and sunlight (transcendent) to become a flower. A student (immanent) meets teachers and materials (transcendent) to become an expert. All growth, all learning, all change follows this pattern. The Be Framework expresses this universal law of transformation in code.
+This pattern is found everywhere in the natural world. A seed (Immanence) meets soil, water, and sun (Transcendence) to become a flower. A student (Immanence) meets a teacher and textbooks (Transcendence) to become an expert. All growth, all learning, all change follows this pattern. Be Framework expresses this universal law of transformation in code.
 
-The programming world is the same. `$cartItems` (immanent) meets tax calculation services (transcendent) to become billing amounts. `$zipCode` (immanent) meets address lookup APIs (transcendent) to become complete addresses. `$rawImage` (immanent) meets image processing engines (transcendent) to become thumbnails. Data cannot change by itself. Only by borrowing external forces can it become something new.
+It is the same in the world of programming. `$cartItems` (Immanence) meets tax calculation service (Transcendence) to become a billing amount. `$zipCode` (Immanence) meets address search API (Transcendence) to become a complete address. `$rawImage` (Immanence) meets image processing engine (Transcendence) to become a thumbnail. Data cannot change on its own. It borrows external power to finally become a new existence.
 
-## Entelecheia - Becoming Who You're Meant to Be
+## Entelechy - Becoming the self you want to be
 
-The constructor is where a new self is born. To become the intended self, **Immanent Nature** meets **Transcendent Forces** that the self doesn't possess, and transformation logic unfolds.
+The constructor is a special place where a new self is born. To become the self it should be, Immanence meets Transcendence given by the world (which it does not possess itself), and the logic of transformation works.
 
 ```php
 final readonly class OrderCalculation
@@ -69,31 +89,31 @@ final readonly class OrderCalculation
     public Money $total;
     
     public function __construct(
-        #[Input] array $items,                    // Immanent
-        #[Input] string $currency,                // Immanent
-        #[Inject] PriceCalculator $calculator,    // Transcendent
-        #[Inject] TaxService $taxService          // Transcendent
+        #[Input] array $items,                    // Immanence
+        #[Input] string $currency,                // Immanence
+        #[Inject] PriceCalculator $calculator,    // Transcendence
+        #[Inject] TaxService $taxService          // Transcendence
     ) {
         $this->subtotal = $calculator->calculateSubtotal($items, $currency);
         $this->tax = $taxService->calculateTax($this->subtotal);
-        $this->total = $this->subtotal->add($this->tax);     // New Immanent
+        $this->total = $this->subtotal->add($this->tax);     // New Immanence
     }
 }
 ```
 
-1. Properties inherited from previous classes become constructor arguments and meet injected external capabilities.
-2. They interact, and the transformation logic unfolds.
-3. Through property assignment, a new being is born.
+1. Properties inherited from the previous class become constructor arguments and meet injected external capabilities.
+2. They interact, and transformation logic works.
+3. A new existence is born by assigning properties.
 
-Entelecheia (ἐντελέχεια) is a philosophical concept proposed by Aristotle, meaning "having purpose within." An acorn is born to become an oak tree, an egg exists to become a bird. Each harbors its "intended self" within. The egg as potentiality becomes the bird as actuality. In other words, the egg exists for the entelecheia of becoming a bird.
+Entelechy (entelecheia) is a philosophical concept proposed by Aristotle, meaning "having the end within itself". An acorn is born to become an oak tree, and an egg exists to become a bird. Each holds the "self it wants to be" within.
 
-The Be Framework is the same. This constructor transformation process is precisely the realization of entelecheia. `OrderCalculation` wants to become a calculated order. `ValidatedUser` wants to become a verified user. Each class becomes its "intended self" through the constructor. The Be Framework focuses not on actions (DOING) but on being (BEING). Actions are not the purpose—they are the means to become the intended being.
+In Be Framework, this transformation process in the constructor is exactly the realization of Entelechy. `OrderCalculation` wants to become a calculated order. `ValidatedUser` wants to become a validated user. Each class becomes the "self it wants to be" in the constructor. In Be Framework, we think centering on BEING (existence), not DOING (action).
 
-Life is the same. Reading books is to become "a person with deep insight," practicing instruments is to become "a person who moves hearts through music." Actions are means; being is the purpose. Focusing not on "what to do" but "what to become"—the Be Framework expresses this way of thinking in code.
+It's the same in life. You read books to become a "person with deep insight", and practice instruments to become a "person who moves hearts with music". Action is the means, and existence is the purpose. Focusing on "What you want to become" rather than "What you do"—Be Framework expresses this way of thinking in code.
 
-## Bridging to Final Objects
+## Bridge to Final Object
 
-Being Classes often serve as bridges, preparing data for final transformation:
+Being classes often serve as bridges, preparing data for final transformation:
 
 ```php
 #[Be([SuccessfulOrder::class, FailedOrder::class])]  // Multiple destinies
@@ -101,12 +121,12 @@ final readonly class OrderValidation
 {
     public bool $isValid;
     public array $errors;
-    public SuccessfulOrder|FailedOrder $being;  // Being Property
+    public SuccessfulOrder|FailedOrder $being;  // Being property
     
     public function __construct(
-        #[Input] Money $total,                    // Immanent
-        #[Input] CreditCard $card,                // Immanent
-        #[Inject] PaymentGateway $gateway         // Transcendent
+        #[Input] Money $total,                    // Immanence
+        #[Input] CreditCard $card,                // Immanence
+        #[Inject] PaymentGateway $gateway         // Transcendence
     ) {
         $result = $gateway->validate($card, $total);
         $this->isValid = $result->isValid();
@@ -122,8 +142,8 @@ final readonly class OrderValidation
 
 ## Natural Flow
 
-Being Classes don't "do" things. What they possess (immanence) meets forces given from outside (transcendence), naturally transforming into what they should be. This is the same as Laozi's teaching at the beginning: "The Tao does nothing, yet nothing is left undone"—without forcing, everything is accomplished in the natural flow. They don't change other things; they transform themselves.
+Being classes do not "do" anything. By meeting what they have (Immanence) and power given from outside (Transcendence), they naturally transform into the form they should be. This is the same as Laozi's teaching at the beginning, "The Way constantly does nothing, yet there is nothing it does not do"—everything is accomplished in the natural flow without forcing power. It does not change something else, but changes itself.
 
 ---
 
-Where transformation leads, to [Final Objects](./04-final-objects.html) ➡️
+To the destination of transformation, [Final Objects](./04-final-objects.html) ➡️
