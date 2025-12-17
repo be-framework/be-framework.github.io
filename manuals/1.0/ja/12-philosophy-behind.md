@@ -279,7 +279,7 @@ final readonly class UserProfile
 
 Beフレームワークは三つのレベルでの明確さを目指しています：
 
-**1. 構造的**
+### 1. 構造的
 
 ```php
 UserInput → ValidatedUser → SavedUser → ActiveUser
@@ -287,7 +287,7 @@ UserInput → ValidatedUser → SavedUser → ActiveUser
 
 変容の経路が型に見えています。
 
-**2. 意味的**
+### 2. 意味的
 
 ```php
 string $email     // 名前がEmail検証を示唆
@@ -296,7 +296,7 @@ string $password  // 名前がPassword検証を示唆
 
 名前が意味を運びます。
 
-**3. 実行時**
+### 3. 実行時
 
 ```json
 {

@@ -279,7 +279,7 @@ This resembles how people develop—not through internal properties alone, but t
 
 Be Framework aims for clarity at three levels:
 
-**1. Structural**
+### 1. Structural
 
 ```php
 UserInput → ValidatedUser → SavedUser → ActiveUser
@@ -287,7 +287,7 @@ UserInput → ValidatedUser → SavedUser → ActiveUser
 
 The transformation path is visible in the types.
 
-**2. Semantic**
+### 2. Semantic
 
 ```php
 string $email     // Name suggests Email validation
@@ -296,7 +296,7 @@ string $password  // Name suggests Password validation
 
 Names carry meaning.
 
-**3. Execution**
+### 3. Execution
 
 ```json
 {
