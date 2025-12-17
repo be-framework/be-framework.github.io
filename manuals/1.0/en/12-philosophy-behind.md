@@ -10,105 +10,165 @@ permalink: /manuals/1.0/en/12-philosophy-behind.html
 > "Everything flows" (Panta Rhei)
 > —Heraclitus (535-475 BC)
 
-Now that we have learned the implementation of Be Framework, let's explore the deep philosophical insights flowing at its foundation. This is not merely a technical choice, but an encounter between ancient wisdom about the essence of existence and transformation, and modern computational theory.
+## Why Read This?
 
-## 1. Ontological Programming: Discovery of "WHETHER?"
+You've learned how Be Framework works. This chapter explores **why** it works this way—the philosophical ideas that shaped its design.
 
-### Why Ontology?
+These connections between ancient philosophy and modern code aren't meant to impress. They're offered because understanding them may help you see familiar problems differently, and perhaps find the patterns more intuitive.
 
-Traditional programming has answered two questions:
+---
 
-- **"What to do?" (WHAT?)** - Functions and algorithms
-- **"How to do it?" (HOW?)** - Implementation and performance
+## 1. From "Tell" to "Be"
 
-However, the most fundamental question has been overlooked:
+### A Different Emphasis
 
-- **"Can it exist in the first place?" (WHETHER?)**
+**1967: Tell, Don't Ask**
 
-Ontological Programming asks this "WHETHER?" first. Can an invalid email address exist as `$email`? Can a negative age be born as `$age`?
+> "Don't ask an object for data, tell it what to do"
+
+This principle guided OOP for decades. But notice—we were still *commanding* objects.
+
+**2025: Be, Don't Do**
+
+> "Don't tell an object what to do, let it become what it is"
 
 ```php
-// Ontological Question: Is this state possible?
-#[Be(ValidatedUser::class)]  // Declare destiny of existence
+// Tell, Don't Ask (imperative)
+$user->validate();
+$user->save();
+
+// Be, Don't Do (declarative)
+$user = $becoming(new UserInput($data));
+```
+
+### A Question Worth Considering
+
+Alan Kay envisioned objects as autonomous cells communicating through messages. What emerged in practice often looks more like controllers commanding passive data structures.
+
+One way to see Be Framework: an attempt to move closer to that original vision—objects that participate in determining their own transformation.
+
+---
+
+## 2. The Question of "WHETHER?"
+
+### Three Questions
+
+| Question     | Focus          | Paradigm    |
+|--------------|----------------|-------------|
+| **HOW?**     | Implementation | Imperative  |
+| **WHAT?**    | Transformation | Functional  |
+| **WHETHER?** | Existence      | Ontological |
+
+Traditional programming asks "How to validate?" or "What to transform?"
+
+Ontological Programming suggests asking first: "Can this exist at all?"
+
+```php
+#[Be(ValidatedUser::class)]
 final readonly class UserInput
 {
     public function __construct(
-        public string $email,    // Existence condition 1
-        public int $age          // Existence condition 2
+        public string $email,
+        public int $age
     ) {}
-}
-
-// Answer: If conditions are met, it exists as ValidatedUser
-```
-
-**Traditional**: "Validate this data" (Imperative)
-**Ontological**: "Can this data exist?" (Ontological inquiry)
-
-### Human Role in the AI Era
-
-In an era where AI can optimize "How to do", the role of humans shifts to "What should exist". Engineers change from implementers to definers.
-
-- **Human**: Definition of meaning, setting conditions for existence
-- **AI**: Generation of optimal implementation methods
-- **Collaboration**: Human meaning creation × AI implementation optimization
-
-## 2. Temporal Being: Expressing Heidegger's "Dasein" in Code
-
-### Being Thrown into Time
-
-Heidegger described humans as beings with **Thrownness (Geworfenheit)**. We start from conditions we cannot choose, and build our existence from there.
-
-Be Framework objects have a similar structure:
-
-```php
-// Thrownness: Unchooseable initial conditions
-#[Be(UserProfile::class)]
-final readonly class UserInput     // Thrown existence
-{
-    public function __construct(
-        public string $name,     // Given condition
-        public string $email     // Given situation
-    ) {}
-}
-
-// Projection: Possibility towards the future
-final readonly class UserProfile   // Projection into possibility
-{
-    public function __construct(
-        #[Input] string $name,                    // Thrown past
-        #[Input] string $email,
-        #[Inject] NameFormatter $formatter        // Encounter with the world
-    ) {
-        $this->displayName = $formatter->format($name);  // New existence
-    }
-    
-    public string $displayName;
 }
 ```
 
-### Objects as Dasein
+If conditions are met, `ValidatedUser` exists. If not, it simply doesn't.
 
-Heidegger's **Dasein** means "being there", an existence that understands itself within time. Be Framework objects possess exactly this Dasein-like character:
+---
 
-- **Temporality**: Past (Input Class) → Present (Being Class) → Future (Final Object)
-- **Self-understanding**: Understanding of one's own possibilities via `#[Be()]`
-- **Being-in-the-world**: Relationship with the world via `#[Inject]`
-- **Existentiality**: Choosing one's own existential possibilities (Type-Driven Metamorphosis)
+## 3. Designing for Impossibility
+
+### Two Approaches
+
+**Defensive approach:**
+
+```txt
+"What if an error occurs?"
+→ Add checks, handle exceptions
+```
+
+**Existence approach:**
+
+```txt
+"Can invalid states exist?"
+→ Design so they cannot
+```
 
 ```php
-// Dasein-like Object: Understanding self in time
-#[Be([ApprovedLoan::class, RejectedLoan::class])]  // Understanding possibilities of existence
+// Defensive
+function processUser(User $user) {
+    if (!$user->isValid()) { throw new Exception(); }
+    if (!$user->hasEmail()) { throw new Exception(); }
+    // ...
+}
+
+// Existence-based
+function processUser(ValidatedUser $user) {
+    // ValidatedUser exists, so it's valid by construction
+}
+```
+
+The idea: rather than handling errors, make certain errors impossible to represent.
+
+---
+
+## 4. Heraclitus: Everything Flows
+
+### Objects in Time
+
+Heraclitus observed that you cannot step into the same river twice.
+
+Traditional objects often exist outside of time:
+
+```php
+$user->age = 5;
+$user->age = 50;   // Same object, different age
+$user->delete();
+$user->getName();  // After deletion?
+```
+
+### Temporal Sequence
+
+One observation: domain concepts often have natural temporal order.
+
+```php
+// Types can express this order:
+UserInput → RegisteredUser → ActiveUser → DeletedUser
+```
+
+Each stage is distinct. A `DeletedUser` type cannot become `ActiveUser`—the type system reflects this constraint.
+
+```txt
+Time T0: EmailInput       — initial state
+    ↓
+Time T1: ValidatedEmail   — after validation
+    ↓
+Time T2: RegisteredUser   — after registration
+```
+
+Each stage represents a complete state, not a partial one.
+
+---
+
+## 5. Aristotle's Dynamis: Potentiality
+
+Aristotle distinguished **Dynamis** (potentiality) from **Energeia** (actuality). An acorn has the potential to become an oak tree.
+
+Union types can express this idea:
+
+```php
+#[Be([ApprovedLoan::class, RejectedLoan::class])]
 final readonly class LoanApplication
 {
-    // Existential choice determining one's destiny
     public ApprovedLoan|RejectedLoan $being;
-    
+
     public function __construct(
-        #[Input] Money $amount,                   // Thrown condition
-        #[Input] CreditScore $score,              // Given situation
-        #[Inject] LoanPolicy $policy              // Encounter with the world
+        #[Input] Money $amount,
+        #[Input] CreditScore $score,
+        #[Inject] LoanPolicy $policy
     ) {
-        // Existential Decision: What will I become?
         $this->being = $policy->evaluate($amount, $score) > 0.7
             ? new ApprovedLoan($amount, $score)
             : new RejectedLoan($amount, $score);
@@ -116,296 +176,231 @@ final readonly class LoanApplication
 }
 ```
 
-## 3. The Tao and Wu Wei: Realizing Laozi's Philosophy in Programming
+The type `ApprovedLoan|RejectedLoan` declares the possible outcomes from the start. The object carries its potential futures.
 
-### Principle of Wu Wei (Non-doing)
+---
 
-Laozi said: "The Way constantly does nothing, yet there is nothing it does not do."
+## 6. Wu Wei: Non-Forcing
 
-This does not mean "doing nothing". It means following the natural flow, without forcing things, acting in accordance with the true nature of things.
+Laozi wrote:
+
+> "The Tao does nothing, yet nothing is left undone."
+
+This suggests acting in accordance with natural flow rather than forcing outcomes.
 
 ```php
-// Practice of Wu Wei: Do not force, flow naturally
-final readonly class OrderProcessing
+// Forcing
+$controller->forceUserToValidate();
+$controller->forceUserToSave();
+
+// Enabling
+#[Be(ValidatedUser::class)]
+#[Be(SavedUser::class)]
+$user = $becoming(new UserInput($data));
+```
+
+The second approach doesn't force—it declares what the object can become and lets the transformation happen.
+
+---
+
+## 7. Buddhist Dependent Origination
+
+### Pratītyasamutpāda
+
+Buddhist philosophy teaches:
+
+> "When this exists, that comes to be."
+
+This describes interdependent arising—things don't exist in isolation.
+
+```php
+final readonly class ValidatedEmail
 {
     public function __construct(
-        #[Input] Order $order,                    // Natural premise
-        #[Inject] PaymentGateway $gateway         // External power
+        #[Input] string $value,              // Prior existence
+        #[Inject] EmailValidator $validator  // Enabling condition
     ) {
-        // Wu Wei: Not making something do, but enabling it to become what it should be
-        $this->result = $gateway->process($order);  // Natural metamorphosis
-    }
-}
-
-// Not this (Yu Wei / Action: Forced execution):
-// $gateway->validateCard($order->card);
-// $gateway->chargeAmount($order->amount);  
-// $gateway->sendConfirmation($order->email);
-```
-
-### Code Flowing Like Water
-
-Laozi also said: "The highest good is like water." Water does not contend, places itself in low places that people dislike, yet nourishes all things.
-
-Be Framework objects flow like water:
-
-- **Do not contend**: No external control, metamorphosis by self-determination
-- **Low places**: Simple structure, avoiding complexity
-- **Nourish all things**: Enabling metamorphosis of other objects
-
-```php
-// Natural flow like water
-$result = $becoming(new ApplicationInput($data));
-
-// The object itself knows the next form (like water flowing to low places)
-// No external orchestrator needed
-```
-
-## 4. Entelechy: Aristotle's Full Realization
-
-### Transition from Potentiality to Actuality
-
-Aristotle's **Entelechy (ἐντελέχεια)** represents the process of potential becoming actual. Like an acorn becoming an oak tree, it is the moment when immanent potential is realized through interaction with the outside.
-
-```php
-// Entelechy: Full realization of potentiality
-final readonly class MatureUser     // Fully realized existence
-{
-    public function __construct(
-        #[Input] UserData $potentiality,         // Potentiality
-        #[Inject] ValidationService $actuator    // Power of actualization
-    ) {
-        // Entelechy: Moment when potentiality transitions to actuality
-        $this->actualizedProfile = $actuator->actualize($potentiality);
-    }
-    
-    public UserProfile $actualizedProfile;  // Actualized existence
-}
-```
-
-### Constructor as the Stage of Metamorphosis
-
-The constructor is the sacred place where Entelechy occurs. Here, immanent potential (`#[Input]`) meets external actualizing power (`#[Inject]`) and a new existence is born.
-
-```php
-public function __construct(
-    #[Input] string $name,           // Immanent potentiality
-    #[Inject] Formatter $formatter   // Actualizing power
-) {
-    // Entelechy: A new existence is born at this moment
-    $this->formattedName = $formatter->format($name);
-}
-```
-
-## 5. Principle of Sufficient Reason: Leibniz's Reason for Existence
-
-### Everything Has a Reason for Existence
-
-Leibniz's **Principle of Sufficient Reason (Principium rationis sufficientis)** states that "for everything, there is a sufficient reason why it exists".
-
-In Be Framework, this philosophy is realized as the **Reason Layer**:
-
-```php
-final readonly class ValidatedUser
-{
-    public function __construct(
-        #[Input] string $email,                 // Immanence
-        #[Input] ValidationReason $reason       // Reason for existence (raison d'être)
-    ) {
-        // ValidationReason provides the reason for existence for ValidatedUser
-        $this->isValid = $reason->validate($email);
+        // ValidatedEmail arises from these conditions
     }
 }
 ```
 
-### Raison d'être
+### What Persists, What Falls Away
 
-French for "reason for being". The Reason Layer provides the grounds for an object to be that existence:
+This also suggests thinking about what continues through transformation versus what enables it:
 
-- `ValidatedUser`'s raison d'être → Validation capability
-- `SavedUser`'s raison d'être → Saving capability
-- `DeletedUser`'s raison d'être → Deletion capability
+```php
+#[Be(Adult::class)]
+final readonly class Child
+{
+    public function __construct(
+        #[Input] string $name,           // Continues: identity
+        #[Input] array $memories,        // Continues: experiences
+        #[Inject] SchoolService $school  // Enables, then releases
+    ) {
+        $this->wisdom = $school->learn($memories);
+    }
+}
+```
 
-Each existence has a sufficient reason that enables that existence.
+- `#[Input]` — what carries forward
+- `#[Inject]` — what enables transformation but doesn't persist
 
-## 6. Immanence and Transcendence: Spinoza's Dual Aspects
+---
 
-### Immanent Nature and Transcendent Power
+## 8. Immanence and Transcendence
 
-Spinoza perceived reality as two aspects of one substance: **Immanence** and **Transcendence**.
+### Becoming Through Encounter
+
+Spinoza saw reality as interplay between what something already is (immanence) and what comes from beyond (transcendence).
 
 ```php
 final readonly class UserProfile
 {
     public function __construct(
-        #[Input] string $name,              // Immanence: What it already has
-        #[Input] string $email,             // Immanence: Given nature
-        #[Inject] Formatter $formatter,     // Transcendence: Power from outside
-        #[Inject] Validator $validator      // Transcendence: Capability provided by the world
+        #[Input] string $name,           // What it already has
+        #[Input] string $email,          // Given nature
+        #[Inject] Formatter $formatter,  // External capability
+        #[Inject] Validator $validator   // World's contribution
     ) {
-        // A new existence is born from the encounter of Immanence and Transcendence
-        $this->displayName = $formatter->format($name);    // New Immanence
-        $this->isValid = $validator->validate($email);     // New Immanence
+        $this->displayName = $formatter->format($name);
+        $this->isValid = $validator->validate($email);
     }
 }
 ```
 
-### Eternal Formula of Metamorphosis
+The pattern: **Given nature** + **External capability** → **New state**
 
-All Being Classes possess the same philosophical structure:
-
-**Immanence** + **Transcendence** → **New Immanence**
-
-This reflects Spinoza's philosophy of "Deus sive Natura" (God or Nature). Nature (external power) and Divinity (immanent essence) are two sides of one reality, and a new existence arises from their interaction.
-
-## 7. Zhuangzi's Relativity: Accepting Multiple Destinies
-
-### Philosophy of Equality of All Things
-
-Zhuangzi preached "The Equality of All Things" (Qi Wu Lun)—all things are fundamentally equivalent, and opposing concepts are merely different aspects of one reality.
-
-Type-Driven Metamorphosis embodies this philosophy:
-
-```php
-#[Be([Success::class, Failure::class])]  // Success and Failure are equivalent possibilities
-final readonly class PaymentAttempt
-{
-    public Success|Failure $being;  // Both are valid existences
-    
-    public function __construct(/* ... */) {
-        // Both success and failure are treated as complete existences
-        $this->being = $result->isSuccessful()
-            ? new Success($result)    // Existence called Success
-            : new Failure($result);   // Existence called Failure
-    }
-}
-```
-
-## 8. Heraclitean Flux: Perpetual Change
-
-### "Everything Flows"
-
-Heraclitus said "Panta Rhei" (πάντα ῥεῖ)—"Everything flows". You cannot step into the same river twice. Because it is no longer the same river, and you are no longer the same person.
-
-Metamorphosis expresses this perpetual change:
-
-```php
-// Time T0: Primal existence
-#[Be(EmailValidation::class)]
-final readonly class EmailInput { /* ... */ }
-
-// Time T1: First Metamorphosis (T0 is already past)
-#[Be(UserCreation::class)]  
-final readonly class EmailValidation { /* ... */ }
-
-// Time T2: Final Existence (encompassing all past)
-final readonly class UserCreation { /* ... */ }
-```
-
-Each moment never returns, and objects naturally transform within the flow of time.
-
-### Unity of Opposites
-
-Heraclitus also preached the "Unity of Opposites". Day and night, life and death, up and down—opposites are actually different aspects of one reality.
-
-```php
-// Unity of Opposites: Activation and Deactivation are two sides of the same reality
-public ActiveUser|InactiveUser $being;
-```
-
-## 9. Buddhist Dependent Origination: Interdependent Existence
-
-### Non-Self and Dependent Origination
-
-Buddhist **Dependent Origination (pratītyasamutpāda)** teaches that "all things exist depending on each other". Independent entities do not exist, and everything is born within a web of relationships.
-
-Be Framework objects are exactly this Dependent Origination existence:
-
-```php
-final readonly class UserProfile    // Existence of Dependent Origination
-{
-    public function __construct(
-        #[Input] string $name,              // Dependent on other existence
-        #[Inject] DatabaseConnection $db,   // Dependent on relationship with outside
-        #[Inject] ValidationService $validator  // Interdependent with service
-    ) {
-        // New existence appears from interdependent relationships
-    }
-}
-```
-
-### Implementation of Non-Self (Anātman)
-
-Buddhist **Non-Self (anātman)** creates the teaching that "there is no fixed self". Everything is a bundle of changing relationships.
-
-In Be Framework:
-- Objects have no fixed "essence"
-- State does not change due to `public readonly`
-- Each stage appears as a completely independent existence
-- "Self" is composed of relationships (Dependency Injection)
-
-## 10. Integration of Programming Philosophy
-
-### Wisdom of East and West
-
-Be Framework integrates Eastern and Western philosophical traditions:
-
-**Eastern Wisdom**:
-- **Taoism**: Flow of Wu Wei / Non-doing
-- **Buddhism**: Dependent Origination and Non-Self, Impermanence
-- **Zhuangzi**: Acceptance of relativity and metamorphosis
-
-**Western Thought**:
-- **Heidegger**: Dasein as Temporal Being
-- **Aristotle**: Entelechy (Realization of possibility)
-- **Leibniz**: Principle of Sufficient Reason
-- **Spinoza**: Unity of Immanence and Transcendence
-
-### Sublimation to Computational Philosophy
-
-When these ancient wisdoms are realized in modern programming, a new **Computational Philosophy** is born:
-
-- **Ontological Design**: Defining what can exist
-- **Temporal Programming**: Respecting the temporality of objects
-- **Wu Wei Execution**: Control following natural flow
-- **Dependent Origination Dependency**: Realization of existence through interdependence
-- **Relativistic Result**: Accepting multiple valid results
-
-## 11. Prospect for the Future: Next Evolution of Programming
-
-### Evolution of Paradigm
-
-Looking at the evolution of programming paradigms, we are gradually approaching the principles of nature:
-
-1. **Machine Language Era**: "Command the machine"
-2. **Procedural Era**: "Describe procedures"
-3. **Object-Oriented Era**: "Delegate responsibility to objects"
-4. **Functional Era**: "Define mathematical transformations"
-5. **Ontological Era**: "Declare conditions of existence and enable natural metamorphosis"
-
-### Humanity in the AI Era
-
-In an era where AI can optimize "How to do", human uniqueness lies in the ability to decide "What should exist, what has meaning".
-
-Ontological Programming maximizes this human-specific value:
-- **Creator of Meaning**: Deciding what existence has value
-- **Designer of Existence**: Defining possible states of existence
-- **Philosophical Thinker**: Designing the ontological structure of systems
-
-### Programming Paradigm in the AI Era
-
-In an era where AI can handle the implementation of "How to do", the essence of programming changes. Rather than describing commands, defining **what can exist** becomes the core.
-
-Ontological Programming is a paradigm with a philosophical foundation for this new era:
-- Rather than implementation details that AI can optimize
-- Focusing on meanings and constraints of existence that humans should define
-- Enabling role shift from "Writer of commands" to "Designer of existence"
+This resembles how people develop—not through internal properties alone, but through encounters with others, culture, and environment.
 
 ---
 
-> **"Where the river flows, there is the way."**
-> —Modern interpretation of Laozi
+## 9. Three Kinds of Transparency
 
-Be Framework is where ancient wisdom meets modern technology. Here, code becomes philosophy, programming becomes ontology, and engineers become modern philosophers.
+Be Framework aims for clarity at three levels:
 
-Objects flow naturally, transform, and become what they should be—this is the new possibility of programming embodied by Be Framework.
+### 1. Structural
+
+```php
+UserInput → ValidatedUser → SavedUser → ActiveUser
+```
+
+The transformation path is visible in the types.
+
+### 2. Semantic
+
+```php
+string $email     // Name suggests Email validation
+string $password  // Name suggests Password validation
+```
+
+Names carry meaning.
+
+### 3. Execution
+
+```json
+{
+  "metamorphosis": "UserInput → ValidatedUser",
+  "inputs": { "email": "user@example.com" },
+  "validations": ["email.format: passed"],
+  "result": "ValidatedUser created"
+}
+```
+
+Logs record what happened.
+
+When these align, the code can serve as its own documentation.
+
+---
+
+## 10. AI Collaboration
+
+Some decisions don't fit deterministic rules well. The `#[Accept]` pattern acknowledges this:
+
+```php
+#[Be(DiagnosedPatient::class)]
+final readonly class PatientSymptoms
+{
+    public Diagnosis|Undetermined $being;
+
+    public function __construct(
+        #[Input] array $symptoms,
+        #[Accept] DiagnosticAI $ai
+    ) {
+        $result = $ai->analyze($symptoms);
+        $this->being = $result->confidence > 0.85
+            ? new Diagnosis($result)
+            : new Undetermined($symptoms, $result->suggestions);
+    }
+}
+```
+
+This suggests a division of concerns:
+
+- Humans define what states can exist and what they mean
+- AI can help determine which state applies
+
+---
+
+## 11. Connections
+
+These philosophical ideas share common themes:
+
+| Source     | Concept                 | Expression in BOP        |
+|------------|-------------------------|--------------------------|
+| Heraclitus | Flow                    | `Input → Being → Final`  |
+| Aristotle  | Potentiality            | `Success|Failure $being` |
+| Laozi      | Non-forcing             | `#[Be]` declaration      |
+| Buddhism   | Interdependence         | `#[Input]` + `#[Inject]` |
+| Spinoza    | Immanence/Transcendence | Input/Inject distinction |
+| Leibniz    | Sufficient reason       | Reason Layer*            |
+
+*See [Chapter 8: Reason Layer](./08-reason-layer.html) for details.*
+
+These aren't forced mappings—the patterns emerged and the philosophical parallels became apparent afterward.
+
+---
+
+## 12. Shifting Perspective
+
+### Different Questions
+
+| Era         | Typical Question               |
+|-------------|--------------------------------|
+| Assembly    | "How to instruct the machine?" |
+| Procedural  | "What steps to execute?"       |
+| OOP         | "Who is responsible?"          |
+| Functional  | "What becomes what?"           |
+| Ontological | "What can exist?"              |
+
+### A Different Role
+
+This framing suggests the programmer's work includes:
+
+- Deciding what states are meaningful
+- Defining what existence is possible
+- Designing the structure of valid states
+
+---
+
+## Where to Go from Here
+
+To explore further:
+
+1. **Re-read earlier chapters** — the patterns may look different now
+2. **Notice your habits** — when do you control vs. enable?
+3. **Experiment** — try asking "What should this become?" instead of "What should this do?"
+
+---
+
+## Conclusion
+
+Be Framework draws on old ideas: flow, potentiality, interdependence, natural transformation. These aren't decorations—they shaped the design.
+
+Whether these philosophical connections resonate with you or not, the practical patterns remain: immutable objects, type-driven transformation, constructor-based metamorphosis.
+
+Ancient philosophers and modern programmers ask similar questions in different languages. A different paradigm offers a different way to see. And how we see shapes what we can build.
+
+---
+
+*Next: Return to [Overview](./01-overview.html) or see [Reference](./11-reference-resources.html) for additional resources.*
