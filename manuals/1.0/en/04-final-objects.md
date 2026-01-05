@@ -159,4 +159,4 @@ This is exactly the destination of programming that Be Framework aims for—an e
 
 ---
 
-There is not just one way. Learn various paths in [Metamorphosis](./05-metamorphosis-patterns.html) ➡️
+There is not just one way. Learn various paths in [Metamorphosis](./05-metamorphosis.html) ➡️
