@@ -20,7 +20,7 @@ permalink: /manuals/1.0/ja/
 ## [4. 最終オブジェクト](./04-final-objects.html)
 変容の目的地 - 完全に変容した存在
 
-## [5. 変容](./05-metamorphosis-patterns.html)
+## [5. 変容](./05-metamorphosis.html)
 時間とドメインの不可分性、運命の自己決定
 
 ## [6. 意味変数](./06-semantic-variables.html)

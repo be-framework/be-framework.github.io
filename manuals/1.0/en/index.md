@@ -21,7 +21,7 @@ Intermediate transformations through Immanent + Transcendent interactions
 ## [4. Final Objects](./04-final-objects.html)
 The destination of metamorphosis - complete transformed beings
 
-## [5. Metamorphosis](./05-metamorphosis-patterns.html)
+## [5. Metamorphosis](./05-metamorphosis.html)
 Inseparability of time and domain, self-determination of destiny
 
 ## [6. Semantic Variables](./06-semantic-variables.html)

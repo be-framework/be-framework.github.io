@@ -39,7 +39,7 @@ Defensive if/guard statements are drastically reduced, and type = reachable stat
 
 ### Q4. What are "temporal existence types"?  
 A. Types like `ValidatedUser`, `SavedUser`, `DeletedUser` express the "when" in progress.  
-Time and domain are inseparable (details: [Metamorphosis](./05-metamorphosis-patterns.html)).
+Time and domain are inseparable (details: [Metamorphosis](./05-metamorphosis.html)).
 
 ---
 
@@ -147,7 +147,7 @@ A. Verify each existence (type) individually. Preconditions = `#[Input]`, postco
 
 A. Procedure-dependent = linear / Results exclusive by conditions = branching / Convergence of independent processes = nested. When in doubt, start with minimal linear.
 
-See [Implementation Guidelines](./05-metamorphosis-patterns.html) for details.
+See [Implementation Guidelines](./05-metamorphosis.html) for details.
 
 ---
 
@@ -272,7 +272,7 @@ A mechanism for holding failures and history not as simple strings, but as struc
 ## 11) Related Chapter Links
 
 * **[Overview](./01-overview.html)**: First encounter with being-oriented programming
-* **[Metamorphosis](./05-metamorphosis-patterns.html)**: Inseparability of time and domain
+* **[Metamorphosis](./05-metamorphosis.html)**: Inseparability of time and domain
 * **[Semantic Variables](./06-semantic-variables.html)**: Domain-specific validation and type safety
 * **[Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html)**: Self-determining objects
 * **[Reason Layer](./08-reason-layer.html)**: Raison d'être and object existence foundations
