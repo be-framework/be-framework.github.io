@@ -106,6 +106,8 @@ The **JTASProtocol** (Japan Triage and Acuity Scale) is not a programmer's arbit
  *
  * A transcendent medical wisdom that exists independently
  * of any individual patient or programmer.
+ *
+ * Note: Simplified. Real JTAS has 5 levels.
  */
 final readonly class JTASProtocol
 {
