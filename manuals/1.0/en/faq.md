@@ -269,7 +269,21 @@ A mechanism for holding failures and history not as simple strings, but as struc
 
 ---
 
-## 11) Related Chapter Links
+## 11) Using AI Agents
+
+### Q27. How do I get AI to write Be Framework code?
+
+A. Simply ask the AI to read the llms-full.txt:
+
+```
+Please read https://be-framework.github.io/llms-full.txt
+```
+
+This file contains all the key concepts, naming conventions, and code examples needed for AI to understand and generate Be Framework code.
+
+---
+
+## 12) Related Chapter Links
 
 * **[Overview](./01-overview.html)**: First encounter with being-oriented programming
 * **[Metamorphosis](./05-metamorphosis.html)**: Inseparability of time and domain

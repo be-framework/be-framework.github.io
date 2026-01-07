@@ -296,7 +296,21 @@ $profile = $becoming(new UserInput($name, $email));
 
 ---
 
-## 11) 関連章へのリンク
+## 11) AIエージェントの活用
+
+### Q27. AIにBe Frameworkのコードを書かせるにはどうすればいいですか？
+
+A. AIにllms-full.txtを読むよう依頼するだけです:
+
+```
+https://be-framework.github.io/llms-full.txt を読んでください
+```
+
+このファイルには、AIがBe Frameworkを理解しコードを生成するために必要な、主要概念、命名規則、コード例がすべて含まれています。
+
+---
+
+## 12) 関連章へのリンク
 
 * **[概要](./01-overview.html)**: 存在指向プログラミングとの出会い
 * **[変容](./05-metamorphosis.html)**: 時間とドメインの不可分性
