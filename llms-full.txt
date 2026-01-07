@@ -229,14 +229,17 @@ final readonly class TriageAssessment
 ```php
 final readonly class EmergencyCase
 {
-    public string $priority = 'IMMEDIATE';
-    public string $color = 'RED';
+    public string $priority;
+    public string $color;
 
     public function __construct(
         #[Input] public float $bodyTemperature,
         #[Input] public int $heartRate,
         #[Input] public Emergency $being
-    ) {}
+    ) {
+        $this->priority = 'IMMEDIATE';
+        $this->color = 'RED';
+    }
 
     public function assignER(): string
     {
@@ -246,14 +249,17 @@ final readonly class EmergencyCase
 
 final readonly class ObservationCase
 {
-    public string $priority = 'DELAYED';
-    public string $color = 'GREEN';
+    public string $priority;
+    public string $color;
 
     public function __construct(
         #[Input] public float $bodyTemperature,
         #[Input] public int $heartRate,
         #[Input] public Observation $being
-    ) {}
+    ) {
+        $this->priority = 'DELAYED';
+        $this->color = 'GREEN';
+    }
 
     public function assignWaitingArea(): string
     {
