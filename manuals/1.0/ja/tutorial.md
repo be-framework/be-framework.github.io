@@ -50,7 +50,7 @@ final class BodyTemperature
     public function validate(float $bodyTemperature): void
     {
         if ($bodyTemperature < 30.0 || $bodyTemperature > 45.0) {
-            throw new LethalVitalException($bodyTemperature);
+            throw new LethalVitalException();
         }
     }
 }
@@ -70,7 +70,7 @@ final class HeartRate
     public function validate(int $heartRate): void
     {
         if ($heartRate < 20 || $heartRate > 250) {
-            throw new LethalVitalException($heartRate);
+            throw new LethalVitalException();
         }
     }
 }
@@ -218,7 +218,7 @@ final readonly class EmergencyCase
     }
 
     /**
-     * EmergencyCase だけが ERを割り当てできます、
+     * EmergencyCase だけが ERを割り当てできます。
      */
     public function assignER(): string
     {
