@@ -112,6 +112,8 @@ function processUser(ValidatedUser $user) {
 
 The idea: rather than handling errors, make certain errors impossible to represent.
 
+Sartre wrote "Existence precedes essence"—we exist first, then define ourselves. In Be Framework: Existence precedes action—what you ARE determines what you CAN DO.
+
 ---
 
 ## 4. Heraclitus: Everything Flows
@@ -350,6 +352,7 @@ These philosophical ideas share common themes:
 |------------|-------------------------|--------------------------|
 | Heraclitus | Flow                    | `Input → Being → Final`  |
 | Aristotle  | Potentiality            | `Success|Failure $being` |
+| Sartre     | Existence precedes essence | Type determines capability |
 | Laozi      | Non-forcing             | `#[Be]` declaration      |
 | Buddhism   | Interdependence         | `#[Input]` + `#[Inject]` |
 | Spinoza    | Immanence/Transcendence | Input/Inject distinction |

@@ -76,7 +76,7 @@ final class HeartRate
 }
 ```
 
-**Key insight:** These aren't just validation rules. They define your **domain ontology**—the vocabulary of what can exist. This declarative foundation serves as documentation that both humans and AI can read to understand your domain. (See [Semantic Variables](./06-semantic-variables.html) for how this enables AI-readable system design.)
+These aren't just validation rules. They define your domain ontology—the vocabulary of what can exist. This declarative foundation serves as documentation that both humans and AI can read to understand your domain. (See [Semantic Variables](./06-semantic-variables.html) for details.)
 
 ## Step 2: Define Exceptions
 
@@ -96,7 +96,7 @@ final class LethalVitalException extends DomainException
 
 ## Step 3: Define the Reason (Transcendence)
 
-The **JTASProtocol** (Japan Triage and Acuity Scale) is not a programmer's arbitrary rule. It represents **transcendent medical wisdom**—objective knowledge that exists independently in the world. In Be Framework, such domain logic becomes a **first-class citizen**: injectable, testable, and explicitly visible.
+The JTASProtocol (Japan Triage and Acuity Scale) is not a programmer's arbitrary rule. It represents transcendent medical wisdom—objective knowledge that exists independently in the world. In Be Framework, such domain logic becomes a **first-class citizen**: injectable, testable, and explicitly visible.
 
 ```php
 // src/Reason/JTASProtocol.php
@@ -186,14 +186,11 @@ final readonly class TriageAssessment
 }
 ```
 
-**Key concepts:**
-- `#[Inject]` brings in the JTASProtocol—transcendent wisdom from outside
-- The `$being` property (Union type) determines which Final class receives the transformation
-- We don't "set status"—the patient BECOMES their destiny
+`#[Inject]` brings in the JTASProtocol—transcendent wisdom from outside. The `$being` property (Union type) determines which Final class receives the transformation. We don't "set status"—the patient BECOMES their destiny.
 
 ## Step 7: Create Final Classes
 
-The final forms—each with their own **unique capabilities**:
+The final forms—each with unique capabilities:
 
 ### EmergencyCase
 
@@ -262,7 +259,7 @@ final readonly class ObservationCase
 }
 ```
 
-Notice: Each outcome has **different methods**. `EmergencyCase` can `assignER()`, while `ObservationCase` can `assignWaitingArea()`. The **type determines capability**—you cannot assign an ER room to an observation patient.
+Each type has different methods. `EmergencyCase` can `assignER()`, while `ObservationCase` can `assignWaitingArea()`. Type determines capability—you cannot assign an ER room to an observation patient.
 
 ## Step 8: Execute the Metamorphosis
 
@@ -279,14 +276,16 @@ $becoming = new Becoming($injector, 'Be\\App\\Semantic');
 
 // High fever patient
 $patient = new PatientArrival(bodyTemperature: 39.5, heartRate: 90);
-$result = $becoming($patient);
+$final = $becoming($patient);
 
-echo $result->priority;     // "IMMEDIATE"
-echo $result->color;        // "RED"
-echo $result->assignER();   // "Secure ER Room 1 immediately..."
+echo $final->priority;     // "IMMEDIATE"
+echo $final->color;        // "RED"
+echo $final->assignER();   // "Secure ER Room 1 immediately..."
 ```
 
-## The Complete Flow
+## Temporal Existence
+
+All existence flows through time—from Input through Being to Final.
 
 ```
 PatientArrival(39.5°C, 90 bpm)
@@ -338,17 +337,19 @@ Problems:
 
 ```php
 $patient = new PatientArrival($temp, $hr);
-$result = $becoming($patient);
+$final = $becoming($patient);
 
-// $result IS an EmergencyCase or ObservationCase
+// $final IS an EmergencyCase or ObservationCase
 // Only EmergencyCase has assignER() method
-$result->assignER();  // Type-safe: only possible for EmergencyCase
+$final->assignER();  // Type-safe: only possible for EmergencyCase
 ```
 
 Benefits:
 - Non-survivable states cannot exist
 - Type IS the status (immutable)
 - Capabilities belong to existence
+
+Type determines capability. Existence precedes action.
 
 ## Project Structure
 
@@ -359,7 +360,7 @@ src/
 ├── Exception/
 │   └── LethalVitalException.php
 ├── Input/
-│   └── PatientArrival.php      # Raw data
+│   └── PatientArrival.php      # Entry point
 ├── Module/
 │   └── AppModule.php           # DI configuration
 ├── Final/
@@ -376,11 +377,9 @@ src/
 
 ## Key Insights
 
-1. **Existence over Action**: The patient doesn't "get triaged"—they BECOME a triaged state
-2. **Type IS Status**: `EmergencyCase` and `ObservationCase` are different types with different capabilities
-3. **Semantic Boundaries**: Lethal vital signs are rejected before metamorphosis
-4. **Transcendent Wisdom**: JTASProtocol exists independently—it's injected, not created
-5. **Immutability**: Once transformed, a patient cannot change status without new metamorphosis
+The patient doesn't "get triaged"—they become a triaged state. `EmergencyCase` and `ObservationCase` are different types with different capabilities. Once transformed, status cannot change without new metamorphosis.
+
+All existence is relational, temporal, ever-becoming. Immanence meets transcendence. New being emerges. "To be is to become."
 
 ## Metamorphosis in Other Domains
 
@@ -388,11 +387,11 @@ The same pattern applies everywhere:
 
 | Domain | Input | Being | Final | Reason |
 |--------|-------|-------|---------|--------|
-| **Triage** | PatientArrival | TriageAssessment | Emergency/Observation | JTASProtocol |
-| **Brewing** | RawMaterials | Fermentation | PremiumSake/Vinegar | YeastCulture |
-| **Immigration** | VisaApplication | ConsularReview | Resident/Visitor | ImmigrationLaw |
-| **Justice** | Evidence | Trial | Guilty/Acquitted | PenalCode |
-| **Stellar** | GasCloud | Protostar | Star/BlackHole | PhysicsLaws |
+| Triage | PatientArrival | TriageAssessment | Emergency/Observation | JTASProtocol |
+| Brewing | RawMaterials | Fermentation | PremiumSake/Vinegar | YeastCulture |
+| Immigration | VisaApplication | ConsularReview | Resident/Visitor | ImmigrationLaw |
+| Justice | Evidence | Trial | Guilty/Acquitted | PenalCode |
+| Stellar | GasCloud | Protostar | Star/BlackHole | PhysicsLaws |
 
 Every domain has its metamorphosis. Every existence has its reason.
 
