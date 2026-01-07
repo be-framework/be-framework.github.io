@@ -156,4 +156,4 @@ Ready for a more complete example with Being classes and branching? Continue to 
 Or revisit the concepts:
 - [Input Classes](./02-input-classes.html) - Starting points
 - [Final Objects](./04-final-objects.html) - Destinations
-- [Semantic Variables](./06-semantic-variables.html) - Domain constraints
+- [Semantic Variables](./06-semantic-variables.html) - Domain ontology

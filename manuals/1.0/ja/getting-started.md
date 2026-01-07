@@ -156,4 +156,4 @@ Being クラスと分岐を含むより完全な例に進む準備ができま�
 または概念を復習:
 - [Input Classes](./02-input-classes.html) - 出発点
 - [Final Objects](./04-final-objects.html) - 目的地
-- [Semantic Variables](./06-semantic-variables.html) - 意味的変数
+- [Semantic Variables](./06-semantic-variables.html) - ドメインオントロジー
