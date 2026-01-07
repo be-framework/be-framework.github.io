@@ -96,6 +96,31 @@ $result->assignER();  // Only possible for EmergencyCase
 - `#[Inject]` - Receives transcendent capability (DI)
 - `#[Validate]` - Semantic validation method marker
 
+## Domain Types (PHPDoc Literal Types)
+
+Use PHPDoc literal string types to constrain values at the type level:
+
+```php
+final readonly class JTASProtocol
+{
+    /** @return 'emergency'|'observation' */
+    public function assess(float $bodyTemperature, int $heartRate): string
+    {
+        // ...
+    }
+}
+
+final readonly class EmergencyCase
+{
+    /** @var 'IMMEDIATE' */
+    public string $priority;
+    /** @var 'RED' */
+    public string $color;
+}
+```
+
+This makes the domain vocabulary explicit and enables static analysis tools (Psalm, PHPStan) to catch invalid values.
+
 ## Naming Conventions
 
 ### Semantic Variables
@@ -229,7 +254,9 @@ final readonly class TriageAssessment
 ```php
 final readonly class EmergencyCase
 {
+    /** @var 'IMMEDIATE' */
     public string $priority;
+    /** @var 'RED' */
     public string $color;
 
     public function __construct(
@@ -249,7 +276,9 @@ final readonly class EmergencyCase
 
 final readonly class ObservationCase
 {
+    /** @var 'DELAYED' */
     public string $priority;
+    /** @var 'GREEN' */
     public string $color;
 
     public function __construct(
