@@ -48,7 +48,7 @@ src/
 ├── Reason/
 │   └── Greeting.php        # Transcendent capability
 ├── Semantic/
-│   └── Name.php            # What can exist
+│   └── Name.php            # Semantic variables
 ├── Exception/
 │   └── EmptyNameException.php
 └── Module/
@@ -156,4 +156,4 @@ Ready for a more complete example with Being classes and branching? Continue to 
 Or revisit the concepts:
 - [Input Classes](./02-input-classes.html) - Starting points
 - [Final Objects](./04-final-objects.html) - Destinations
-- [Semantic Variables](./06-semantic-variables.html) - Validation
+- [Semantic Variables](./06-semantic-variables.html) - Domain constraints

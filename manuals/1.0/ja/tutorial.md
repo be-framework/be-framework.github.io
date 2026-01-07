@@ -17,9 +17,9 @@ permalink: /manuals/1.0/ja/tutorial.html
 
 ## はじめに
 
-このチュートリアルでは、Be Framework の核心哲学を示す救急トリアージシステムを構築します：**オブジェクトは何かを「する」のではなく、何かに「なる」のです。**
+このチュートリアルでは、Be Framework の核心哲学を示す救急トリアージシステムを構築します：オブジェクトは何かを「する」のではなく、何かに「なる」のです。
 
-患者は「トリアージされる」のではありません。医学プロトコルという超越的な知恵に基づいて、緊急症例または経過観察症例に**なる**のです。
+患者は「トリアージされる」のではありません。医学プロトコルという患者自身は持たない(=超越的な)知恵に基づいて、緊急症例または経過観察症例に**なる**のです。
 
 ## 変態の流れ
 
@@ -33,7 +33,7 @@ EmergencyCase または ObservationCase（最終的な存在）
 
 ## ステップ 1: オントロジーを定義する
 
-ロジックを書く前に、**ドメインオントロジー**—このドメインで何が存在できるかの語彙—を定義します。
+ロジックを書く前に、**意味的変数**—このドメインで何が存在できるかの語彙—を定義します。
 
 ### BodyTemperature
 
@@ -50,7 +50,7 @@ final class BodyTemperature
     public function validate(float $bodyTemperature): void
     {
         if ($bodyTemperature < 30.0 || $bodyTemperature > 45.0) {
-            throw new LethalVitalException();
+            throw new LethalVitalException($bodyTemperature);
         }
     }
 }
@@ -70,7 +70,7 @@ final class HeartRate
     public function validate(int $heartRate): void
     {
         if ($heartRate < 20 || $heartRate > 250) {
-            throw new LethalVitalException();
+            throw new LethalVitalException($heartRate);
         }
     }
 }
@@ -96,7 +96,7 @@ final class LethalVitalException extends DomainException
 
 ## ステップ 3: Reason（超越）を定義する
 
-JTASProtocol（Japan Triage and Acuity Scale）はプログラマーの恣意的なルールではありません。超越的な医学の知恵—世界に独立して存在する客観的な知識—を表します。Be Framework では、このようなドメインロジックは**第一級市民**になります：注入可能、テスト可能、明示的に可視。
+JTASProtocol（Japan Triage and Acuity Scale）は開発者の恣意的なルールではありません。超越的な医学の知恵—世界に独立して存在する客観的な知識—を表します。Be Framework では、このようなドメインロジックは第一級市民(first class citizen)になります：注入可能、テスト可能で明示的に表されます。
 
 ```php
 // src/Reason/JTASProtocol.php
@@ -104,10 +104,10 @@ JTASProtocol（Japan Triage and Acuity Scale）はプログラマーの恣意的
 /**
  * JTAS (Japan Triage and Acuity Scale) プロトコル
  *
- * 個々の患者やプログラマーから独立して存在する
+ * 個々の患者や開発者から独立して存在する
  * 超越的な医学の知恵。
  *
- * 注: 簡略化。実際のJTASは5レベル。
+ * 注: 実際のJTASは5レベル存在します。
  */
 final readonly class JTASProtocol
 {
@@ -149,13 +149,13 @@ final readonly class PatientArrival
 
 ```php
 // src/Reason/Emergency.php
-final readonly class Emergency {}
+final readonly class Emergency {} // 緊急
 
 // src/Reason/Observation.php
-final readonly class Observation {}
+final readonly class Observation {} // 経過観察
 ```
 
-これらは空のクラスではありません—それ自体が**区別**です。`Emergency` は `Observation` とは根本的に異なります。型自体が意味を持ちます。
+これらは空のクラスではありません—それ自体が**区別**です。`Emergency` は `Observation` とは根本的に異なり型自体が意味を持ちます。
 
 ## ステップ 6: Being クラスを作成
 
@@ -198,9 +198,10 @@ final readonly class TriageAssessment
 // src/Final/EmergencyCase.php
 
 /**
- * 最高優先度として存在する患者。
- * これは単なるステータスフラグではない。この患者は緊急である。
- * その型が他にはない能力を与える。
+ * 最高優先度として存在する患者
+ *
+ * これは単なるステータスフラグではなくこの患者は緊急です。
+ * この型よって他にはない能力が与えられます。
  */
 final readonly class EmergencyCase
 {
@@ -217,7 +218,7 @@ final readonly class EmergencyCase
     }
 
     /**
-     * EmergencyCase だけが ER 割り当てを要求できる
+     * EmergencyCase だけが ERを割り当てできます、
      */
     public function assignER(): string
     {
@@ -259,7 +260,7 @@ final readonly class ObservationCase
 }
 ```
 
-各型は異なるメソッドを持ちます。`EmergencyCase` は `assignER()` を、`ObservationCase` は `assignWaitingArea()` を持ちます。型が能力を決定します—経過観察の患者に救急室を割り当てることはできません。
+各型は異なるメソッドを持ちます。`EmergencyCase` には `assignER()` が、`ObservationCase` には `assignWaitingArea()` メソッドが存在します。型によって能力が決定されます — 経過観察の患者に救急室を割り当てることはできません。
 
 ## ステップ 8: 変態を実行
 
@@ -276,14 +277,16 @@ $becoming = new Becoming($injector, 'Be\\App\\Semantic');
 
 // 高熱の患者
 $patient = new PatientArrival(bodyTemperature: 39.5, heartRate: 90);
-$result = $becoming($patient);
+$final = $becoming($patient);
 
-echo $result->priority;     // "IMMEDIATE"
-echo $result->color;        // "RED"
-echo $result->assignER();   // "直ちに救急室1を確保..."
+echo $final->priority;     // "IMMEDIATE"
+echo $final->color;        // "RED"
+echo $final->assignER();   // "直ちに救急室1を確保..."
 ```
 
-## 完全なフロー
+## 時間的存在
+
+すべての存在は時間の中で変化し、Input から Being を経て Final へと変態します。
 
 ```
 PatientArrival(39.5°C, 90 bpm)
@@ -298,7 +301,7 @@ EmergencyCase（$being が Emergency なので）
     → assignER(): "直ちに救急室1を確保..."
 ```
 
-## 生存不可能な存在の処理
+## 生存不可能な存在
 
 ```php
 // 生存可能範囲外の体温
@@ -312,9 +315,9 @@ try {
 }
 ```
 
-変態は**拒否されます**。致死的なバイタルサインを持つ患者は私たちのシステムに存在できません。
+変態は拒否されます。致死的なバイタルサインを持つ患者は私たちのシステムに存在できません。
 
-## なぜこれが重要か
+## パラダイムの転換
 
 ### 従来のアプローチ（Doing）
 
@@ -335,17 +338,19 @@ if ($triageService->isEmergency($patient)) {
 
 ```php
 $patient = new PatientArrival($temp, $hr);
-$result = $becoming($patient);
+$final = $becoming($patient);
 
-// $result は EmergencyCase または ObservationCase である
+// $final は EmergencyCase または ObservationCase である
 // EmergencyCase だけが assignER() メソッドを持つ
-$result->assignER();  // 型安全：EmergencyCase でのみ可能
+$final->assignER();  // 型安全：EmergencyCase でのみ可能
 ```
 
 利点：
 - 生存不可能な状態は存在できない
 - 型がステータスである（不変）
 - 能力は存在に属する
+
+型が能力を決定する。存在は行動に先立つ。
 
 ## プロジェクト構造
 
@@ -356,7 +361,7 @@ src/
 ├── Exception/
 │   └── LethalVitalException.php
 ├── Input/
-│   └── PatientArrival.php      # 生データ
+│   └── PatientArrival.php      # 入力
 ├── Module/
 │   └── AppModule.php           # DI設定
 ├── Final/
@@ -371,25 +376,25 @@ src/
     └── HeartRate.php
 ```
 
-## 重要な洞察
+## 哲学
 
-1. 患者は「トリアージされる」のではなく、トリアージされた状態になる
-2. `EmergencyCase` と `ObservationCase` は異なる能力を持つ異なる型
-3. 一度変態すると、新たな変態なしにステータスは変更できない
+患者は「トリアージされる」のではなく、トリアージされた状態になります。`EmergencyCase` と `ObservationCase` は異なる能力を持つ異なる型です。一度変態すると、新たな変態なしにステータスは変更できません。
+
+すべての存在は時間の中に存在し、常に変化していて決して静止することはありません。絶えることなく自我を超越したものと出会い、影響を受け、自らを形作っていきます。「在ることは、成ること。」
 
 ## 他のドメインでの変態
 
-同じパターンがあらゆる場所に適用されます：
+同じパターンがあらゆる場所に適用されています：
 
 | ドメイン | Input | Being | Final | Reason |
 |---------|-------|-------|-------|--------|
-| **トリアージ** | PatientArrival | TriageAssessment | Emergency/Observation | JTASProtocol |
-| **醸造** | RawMaterials | Fermentation | PremiumSake/Vinegar | YeastCulture |
-| **入国審査** | VisaApplication | ConsularReview | Resident/Visitor | ImmigrationLaw |
-| **裁判** | Evidence | Trial | Guilty/Acquitted | PenalCode |
-| **恒星進化** | GasCloud | Protostar | Star/BlackHole | PhysicsLaws |
+| トリアージ | PatientArrival | TriageAssessment | Emergency/Observation | JTASProtocol |
+| 醸造 | RawMaterials | Fermentation | PremiumSake/Vinegar | YeastCulture |
+| 入国審査 | VisaApplication | ConsularReview | Resident/Visitor | ImmigrationLaw |
+| 裁判 | Evidence | Trial | Guilty/Acquitted | PenalCode |
+| 恒星進化 | GasCloud | Protostar | Star/BlackHole | PhysicsLaws |
 
-すべてのドメインに変態があります。すべての存在に理由があります。
+このようにすべてのドメインに変態があります。すべての存在に理由があります。全ては時間的存在です。
 
 ## 次のステップ
 

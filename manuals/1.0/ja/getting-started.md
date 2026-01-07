@@ -48,7 +48,7 @@ src/
 ├── Reason/
 │   └── Greeting.php        # 超越的な能力
 ├── Semantic/
-│   └── Name.php            # 何が存在できるか
+│   └── Name.php            # 意味的変数
 ├── Exception/
 │   └── EmptyNameException.php
 └── Module/
@@ -69,7 +69,7 @@ final readonly class HelloInput
 }
 ```
 
-`#[Be]` 属性は**運命**を宣言します—この入力が何になるかを。
+`#[Be]` 属性はこの入力が何になるか、自らの**運命**を宣言します。
 
 ### Final クラス
 
@@ -87,8 +87,8 @@ final readonly class Hello
 }
 ```
 
-- `#[Input]` は前の段階（HelloInput）からデータを受け取る
-- `#[Inject]` は**超越**（外部からの能力）を受け取る
+- `#[Input]` は前の段階（HelloInput）からデータを受け取ります。
+- `#[Inject]` は外部からの能力（トランセンデンス）を受け取ります。
 
 ### Reason クラス
 
@@ -99,9 +99,9 @@ final class Greeting
 }
 ```
 
-Greeting は**超越的な能力**—挨拶する力—を提供します。
+Greeting はトランセンデンス — 挨拶する力—を提供します。
 
-### 変態の実行
+### 変態（メタモルフォーシス）の実行
 
 ```php
 $injector = new Injector(new AppModule());
@@ -122,7 +122,7 @@ Hello (Greeting が注入された状態)
     → "Hello World"
 ```
 
-入力は何も「しなかった」—変態を通じて Hello に**なった**のです。
+入力オブジェクトは何もしていません — 変態を通じて Hello になった(BEING)のです。
 
 ## セマンティック検証を試す
 
@@ -138,7 +138,7 @@ $input = new HelloInput('');
 php bin/app.php
 ```
 
-`Semantic/Name.php` が名前が空であることを検証するため、エラーメッセージが表示されます。
+`Semantic/Name.php` が名前が空であることを検証するため、エラーメッセージが表示されます。空の名前では存在ができないのです。
 
 ## 示された主要概念
 
@@ -156,4 +156,4 @@ Being クラスと分岐を含むより完全な例に進む準備ができま�
 または概念を復習:
 - [Input Classes](./02-input-classes.html) - 出発点
 - [Final Objects](./04-final-objects.html) - 目的地
-- [Semantic Variables](./06-semantic-variables.html) - 検証
+- [Semantic Variables](./06-semantic-variables.html) - 意味的変数

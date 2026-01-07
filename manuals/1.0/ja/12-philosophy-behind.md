@@ -112,6 +112,8 @@ function processUser(ValidatedUser $user) {
 
 アイデア：エラーを処理するのではなく、特定のエラーを表現不可能にする。
 
+サルトルは「実存は本質に先立つ」と書きました—私たちはまず存在し、それから自分自身を定義します。Be Frameworkでは：存在は行動に先立つ—何であるかが何をできるかを決定します。
+
 ---
 
 ## 4. ヘラクレイトス：万物は流転する
@@ -350,6 +352,7 @@ final readonly class PatientSymptoms
 |------|------|-------------|
 | ヘラクレイトス | 流転 | `Input → Being → Final` |
 | アリストテレス | 可能態 | `Success|Failure $being` |
+| サルトル | 実存は本質に先立つ | 型が能力を決定する |
 | 老子 | 無為 | `#[Be]`宣言 |
 | 仏教 | 縁起 | `#[Input]` + `#[Inject]` |
 | スピノザ | 内在/超越 | Input/Injectの区別 |
