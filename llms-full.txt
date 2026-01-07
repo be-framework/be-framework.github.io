@@ -1,0 +1,243 @@
+# Be Framework - Full Documentation
+
+> Objects don't DO things—they BECOME things.
+
+Be Framework is a PHP framework for ontological programming where transformation (metamorphosis) replaces procedural action.
+
+## Core Philosophy
+
+A patient doesn't "get triaged." They **become** an emergency case or an observation case, based on the transcendent wisdom of medical protocol.
+
+## Key Concepts
+
+### Domain Ontology (Semantic Variables)
+
+Semantic variables define what CAN exist in a domain—not just validation rules, but the vocabulary of existence. This declarative foundation serves as documentation that both humans and AI can read to understand your domain.
+
+```php
+final class BodyTemperature
+{
+    #[Validate]
+    public function validate(float $bodyTemperature): void
+    {
+        if ($bodyTemperature < 30.0 || $bodyTemperature > 45.0) {
+            throw new LethalVitalException();
+        }
+    }
+}
+```
+
+### Reason (Transcendence)
+
+Domain logic becomes a first-class citizen: injectable, testable, and explicitly visible.
+
+```php
+final readonly class JTASProtocol
+{
+    /** @return 'emergency'|'observation' */
+    public function assess(float $bodyTemperature, int $heartRate): string
+    {
+        if ($bodyTemperature >= 39.0 || $heartRate >= 120) {
+            return 'emergency';
+        }
+        return 'observation';
+    }
+}
+```
+
+### Metamorphosis Pattern
+
+Input → Being → Final transformation through the Becoming class.
+
+```php
+$becoming = new Becoming($injector, 'Be\\App\\Semantic');
+$patient = new PatientArrival(bodyTemperature: 39.5, heartRate: 90);
+$result = $becoming($patient);
+// $result IS an EmergencyCase or ObservationCase
+```
+
+### Type-Driven Branching
+
+The `$being` property (Union type) determines which Final class receives the transformation.
+
+```php
+#[Be([EmergencyCase::class, ObservationCase::class])]
+final readonly class TriageAssessment
+{
+    public Emergency|Observation $being;
+
+    public function __construct(
+        #[Input] public float $bodyTemperature,
+        #[Input] public int $heartRate,
+        #[Inject] JTASProtocol $protocol
+    ) {
+        $urgency = $protocol->assess($bodyTemperature, $heartRate);
+        $this->being = ($urgency === 'emergency')
+            ? new Emergency()
+            : new Observation();
+    }
+}
+```
+
+### Type IS Capability
+
+Different Final types have different methods—the type determines what actions are possible.
+
+```php
+// EmergencyCase has assignER()
+// ObservationCase has assignWaitingArea()
+$result->assignER();  // Only possible for EmergencyCase
+```
+
+## Key Attributes
+
+- `#[Be([TargetClass::class])]` - Declares metamorphosis destination(s)
+- `#[Input]` - Receives data from previous stage
+- `#[Inject]` - Receives transcendent capability (DI)
+- `#[Validate]` - Semantic validation method marker
+
+## Transformation Flow
+
+```
+Input (with #[Be([Being::class])])
+    ↓ Becoming executes
+Being (with #[Be([Final1::class, Final2::class])])
+    ↓ $being property determines branch
+Final (capability-specific type)
+```
+
+## Project Structure
+
+```
+src/
+├── Input/          # Starting points (raw data)
+├── Being/          # Intermediate transformations
+├── Final/          # Destinations (capability-specific types)
+├── Reason/         # Transcendent wisdom (domain logic)
+├── Semantic/       # Domain ontology (what CAN exist)
+├── Exception/      # Domain exceptions
+└── Module/         # DI configuration
+```
+
+## Example: Emergency Triage
+
+### Input Class
+
+```php
+#[Be([TriageAssessment::class])]
+final readonly class PatientArrival
+{
+    public function __construct(
+        public float $bodyTemperature,
+        public int $heartRate
+    ) {}
+}
+```
+
+### Being Class
+
+```php
+#[Be([EmergencyCase::class, ObservationCase::class])]
+final readonly class TriageAssessment
+{
+    public Emergency|Observation $being;
+
+    public function __construct(
+        #[Input] public float $bodyTemperature,
+        #[Input] public int $heartRate,
+        #[Inject] JTASProtocol $protocol
+    ) {
+        $urgency = $protocol->assess($bodyTemperature, $heartRate);
+        $this->being = ($urgency === 'emergency')
+            ? new Emergency()
+            : new Observation();
+    }
+}
+```
+
+### Final Classes
+
+```php
+final readonly class EmergencyCase
+{
+    public string $priority = 'IMMEDIATE';
+    public string $color = 'RED';
+
+    public function __construct(
+        #[Input] public float $bodyTemperature,
+        #[Input] public int $heartRate,
+        #[Input] public Emergency $being
+    ) {}
+
+    public function assignER(): string
+    {
+        return "Secure ER Room 1 immediately.";
+    }
+}
+
+final readonly class ObservationCase
+{
+    public string $priority = 'DELAYED';
+    public string $color = 'GREEN';
+
+    public function __construct(
+        #[Input] public float $bodyTemperature,
+        #[Input] public int $heartRate,
+        #[Input] public Observation $being
+    ) {}
+
+    public function assignWaitingArea(): string
+    {
+        return "Move to waiting area.";
+    }
+}
+```
+
+### Execution
+
+```php
+$injector = new Injector(new AppModule());
+$becoming = new Becoming($injector, 'Be\\App\\Semantic');
+
+$patient = new PatientArrival(bodyTemperature: 39.5, heartRate: 90);
+$result = $becoming($patient);
+
+echo $result->priority;     // "IMMEDIATE"
+echo $result->assignER();   // "Secure ER Room 1 immediately."
+```
+
+## Why Being Over Doing
+
+### Traditional (Doing)
+
+```php
+$patient = new Patient($temp, $hr);
+if ($triageService->isEmergency($patient)) {
+    $patient->setStatus('emergency');
+    $this->erService->assign($patient);
+}
+```
+
+Problems:
+- Patient can exist in invalid state
+- Status can be changed at any time
+- `erService->assign()` can be called on any patient
+
+### Be Framework (Being)
+
+```php
+$patient = new PatientArrival($temp, $hr);
+$result = $becoming($patient);
+$result->assignER();  // Type-safe: only possible for EmergencyCase
+```
+
+Benefits:
+- Non-survivable states cannot exist
+- Type IS the status (immutable)
+- Capabilities belong to existence
+
+## Documentation
+
+- English: https://be-framework.github.io/manuals/1.0/en/
+- Japanese: https://be-framework.github.io/manuals/1.0/ja/
+- Repository: https://github.com/be-framework/be-framework
