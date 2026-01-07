@@ -48,7 +48,7 @@ src/
 ├── Reason/
 │   └── Greeting.php        # 超越的な能力
 ├── Semantic/
-│   └── Name.php            # 検証ルール
+│   └── Name.php            # 何が存在できるか
 ├── Exception/
 │   └── EmptyNameException.php
 └── Module/

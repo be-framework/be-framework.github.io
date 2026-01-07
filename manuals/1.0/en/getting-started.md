@@ -48,7 +48,7 @@ src/
 ├── Reason/
 │   └── Greeting.php        # Transcendent capability
 ├── Semantic/
-│   └── Name.php            # Validation rules
+│   └── Name.php            # What can exist
 ├── Exception/
 │   └── EmptyNameException.php
 └── Module/

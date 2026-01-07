@@ -76,7 +76,7 @@ final class HeartRate
 }
 ```
 
-**Key insight:** These aren't just validation rules. They define your **domain ontology**—the vocabulary of what can exist. This declarative foundation serves as documentation that both humans and AI can read to understand your domain. (See [Semantic Variables](./06-semantic-variables.html) for how this enables AI-readable system design.)
+These aren't just validation rules. They define your domain ontology—the vocabulary of what can exist. This declarative foundation serves as documentation that both humans and AI can read to understand your domain. (See [Semantic Variables](./06-semantic-variables.html) for details.)
 
 ## Step 2: Define Exceptions
 
@@ -96,7 +96,7 @@ final class LethalVitalException extends DomainException
 
 ## Step 3: Define the Reason (Transcendence)
 
-The **JTASProtocol** (Japan Triage and Acuity Scale) is not a programmer's arbitrary rule. It represents **transcendent medical wisdom**—objective knowledge that exists independently in the world. In Be Framework, such domain logic becomes a **first-class citizen**: injectable, testable, and explicitly visible.
+The JTASProtocol (Japan Triage and Acuity Scale) is not a programmer's arbitrary rule. It represents transcendent medical wisdom—objective knowledge that exists independently in the world. In Be Framework, such domain logic becomes a **first-class citizen**: injectable, testable, and explicitly visible.
 
 ```php
 // src/Reason/JTASProtocol.php
@@ -186,14 +186,11 @@ final readonly class TriageAssessment
 }
 ```
 
-**Key concepts:**
-- `#[Inject]` brings in the JTASProtocol—transcendent wisdom from outside
-- The `$being` property (Union type) determines which Final class receives the transformation
-- We don't "set status"—the patient BECOMES their destiny
+`#[Inject]` brings in the JTASProtocol—transcendent wisdom from outside. The `$being` property (Union type) determines which Final class receives the transformation. We don't "set status"—the patient BECOMES their destiny.
 
 ## Step 7: Create Final Classes
 
-The final forms—each with their own **unique capabilities**:
+The final forms—each with unique capabilities:
 
 ### EmergencyCase
 
@@ -262,7 +259,7 @@ final readonly class ObservationCase
 }
 ```
 
-Notice: Each outcome has **different methods**. `EmergencyCase` can `assignER()`, while `ObservationCase` can `assignWaitingArea()`. The **type determines capability**—you cannot assign an ER room to an observation patient.
+Each type has different methods. `EmergencyCase` can `assignER()`, while `ObservationCase` can `assignWaitingArea()`. Type determines capability—you cannot assign an ER room to an observation patient.
 
 ## Step 8: Execute the Metamorphosis
 
@@ -376,11 +373,9 @@ src/
 
 ## Key Insights
 
-1. **Existence over Action**: The patient doesn't "get triaged"—they BECOME a triaged state
-2. **Type IS Status**: `EmergencyCase` and `ObservationCase` are different types with different capabilities
-3. **Semantic Boundaries**: Lethal vital signs are rejected before metamorphosis
-4. **Transcendent Wisdom**: JTASProtocol exists independently—it's injected, not created
-5. **Immutability**: Once transformed, a patient cannot change status without new metamorphosis
+1. The patient doesn't "get triaged"—they BECOME a triaged state
+2. `EmergencyCase` and `ObservationCase` are different types with different capabilities
+3. Once transformed, status cannot change without new metamorphosis
 
 ## Metamorphosis in Other Domains
 
