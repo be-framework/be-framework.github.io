@@ -96,7 +96,43 @@ $result->assignER();  // Only possible for EmergencyCase
 - `#[Inject]` - Receives transcendent capability (DI)
 - `#[Validate]` - Semantic validation method marker
 
+## Naming Conventions
+
+### Semantic Variables
+
+Semantic class name matches constructor parameter name (camelCase):
+
+- `BodyTemperature` class validates `$bodyTemperature` parameter
+- `HeartRate` class validates `$heartRate` parameter
+
+### Destiny Markers and Final Classes
+
+Final class receives the destiny marker matching its `#[Input]` type:
+
+```php
+// Destiny markers (empty classes that ARE the distinction)
+final readonly class Emergency {}
+final readonly class Observation {}
+
+// Final classes receive matching destiny via #[Input]
+final readonly class EmergencyCase
+{
+    public function __construct(
+        #[Input] public Emergency $being  // Receives Emergency marker
+    ) {}
+}
+
+final readonly class ObservationCase
+{
+    public function __construct(
+        #[Input] public Observation $being  // Receives Observation marker
+    ) {}
+}
+```
+
 ## Transformation Flow
+
+### With Branching (Input → Being → Final)
 
 ```
 Input (with #[Be([Being::class])])
@@ -104,6 +140,39 @@ Input (with #[Be([Being::class])])
 Being (with #[Be([Final1::class, Final2::class])])
     ↓ $being property determines branch
 Final (capability-specific type)
+```
+
+### Direct (Input → Final)
+
+When no branching is needed, Input can transform directly to Final:
+
+```php
+#[Be([Hello::class])]
+final readonly class HelloInput
+{
+    public function __construct(public string $name) {}
+}
+
+final readonly class Hello
+{
+    public function __construct(
+        #[Input] public string $name,
+        #[Inject] Greeting $greeting
+    ) {}
+}
+```
+
+## Error Handling
+
+When semantic validation fails, metamorphosis is rejected:
+
+```php
+try {
+    $becoming($input);
+} catch (SemanticVariableException $e) {
+    $messages = $e->getErrors()->getMessages('en');
+    // ["Vital signs indicate non-survivable conditions."]
+}
 ```
 
 ## Project Structure
