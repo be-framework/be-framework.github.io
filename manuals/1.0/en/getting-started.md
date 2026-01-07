@@ -1,8 +1,8 @@
 ---
 layout: docs-en
-title: "P1. Getting Started"
+title: "Getting Started"
 category: Manual
-permalink: /manuals/1.0/en/P1-getting-started.html
+permalink: /manuals/1.0/en/getting-started.html
 ---
 
 # Getting Started

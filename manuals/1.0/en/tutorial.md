@@ -1,8 +1,8 @@
 ---
 layout: docs-en
-title: "P2. Tutorial"
+title: "Tutorial"
 category: Manual
-permalink: /manuals/1.0/en/P2-tutorial.html
+permalink: /manuals/1.0/en/tutorial.html
 ---
 
 # Tutorial: Emergency Triage
