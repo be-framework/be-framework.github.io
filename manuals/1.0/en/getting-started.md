@@ -105,7 +105,7 @@ The Greeting provides the **transcendent capability**—the power to greet.
 
 ```php
 $injector = new Injector(new AppModule());
-$becoming = new Becoming($injector, __NAMESPACE__ . '\\Semantic');
+$becoming = new Becoming($injector, 'Be\\App\\Semantic');
 
 $input = new HelloInput('World');
 $hello = $becoming($input);
@@ -151,7 +151,7 @@ You'll see an error message because `Semantic/Name.php` validates that name cann
 
 ## Next Steps
 
-Ready for a more complete example with Being classes and branching? Continue to [Tutorial](./P2-tutorial.html) →
+Ready for a more complete example with Being classes and branching? Continue to [Tutorial](./tutorial.html) →
 
 Or revisit the concepts:
 - [Input Classes](./02-input-classes.html) - Starting points

@@ -9,6 +9,14 @@ permalink: /manuals/1.0/en/tutorial.html
 
 > Build a triage system where vital signs determine a patient's existence as "emergency" or "observation."
 
+## Prerequisites
+
+- Complete [Getting Started](./getting-started.html)
+- PHP 8.4+
+- Basic understanding of [Be Framework philosophy](./01-overview.html)
+
+## Introduction
+
 In this tutorial, we'll build an emergency triage system that demonstrates the core philosophy of Be Framework: **objects don't DO things—they BECOME things.**
 
 A patient doesn't "get triaged." They **become** an emergency case or an observation case, based on the transcendent wisdom of medical protocol.
@@ -104,7 +112,6 @@ final readonly class JTASProtocol
     /** @return 'emergency'|'observation' */
     public function assess(float $bodyTemperature, int $heartRate): string
     {
-        // Level 1 (Resuscitation) or Level 2 (Emergency) criteria
         if ($bodyTemperature >= 39.0 || $heartRate >= 120) {
             return 'emergency';
         }
