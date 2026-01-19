@@ -27,6 +27,9 @@
                 <li class="nav-item">
                     <a class="nav-link {% if page.category == 'Manual' %}active{% endif %}" href="/manuals/1.0/en/index.html">Manual</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% if page.layout == 'docs-ja' %}/manuals/1.0/ja/demos.html{% else %}/manuals/1.0/en/demos.html{% endif %}">Demos</a>
+                </li>
             </ul>
         </div>
         {% if page.category == 'Manual' %}
