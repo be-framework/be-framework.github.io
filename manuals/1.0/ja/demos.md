@@ -42,6 +42,8 @@ Momentには3つの側面があります：
 ```php
 final readonly class PaymentCompleted implements MomentInterface
 {
+    public PaymentCapture $capture;
+
     public function __construct(
         #[CardNumber] public string $cardNumber,
         #[Amount] public int $amount,
