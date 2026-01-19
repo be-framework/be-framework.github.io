@@ -31,6 +31,8 @@ The Order Processing demo showcases the **Diamond Metamorphosis** pattern - wher
 
 #### Moment (契機)
 
+> **Note**: Moment is an evolving concept. The ideas presented here represent our current understanding and may be refined based on practical experience and feedback.
+
 A Moment has three aspects:
 
 - **Dynamis (δύναμις)** - Realizable potential, becomes actuality through `be()`
