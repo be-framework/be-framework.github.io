@@ -166,14 +166,16 @@ final readonly class OrderConfirmed
 
 ### Philosophical Foundations
 
-| Directory | Concept | Philosopher | Meaning |
-|-----------|---------|-------------|---------|
-| `Input/` | δύναμις | Aristotle | Potentiality |
-| `Being/` | Dasein | Heidegger | Being-in-becoming |
-| `Moment/` | Moment | Hegel | Essential aspect of whole |
-| `Final/` | ἐνέργεια | Aristotle | Actuality |
-| `Semantic/` | Sinn | Frege | Meaning with power |
-| `Reason/` | Sufficient Reason | Leibniz | Raison d'être |
+The directory structure is grounded in ontological concepts.
+
+| Directory | Description | Concept |
+|-----------|-------------|---------|
+| `Input/` | Holds potentiality—what something *can become* | δύναμις (Aristotle) |
+| `Being/` | Intermediate stages of transformation | Dasein (Heidegger) |
+| `Moment/` | Essential part constituting the whole | Moment (Hegel) |
+| `Final/` | Completed form of transformation | ἐνέργεια (Aristotle) |
+| `Semantic/` | Types with the power of validation and transformation | Sinn (Frege) |
+| `Reason/` | External force that enables existence | Sufficient Reason (Leibniz) |
 
 ### Links
 
