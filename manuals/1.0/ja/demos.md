@@ -9,6 +9,71 @@ permalink: /manuals/1.0/ja/demos.html
 
 Be Frameworkの概念を実際に動作する例で示します。
 
+## Hello World デモ
+
+最もシンプルな変換です。名前を持つInputが、挨拶を持つFinalになります。
+
+```text
+HelloInput  →  Hello
+(name)         (greeting)
+```
+
+### Input（潜在性）
+
+```php
+#[Be([Hello::class])]
+final readonly class HelloInput
+{
+    public function __construct(
+        public string $name,
+    ) {}
+}
+```
+
+`#[Be]`属性は、このInputが「何になれるか」を宣言します。
+
+### Final（現実態）
+
+```php
+final readonly class Hello
+{
+    public string $greeting;
+
+    public function __construct(
+        #[Input] string $name,       // HelloInputから
+        #[Inject] Greeting $greeting, // DIコンテナから
+    ) {
+        $this->greeting = "{$greeting->greeting} {$name}";
+    }
+}
+```
+
+### Reason（存在理由）
+
+```php
+final class Greeting
+{
+    public string $greeting = 'Hello';
+}
+```
+
+Greetingが挨拶を'Hello'と決めています。これは外部から与えられたルールです。
+
+### 使用例
+
+```php
+$input = new HelloInput(name: 'World');
+$final = ($becoming)($input);
+
+echo $final->greeting; // "Hello World"
+```
+
+### リンク
+
+- [ソースコード](https://github.com/be-framework/demos/tree/1.x/demos/hello-world)
+
+---
+
 ## Order Processing デモ
 
 Order Processingデモは、**Diamond Metamorphosis**パターンを示します。複数の並列パイプラインが単一のFinal状態に収束するパターンです。
