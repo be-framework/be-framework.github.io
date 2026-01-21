@@ -9,6 +9,71 @@ permalink: /manuals/1.0/en/demos.html
 
 Working examples demonstrating Be Framework concepts in action.
 
+## Hello World Demo
+
+The simplest transformation. An Input with a name becomes a Final with a greeting.
+
+```text
+HelloInput  →  Hello
+(name)         (greeting)
+```
+
+### Input (Potentiality)
+
+```php
+#[Be([Hello::class])]
+final readonly class HelloInput
+{
+    public function __construct(
+        public string $name,
+    ) {}
+}
+```
+
+The `#[Be]` attribute declares what this Input *can become*.
+
+### Final (Actuality)
+
+```php
+final readonly class Hello
+{
+    public string $greeting;
+
+    public function __construct(
+        #[Input] string $name,        // From HelloInput
+        #[Inject] Greeting $greeting, // From DI container
+    ) {
+        $this->greeting = "{$greeting->greeting} {$name}";
+    }
+}
+```
+
+### Reason (Raison d'être)
+
+```php
+final class Greeting
+{
+    public string $greeting = 'Hello';
+}
+```
+
+The name becomes a greeting by borrowing the external force of Reason. Here, Greeting provides 'Hello'.
+
+### Usage
+
+```php
+$input = new HelloInput(name: 'World');
+$final = ($becoming)($input);
+
+echo $final->greeting; // "Hello World"
+```
+
+### Links
+
+- [Source Code](https://github.com/be-framework/demos/tree/1.x/demos/hello-world)
+
+---
+
 ## Order Processing Demo
 
 The Order Processing demo showcases the **Diamond Metamorphosis** pattern - where multiple parallel pipelines converge into a single Final state.

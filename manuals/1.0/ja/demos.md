@@ -57,7 +57,7 @@ final class Greeting
 }
 ```
 
-Greetingが挨拶を'Hello'と決めています。これは外部から与えられたルールです。
+名前がReasonという外部の力を借りて挨拶になります。ここではGreetingが'Hello'を提供しています。
 
 ### 使用例
 
