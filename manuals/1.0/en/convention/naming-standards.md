@@ -1,3 +1,10 @@
+---
+layout: docs-en
+title: "Be Framework Naming Standards"
+category: Convention
+permalink: /manuals/1.0/en/convention/naming-standards.html
+---
+
 # Be Framework Naming Standards
 
 > Code as philosophy: names that reflect existence, not actions
@@ -6,12 +13,7 @@ This document establishes naming conventions that align with Be Framework's onto
 
 ## Core Philosophy
 
-**"Objects don't do things—they become what they are meant to be"**
-
-Our naming reflects this fundamental shift from imperative to existential thinking:
-- From **action-oriented** names → **existence-oriented** names
-- From **what it does** → **what it is**
-- From **controlling** → **being**
+Names express **what it is**, not **what it does**.
 
 ## Class Naming Patterns
 
@@ -22,231 +24,166 @@ Our naming reflects this fundamental shift from imperative to existential thinki
 ```php
 // ✅ Correct
 final readonly class UserInput
-final readonly class OrderInput  
+final readonly class OrderInput
 final readonly class DataInput
 final readonly class PaymentInput
 
 // ❌ Avoid
 final readonly class UserData          // Too generic
 final readonly class CreateUserRequest // Action-oriented
-final readonly class UserCommand       // Imperative thinking
+final readonly class UserDto           // Technical-oriented
 ```
 
 ### Being Classes
-**Pattern**: `Being{Domain}` or `{Domain}Being`
-**Purpose**: Intermediate transformation stages where objects discover their nature
+**Pattern**: `{State}{Domain}`
+**Purpose**: Intermediate transformation stages
 
 ```php
-// ✅ Correct - Being prefix (recommended)
-final readonly class BeingUser
-final readonly class BeingOrder
-final readonly class BeingData
-final readonly class BeingPayment
-
-// ✅ Acceptable - Being suffix
-final readonly class UserBeing
-final readonly class OrderBeing
+// ✅ Correct
+final readonly class ValidatedUser
+final readonly class AuthenticatedUser
+final readonly class ProcessedOrder
+final readonly class VerifiedPayment
 
 // ❌ Avoid
-final readonly class UserValidator     // Action-oriented
-final readonly class OrderProcessor    // What it does, not what it is
-final readonly class DataTransformer   // Imperative thinking
+final readonly class UserValidator     // Service-oriented
+final readonly class OrderProcessor    // Action-oriented
 ```
 
 ### Final Objects
-**Pattern**: Domain-specific result names expressing final state
-**Purpose**: Complete transformed beings representing successful completion
+**Pattern**: `{CompletedState}`
+**Purpose**: The destination of metamorphosis
 
 ```php
-// ✅ Correct - State of being
-final readonly class ValidatedUser
-final readonly class ProcessedOrder
-final readonly class Success
-final readonly class Failure
-final readonly class ApprovedLoan
-final readonly class RejectedApplication
+// ✅ Correct
+final readonly class RegisteredUser
+final readonly class CompletedOrder
+final readonly class SuccessfulPayment
+final readonly class PublishedArticle
 
-// ❌ Avoid  
-final readonly class UserResponse      // Implementation detail
-final readonly class OrderResult       // Generic
-final readonly class ProcessingOutput  // Action-oriented
+// ❌ Avoid
+final readonly class UserEntity       // Technical-oriented
+final readonly class OrderResult      // Result-oriented
 ```
 
 ## Property Naming
 
+### Properties as Semantic Variables
+Property names are automatically linked to the semantic variable system:
+
+```php
+// Property names automatically map to semantic variable classes
+#[Input] string $emailAddress    // → EmailAddress semantic variable
+#[Input] string $userName        // → UserName semantic variable
+#[Input] int $age               // → Age semantic variable
+```
+
 ### Being Property
-**Pattern**: `public {Type1}|{Type2} $being;`
-**Purpose**: Carries the object's destiny through union types
+**Pattern**: `$being`
+**Purpose**: Represents the object's next existential state
+
+```php
+public SuccessfulPayment|FailedPayment $being;
+public ActiveUser|SuspendedUser $being;
+```
+
+## Method Naming Principles
+
+### Traditional methods do not exist in Be Framework
+
+```php
+// ❌ Traditional OOP style (avoid)
+class User {
+    public function validate() { }
+    public function save() { }
+    public function delete() { }
+}
+
+// ✅ Be Framework style
+final readonly class ValidatedUser {
+    public function __construct(UserInput $input) {
+        // Validation is executed as a precondition for existence
+    }
+}
+```
+
+## Variable Naming
+
+### Local Variables
+Use names that reflect existential state:
 
 ```php
 // ✅ Correct
-public Success|Failure $being;
-public ValidUser|InvalidUser $being;
-public ApprovedLoan|RejectedLoan $being;
+$validatedInput = new ValidatedUserInput($rawInput);
+$authenticatedUser = new AuthenticatedUser($validatedInput);
+$finalUser = $authenticatedUser->being;
 
 // ❌ Avoid
-public mixed $result;      // Not type-specific
-public object $outcome;    // Too generic
-public array $data;        // Action-oriented
+$result = validateUser($input);     // Action-oriented
+$data = processInput($rawInput);    // Too generic
 ```
 
-### Immanent Properties
-**Pattern**: Descriptive names reflecting inherent identity
-**Purpose**: What the object already is
+### Dependency Injection
+**Pattern**: `{InterfaceName}` (no Service suffix)
 
 ```php
-// ✅ Correct
-public string $email;
-public Money $amount;
-public UserId $userId;
-public \DateTimeImmutable $timestamp;
-
-// ❌ Avoid
-public string $inputEmail;    // Redundant prefix
-public Money $requestAmount;  // Action-oriented
+final readonly class AuthenticatedUser {
+    public function __construct(
+        #[Input] UserInput $input,
+        #[Inject] PasswordHasher $hasher,        // ✅ As capability
+        #[Inject] UserRepository $repository     // ✅ As repository
+    ) {}
+}
 ```
 
-## Parameter Naming
+## File and Directory Structure
 
-### Constructor Parameters
-**Pattern**: Match property names for Immanent, descriptive for Transcendent
+### Semantic Variables
+**Location**: `src/Domain/SemanticVariable/`
+**Naming**: Word combinations, PascalCase
 
+```txt
+src/Domain/SemanticVariable/
+├── EmailAddress.php
+├── UserName.php
+├── ProductCode.php
+└── PaymentAmount.php
+```
+
+### Domain Objects
+**Location**: `src/Domain/`
+**Naming**: Reflects existential state
+
+```txt
+src/Domain/
+├── User/
+│   ├── UserInput.php
+│   ├── ValidatedUser.php
+│   └── RegisteredUser.php
+└── Order/
+    ├── OrderInput.php
+    ├── ProcessedOrder.php
+    └── CompletedOrder.php
+```
+
+## Philosophical Naming Principles
+
+### 1. Existence First
 ```php
-// ✅ Correct
-public function __construct(
-    #[Input] string $email,              // Immanent - matches property
-    #[Input] Money $amount,              // Immanent - matches property  
-    #[Inject] EmailValidator $validator, // Transcendent - capability
-    #[Inject] PaymentGateway $gateway    // Transcendent - external service
-) {}
-
-// ❌ Avoid
-public function __construct(
-    #[Input] string $userEmail,          // Different from property name
-    #[Input] Money $inputAmount,         // Redundant prefix
-    #[Inject] object $emailChecker,      // Not descriptive
-    #[Inject] mixed $paymentService      // Not type-specific
-) {}
+// Express existence, not action
+final readonly class DeletedUser    // ✅ Existence of deleted state
+final readonly class UserDeleter    // ❌ Action of deleting
 ```
 
-## Attribute Usage
-
-### Be Attribute
-**Pattern**: `#[Be(DestinyClass::class)]` or `#[Be([Option1::class, Option2::class])]`
-
+### 2. Temporal Direction
 ```php
-// ✅ Single destiny
-#[Be(BeingUser::class)]
-final readonly class UserInput
-
-// ✅ Multiple destinies  
-#[Be([ValidatedUser::class, InvalidUser::class])]
-final readonly class BeingUser
-
-// ❌ Avoid
-#[Be(UserProcessor::class)]    // Action-oriented
-#[Be(HandleUser::class)]       // Imperative
+// Express the natural flow of metamorphosis
+$input → $validated → $authenticated → $registered
 ```
 
-### Input/Inject Comments
-**Pattern**: Always include philosophical comments
-
+### 3. Semantic Completeness
 ```php
-// ✅ Correct
-public function __construct(
-    #[Input] string $email,                // Immanent
-    #[Inject] EmailValidator $validator    // Transcendent
-) {}
-
-// ❌ Missing philosophy
-public function __construct(
-    #[Input] string $email,
-    #[Inject] EmailValidator $validator
-) {}
+// Names carry constraints
+string $emailAddress      // Must be a valid email address
+int $age                 // Negative values cannot exist
 ```
-
-## Domain-Specific Examples
-
-### E-commerce Domain
-```php
-// Input → Being → Final
-ProductInput → BeingProduct → [ValidProduct, InvalidProduct]
-OrderInput → BeingOrder → [ProcessedOrder, FailedOrder]  
-PaymentInput → BeingPayment → [SuccessfulPayment, DeclinedPayment]
-```
-
-### User Management Domain
-```php
-// Input → Being → Final  
-UserInput → BeingUser → [RegisteredUser, ConflictingUser]
-LoginInput → BeingLogin → [AuthenticatedUser, FailedAuthentication]
-ProfileInput → BeingProfile → [UpdatedProfile, InvalidProfile]
-```
-
-### Data Processing Domain
-```php
-// Input → Being → Final
-DataInput → BeingData → [ProcessedData, CorruptedData]
-FileInput → BeingFile → [ValidatedFile, InvalidFile]
-ConfigInput → BeingConfig → [LoadedConfig, MalformedConfig]
-```
-
-## Anti-Patterns to Avoid
-
-### Imperative Naming
-```php
-// ❌ Action-oriented
-ProcessUser, ValidateOrder, TransformData
-CreatePayment, HandleRequest, ExecuteCommand
-
-// ✅ Being-oriented  
-BeingUser, BeingOrder, BeingData
-BeingPayment, BeingRequest, BeingCommand
-```
-
-### Generic Naming
-```php
-// ❌ Too generic
-Handler, Processor, Manager, Service, Util
-
-// ✅ Specific and meaningful
-BeingUser, ValidatedOrder, ProcessedPayment
-```
-
-### Technical Implementation Details
-```php
-// ❌ Implementation-focused
-UserDTO, OrderVO, PaymentPOJO, DataObject
-
-// ✅ Domain-focused
-UserInput, BeingOrder, ProcessedPayment
-```
-
-## Naming Checklist
-
-Before naming any class, ask:
-
-1. **Existence Question**: "What does this object *be* rather than *do*?"
-2. **Stage Question**: "What stage of metamorphosis does this represent?"
-3. **Philosophy Question**: "Does this name reflect ontological thinking?"
-4. **Clarity Question**: "Will developers understand the object's nature?"
-5. **Consistency Question**: "Does this follow our established patterns?"
-
-## Evolution of Names
-
-As your understanding of the domain deepens, names may evolve:
-
-```php
-// Initial understanding
-UserValidator → 
-
-// Deeper understanding  
-BeingUser →
-
-// Full ontological clarity
-BeingUser // with clear Immanent/Transcendent distinction
-```
-
----
-
-*"In Be Framework, names are not labels—they are declarations of existence. Choose them as carefully as you would choose words in poetry, for they shape how we think about the reality we create."*

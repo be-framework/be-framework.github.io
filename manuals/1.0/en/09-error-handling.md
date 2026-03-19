@@ -1,11 +1,11 @@
 ---
 layout: docs-en
-title: "9. Error Handling"
+title: "9. Semantic Exceptions"
 category: Manual
 permalink: /manuals/1.0/en/09-error-handling.html
 ---
 
-# Error Handling
+# Semantic Exceptions
 
 > "I have not failed. I've just found 10,000 ways that won't work"
 >
@@ -13,15 +13,17 @@ permalink: /manuals/1.0/en/09-error-handling.html
 
 ## Meaningful Failures
 
-In Be Framework, errors are not mere "failures" but **specific reasons why existence is impossible**. We use semantic exceptions instead of generic ones:
+Generic exceptions tell **what happened**:
 
 ```php
-// Traditional generic error
 catch (Exception $e) {
     echo $e->getMessage();  // "Validation failed"
 }
+```
 
-// Semantic exceptions
+In contrast, semantic exceptions tell **why existence is impossible**:
+
+```php
 catch (SemanticVariableException $e) {
     foreach ($e->getErrors()->exceptions as $exception) {
         echo get_class($exception) . ": " . $exception->getMessage();
@@ -33,7 +35,7 @@ catch (SemanticVariableException $e) {
 
 ## Domain Exception Classes
 
-In Be Framework, all exceptions inherit from `DomainException`:
+All exceptions inherit from `DomainException`. Technical exceptions (`RuntimeException`, `InvalidArgumentException`, etc.) are not used. Failures are always expressed as **failures with domain meaning**:
 
 ```php
 abstract class DomainException extends Exception {}
@@ -48,18 +50,13 @@ final readonly class InvalidEmailException extends DomainException
     }
 }
 
-final readonly class AgeTooYoungException extends DomainException
-{
-    public function __construct(public int $age, public int $min = 13)
-    {
-        parent::__construct("Age insufficient: {$age} years (minimum {$min} years)");
-    }
-}
+// Age-related existence failures
+abstract class AgeException extends DomainException {}
+final readonly class NegativeAgeException extends AgeException {}
+final readonly class AgeTooHighException extends AgeException {}
 ```
 
-Since all exceptions are domain exceptions, technical exceptions (`RuntimeException`, `InvalidArgumentException`, etc.) are not used. Failures are always expressed as **failures with domain meaning**.
-
-Domain exceptions hold not just messages but **structured data**. From the `$invalidEmail` property, programs can access the invalid email address value and utilize it for various purposes: human-readable display, API JSON responses, AI analysis, etc.
+Domain exceptions hold not just messages but **structured data**. From the `$invalidEmail` property, programs can access the invalid email address value—for display, API responses, logging, and more:
 
 ```php
 catch (InvalidEmailException $e) {
@@ -72,9 +69,9 @@ catch (InvalidEmailException $e) {
 }
 ```
 
-## Multilingual Error Messages
+## Multilingual Messages
 
-The `#[Message]` attribute enables multilingual error messages:
+The `#[Message]` attribute lets exceptions speak in the user's language:
 
 ```php
 #[Message([
@@ -94,36 +91,36 @@ final readonly class AgeTooYoungException extends DomainException
 }
 ```
 
-## Automatic Collection of All Errors
+## Error Collection
 
-The framework collects **all validation errors** before throwing an exception:
+The framework does not stop at the first error—it collects **all validation errors**:
 
 ```php
 try {
     $user = $becoming(new UserInput('', 'invalid-email', 10));
 } catch (SemanticVariableException $e) {
-    // Three errors are collected simultaneously:
+    // Three errors collected simultaneously:
     // - EmptyNameException
-    // - InvalidEmailException  
+    // - InvalidEmailException
     // - AgeTooYoungException
-    
+
     $messages = $e->getErrors()->getMessages('en');
     // ["Name cannot be empty", "Invalid email format", "Age must be at least 13"]
 }
 ```
 
-Rather than "stop at first error", you can **understand all problems at once**.
+Rather than "fail fast"—**understand all problems at once**.
 
-## Metamorphosis Including Errors
+## Errors as Existence
 
-Error states can also be treated as valid metamorphosis results:
+Error states can be treated as valid metamorphosis results:
 
 ```php
 #[Be([ValidUser::class, InvalidUser::class])]
 final readonly class UserValidation
 {
     public ValidUser|InvalidUser $being;
-    
+
     public function __construct(#[Input] string $data)
     {
         try {
@@ -135,10 +132,8 @@ final readonly class UserValidation
 }
 ```
 
-Errors can be expressed as types rather than stopping execution with exceptions.
-
-Semantic exceptions make failure reasons clear, enabling users to understand specific correction methods. Error handling changes from problem reporting to **guidance toward problem resolution**.
+Rather than halting execution with exceptions, errors are expressed as types. Failure, like success, is a legitimate result of transformation.
 
 ---
 
-Every transformation is recorded as a story, as [Semantic Logging](./10-semantic-logging.html) ➡️
+For the full picture, see [Reference](./11-reference-resources.html) ➡️

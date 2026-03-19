@@ -9,180 +9,73 @@ permalink: /manuals/1.0/en/06-semantic-variables.html
 
 > "What exists necessarily exists, and what does not exist necessarily does not exist"
 >
-> 　　—Spinoza, *Ethics*, Part I, Proposition 29 (1677)
+> —Spinoza, *Ethics*, Part I, Proposition 29 (1677)
 
-Where should data validity be guaranteed? Controller? Model? Validator?
+## Meaning and Constraints
 
-Be Framework's answer is clear: **names themselves should carry constraints**.
-`$email` should not be just a string—it should be a **valid email address**. `$age` cannot have negative values.
-
-Semantic Variables are identifiers of information that express meaning and hold constraints—they are **complete information models**.
-
-## The Problem: Scattered Incompleteness
-
-Traditional approaches scatter the definition of meaning across multiple locations:
+`$email` is not just a string. A semantic variable is an identifier of information—it expresses meaning and carries constraints as a complete information model:
 
 ```php
-// Controllers/models/validators...
-if (empty($name)) throw new Exception("error.name.empty");
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new Exception("error.email.invalid");
-
-// messages/en.yml
-error.name.empty: "Name is required"
-error.email.invalid: "Please enter a valid email address"
-
-// README.md
-// "Name must be 1-100 characters, whitespace-only not allowed..."
-```
-
-The following problems occur:
-- **Validation**: Scattered across controllers
-- **Error messages**: Managed in separate files
-- **Constraint rules**: Duplicated in multiple places
-- **Meaning definition**: Exists only in documentation
-
-There is no central place to see the meanings that the system handles.
-
-## The Solution: Semantic Completeness
-
-Be Framework integrates scattered definitions into **complete information models**. Constructor arguments and class properties can only use registered **semantic variables**.
-
-## Defining Existence
-
-Semantic variables are defined as classes in dedicated folders:
-
-```php
-final readonly class Name
+final class Email
 {
     #[Validate]
-    public function validate(string $name): void
+    public function validate(string $email): void
     {
-        if (empty(trim($name))) {
-            throw new EmptyNameException();
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidEmailException();
         }
     }
 }
+
+// Automatically applied to any constructor argument named $email
+public function __construct(string $email) {}
 ```
 
-## Validation Contexts
+Define it once, and it automatically applies to every constructor parameter named `$email`. The value in `$email` is not correct by accident—it is correct by necessity. What cannot be correct simply cannot exist.
 
-Different business contexts may require different rules. Semantic variables naturally support multiple validation contexts:
+## Decorating Names
+
+Adding attributes to the same name refines the conditions for existence. When a `#[Validate]` method has an attribute on its parameter, it only executes when the constructor argument has a matching attribute:
 
 ```php
-final readonly class ProductCode
+// Basic $age constraint (0–150 years)
+final readonly class Age
 {
     #[Validate]
-    public function validate(string $code): void 
-    { 
-        // Standard product code validation (e.g., 8-digit alphanumeric)
-        if (!preg_match('/^[A-Z0-9]{8}$/', $code)) {
-            throw new InvalidProductCodeException();
-        }
-    }
-
-    #[Validate] 
-    public function validateLegacy(#[Legacy] string $code): void 
-    { 
-        // Relaxed validation for legacy systems (e.g., 6-10 digit alphanumeric)
-        if (!preg_match('/^[A-Z0-9]{6,10}$/', $code)) {
-            throw new InvalidLegacyProductCodeException();
-        }
-    }
-
-    #[Validate]
-    public function validatePremium(#[Premium] string $code): void 
-    { 
-        // Strict validation for premium products (e.g., specific prefix required)
-        if (!preg_match('/^PREM[A-Z0-9]{4}$/', $code)) {
-            throw new InvalidPremiumProductCodeException();
-        }
-    }
-}
-```
-
-## The Meaning of Failure
-
-When existence fails, the meaning of failure must be preserved:
-
-```php
-#[Message([
-    'en' => 'Name cannot be empty.',
-    'ja' => '名前は空にできません。'
-])]
-final readonly class EmptyNameException extends DomainException {}
-```
-
-The framework collects not just the first thrown exception but **all validation errors** as a collection of exceptions, creating complete understanding of why existence is impossible.
-
-## Natural Integration
-
-Semantic variables work automatically in constructors:
-
-```php
-final readonly class UserProfile
-{
-    public function __construct(
-        #[Input] #[English] public string $name,    // Auto-validated as English name
-        #[Input] string $emailAddress,              // Auto-validated as email address
-        #[Inject] NameFormatter $formatter
-    ) {
-        // At this point, all inputs are guaranteed valid
-    }
-}
-```
-
-The variable name `$name` is automatically associated with the `Name` semantic variable class, and `$emailAddress` with the `EmailAddress` semantic variable class.
-
-## Hierarchical Validation
-
-Semantic variables can build upon other semantic variables. This is a powerful technique for expressing the natural hierarchical structure of business rules in the type system.
-
-```php
-final readonly class TeenAge  
-{
-    #[Validate]
-    public function validate(#[Teen] int $age): void
+    public function validate(int $age): void
     {
-        // First, basic Age validation is executed (automatically called via #[Teen])
-        // Then, teen-specific rules are added
-        if ($age < 13) throw new TeenAgeTooYoungException();
-        if ($age > 19) throw new TeenAgeTooOldException();
+        if ($age < 0 || $age > 150) {
+            throw new InvalidAgeException();
+        }
+    }
+
+    // Only executed when #[Teen] attribute is present
+    #[Validate]
+    public function validateTeen(#[Teen] int $age): void
+    {
+        if ($age < 13 || $age > 19) {
+            throw new InvalidTeenAgeException();
+        }
     }
 }
 ```
 
-This hierarchical approach builds rich semantic hierarchies:
-
-- `Email` → `CorporateEmail` (corporate domain required) → `ExecutiveEmail` (executive-level constraints)
-- `Price` → `DiscountPrice` (discount rate limits) → `MemberPrice` (member pricing rules)
-- `Password` → `AdminPassword` (admin requirements) → `SystemPassword` (strict system admin requirements)
-- `Address` → `ShippingAddress` (deliverable regions) → `InternationalAddress` (international shipping support)
-
-Each layer inherits constraints from the previous layer and adds its own unique constraints. Nothing that fails basic `Email` validation can ever exist as `ExecutiveEmail`. This is not merely a combination of validations—it is the **natural refinement of concepts**.
-
-## Relationship Constraints
-
-Semantic variables exist not only in isolation but can also hold relationships with other semantic variables as constraints. What's remarkable is **how easy this is to describe**:
-
 ```php
-final readonly class UserRegistration
-{
-    public function __construct(
-        #[Input] string $email,
-        #[Input] string $confirmEmail,
-        #[Input] string $password,
-        #[Input] string $confirmPassword,
-    ) {
-        // Nothing needs to be written here!
-        // The framework automatically validates relationships
-    }
-}
+// Only basic Age validation applied
+public function __construct(int $age) {}
+
+// Both Age + Teen validation applied
+public function __construct(#[Teen] int $age) {}
 ```
 
-The framework automatically discovers and applies validation classes that **partially match** the target constructor's signature.
+The same `$age` gets different existential conditions depending on its attributes.
+
+## Names as Relations
+
+Semantic variables hold not only individual constraints but also relationships between variables. When a `#[Validate]` method's parameter names partially match a constructor's parameter names, the corresponding values are automatically passed:
 
 ```php
-// If this exists...
+// Email address confirmation match
 final readonly class EmailConfirmation
 {
     #[Validate]
@@ -193,67 +86,72 @@ final readonly class EmailConfirmation
         }
     }
 }
-
-// It's automatically applied to any constructor with $email, $confirmEmail!
 ```
 
-Examples of relationship constraints:
-- `$startDate` and `$endDate`: Start date must be before end date
-- `$minPrice` and `$maxPrice`: Minimum price must be less than or equal to maximum price
-- `$email` and `$confirmEmail`: Email address confirmation match required
-- `$currentPassword` and `$newPassword`: New password must differ from current one
-
-Developers define business rules once, and they're automatically applied to all objects with matching signatures. These constraints function as **preconditions** for object existence. Unless preconditions are met, that object cannot even exist.
-
-## Error Handling
-
-Multilingual error messages adapt automatically:
-
 ```php
-try {
-    $userProfile = $becoming(new UserRegistrationInput($data));
-} catch (SemanticVariableException $e) {
-    $englishMessages = $e->getErrors()->getMessages('en');
-    $japaneseMessages = $e->getErrors()->getMessages('ja');
-}
-```
-
-## What Meaning Brings
-
-**Names are identifiers of meaning and constraints.** This simple principle alone realizes a world rich enough to be called a framework.
-
-Semantic Variables make **impossible states impossible**. Invalid email addresses cannot exist as `$email`, negative ages cannot be born as `$age`. Out-of-stock products cannot be ordered as `$orderId`, and addresses outside delivery zones cannot be specified as `$shippingAddress`.
-
-The type system itself becomes a **domain language**, where each type speaks of what can exist in your business domain.
-
-## Design by Contract
-
-Constructor arguments reveal preconditions. Properties reveal postconditions:
-
-```php
-final readonly class ProcessedOrder
+// Start date must be before end date
+final readonly class DateRange
 {
-    public function __construct(
-        #[Input] #[Verified] string $productCode,    // Precondition: verified product code
-        #[Input] int $paymentAmount,                 // Precondition: payment amount
-        #[Input] #[Adult] int $age                   // Precondition: adult age
-    ) {
-        // Can only exist when preconditions are satisfied
-        $this->orderNumber = $this->generateOrderNumber();
-        $this->processedAt = new DateTime();
+    #[Validate]
+    public function validate(string $startDate, string $endDate): void
+    {
+        if ($startDate > $endDate) {
+            throw new InvalidDateRangeException();
+        }
     }
-    
-    public string $orderNumber;    // Postcondition: order number always exists
-    public DateTime $processedAt;  // Postcondition: processed time always exists
 }
 ```
 
-Constructor arguments express **preconditions** (conditions that must be satisfied for this object to exist), while `public readonly` properties express **postconditions** (states this object guarantees).
+```php
+// Minimum must not exceed maximum
+final readonly class MinMax
+{
+    #[Validate]
+    public function validate(int $min, int $max): void
+    {
+        if ($min > $max) {
+            throw new MinExceedsMaxException();
+        }
+    }
+}
+```
 
-Defensive programming becomes unnecessary. Argument validation, null checks, range verification, inventory confirmation, geographic constraints—semantic variables guarantee all of these. Code can focus on its true purpose: implementing business logic.
+Define once, and they are automatically applied to any constructor whose argument names match:
 
-What began as a simple naming convention evolves into hierarchical validation, relationship constraints, external resource integration, building a complete domain guarantee system. **The meaning embedded in names supports the integrity of the entire system.**
+```php
+// EmailConfirmation + MinMax auto-applied
+public function __construct(
+    string $email,
+    string $confirmEmail,
+    int $min,
+    int $max,
+) {}
+```
+
+```php
+// DateRange auto-applied
+public function __construct(
+    string $startDate,
+    string $endDate,
+) {}
+```
+
+## Constraints Dwell in Names
+
+The power of names extends beyond format validation:
+
+```php
+public function __construct(
+    public string $email,          // Format constraint
+    public float $bodyTemperature, // Value range constraint
+    public string $inStockItemId,  // Business rule constraint
+) {}
+```
+
+From formats to value ranges to business rules—names define the conditions for existence.
+
+When constraints dwelling in names are violated, existence fails. Learn how to handle this in [Semantic Exceptions](./09-error-handling.html).
 
 ---
 
-Objects know their own next transformation. The mechanism, [Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html) ➡️
+No existence exists without reason. [Reason Layer](./08-reason-layer.html) ➡️

@@ -15,17 +15,17 @@ permalink: /manuals/1.0/ja/02-input-classes.html
 
 入力クラスは、Beフレームワークにおけるすべての変容の出発点です。
 
-ここにはオブジェクト自身が持つ要素だけが含まれ、外部依存がありません。いわばオブジェクトのアイデンティティです。オブジェクトの内側にあるものなので、これを**内在的性質、イマナンス（Immanence）**と呼びます。
+ここにはオブジェクト自身が持つ要素だけが含まれ、外部依存がありません。いわばオブジェクトのアイデンティティです。オブジェクトの内側にあるものなので、これを**内在（Immanence）**と呼びます。
 
 ## 基本構造
 
 ```php
-#[Be(UserProfile::class)]  // 変容の運命
+#[Be(ValidatedUser::class)]  // 変容の運命
 final readonly class UserInput
 {
     public function __construct(
-        public string $name,     // 内在的
-        public string $email     // 内在的
+        public string $name,     // 内在
+        public string $email     // 内在
     ) {}
 }
 ```
@@ -34,9 +34,11 @@ final readonly class UserInput
 
 **純粋なアイデンティティ**: 入力クラスはオブジェクトが根本的に*何であるか*のみを含みます—外部依存関係や複雑なロジックはありません。
 
+**ユースケースの起点**: すべてのユースケースは固有の入力クラスを持ちます。
+
 **変容先（オブジェクトの運命）**: `#[Be()]`属性は、この入力が何になるかを宣言します。
 
-**読み取り専用プロパティ**: すべてのデータは不変であり、変異ではなく変容する固定されたアイデンティティを表します。
+**読み取り専用プロパティ**: すべてのプロパティは `readonly` です。入力クラスの値は変更されません。
 
 ## 例
 
@@ -46,8 +48,8 @@ final readonly class UserInput
 final readonly class OrderInput
 {
     public function __construct(
-        public array $items,        // 内在的
-        public string $currency     // 内在的
+        public array $items,        // 内在
+        public string $currency     // 内在
     ) {}
 }
 ```
@@ -58,20 +60,12 @@ final readonly class OrderInput
 final readonly class PaymentInput
 {
     public function __construct(
-        public Money $amount,           // 内在的
-        public CreditCard $card,        // 内在的
-        public Address $billing         // 内在的
+        public Money $amount,      // 内在
+        public CreditCard $card,   // 内在
+        public Address $billing    // 内在
     ) {}
 }
 ```
-
-## イマナンスの役割
-
-入力クラスでは、すべてが**イマナンス**です。ここには**トランセンデンス（Transcendence／超越的な力）**はありません。トランセンデンスは外部から提供される、自分だけでは実現不可能な力であり、それらは後で**存在クラス（Being クラス）**において現れます。
-
-例えば、`UserInput`クラスはメールアドレスと名前という素のデータだけを持ちます。このメールアドレスが有効かどうかを検証する力、データベースに保存する力、通知を送る力——これらはすべてトランセンデンスであり、入力クラスには存在しません。入力クラスはただ「私はこういうデータです」と宣言するだけです。
-
-入力クラスは変容の出発点です。自己を超えたものと出会って、新しい何かへと変わっていく最初の姿を表します。
 
 ---
 

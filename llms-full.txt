@@ -1,221 +1,86 @@
-# Be Framework - Full Documentation
+# Be Framework — Complete Reference for LLMs
 
-> Objects don't DO things—they BECOME things.
+> Objects don't DO things — they BECOME things.
 
-Be Framework is a PHP framework for ontological programming where transformation (metamorphosis) replaces procedural action.
+Be Framework is a PHP framework for ontological programming. Instead of telling objects what to do, you declare what can exist. Invalid states are not checked for — they are structurally inexpressible. Metamorphosis replaces procedural action.
 
-## Core Philosophy
+## Why Being Over Doing
 
-A patient doesn't "get triaged." They **become** an emergency case or an observation case, based on the transcendent wisdom of medical protocol.
+Traditional code scatters defensive if statements throughout — "what if called in this state?", "what if null?" — because invalid states are representable. Service layers orchestrate from outside, and objects become obedient data containers.
 
-## Key Concepts
+In Be, types are existence conditions. There are no types for invalid states, so guard statements disappear. Objects declare their own destiny through `#[Be]` and self-organize without external orchestrators. Side effects complete inside the constructor. Once born, objects are immutable.
 
-### Domain Ontology (Semantic Variables)
+## The Transformation Formula
 
-Semantic variables define what CAN exist in a domain—not just validation rules, but the vocabulary of existence. This declarative foundation serves as documentation that both humans and AI can read to understand your domain.
+Every transformation follows one formula:
+
+**Immanence** (`#[Input]`) + **Transcendence** (`#[Inject]`) → **New Immanence** (public properties)
+
+- **Immanence**: What the object inherently carries from the previous stage
+- **Transcendence**: External power injected from outside (DI)
+- **New Immanence**: The transformed state, expressed as public readonly properties
+
+Transcendence transforms the immanent and then vanishes.
 
 ```php
-final class BodyTemperature
+final readonly class ValidatedUser
 {
-    #[Validate]
-    public function validate(float $bodyTemperature): void
-    {
-        if ($bodyTemperature < 30.0 || $bodyTemperature > 45.0) {
-            throw new LethalVitalException();
-        }
-    }
-}
-```
-
-### Reason (Transcendence)
-
-Domain logic becomes a first-class citizen: injectable, testable, and explicitly visible.
-
-```php
-final readonly class JTASProtocol
-{
-    /** @return 'emergency'|'observation' */
-    public function assess(float $bodyTemperature, int $heartRate): string
-    {
-        if ($bodyTemperature >= 39.0 || $heartRate >= 120) {
-            return 'emergency';
-        }
-        return 'observation';
-    }
-}
-```
-
-### Metamorphosis Pattern
-
-Input → Being → Final transformation through the Becoming class.
-
-```php
-$becoming = new Becoming($injector, 'Be\\App\\Semantic');
-$patient = new PatientArrival(bodyTemperature: 39.5, heartRate: 90);
-$result = $becoming($patient);
-// $result IS an EmergencyCase or ObservationCase
-```
-
-### Type-Driven Branching
-
-The `$being` property (Union type) determines which Final class receives the transformation.
-
-```php
-#[Be([EmergencyCase::class, ObservationCase::class])]
-final readonly class TriageAssessment
-{
-    public Emergency|Observation $being;
+    public string $displayName;
+    public bool $isValid;
 
     public function __construct(
-        #[Input] public float $bodyTemperature,
-        #[Input] public int $heartRate,
-        #[Inject] JTASProtocol $protocol
+        #[Input] string $name,              // Immanence (from UserInput)
+        #[Input] string $email,             // Immanence (from UserInput)
+        #[Inject] NameFormatter $formatter, // Transcendence (from DI)
+        #[Inject] EmailValidator $validator // Transcendence (from DI)
     ) {
-        $urgency = $protocol->assess($bodyTemperature, $heartRate);
-        $this->being = ($urgency === 'emergency')
-            ? new Emergency()
-            : new Observation();
+        $this->displayName = $formatter->format($name);
+        $this->isValid = $validator->validate($email);
     }
 }
-```
-
-### Type IS Capability
-
-Different Final types have different methods—the type determines what actions are possible.
-
-```php
-// EmergencyCase has assignER()
-// ObservationCase has assignWaitingArea()
-$result->assignER();  // Only possible for EmergencyCase
 ```
 
 ## Key Attributes
 
-- `#[Be([TargetClass::class])]` - Declares metamorphosis destination(s)
-- `#[Input]` - Receives data from previous stage
-- `#[Inject]` - Receives transcendent capability (DI)
-- `#[Validate]` - Semantic validation method marker
+| Attribute | Role | Source |
+|-----------|------|--------|
+| `#[Be([Target::class])]` | Declares metamorphosis destination(s) | Class attribute |
+| `#[Input]` | Receives immanence from previous stage | Constructor parameter |
+| `#[Inject]` | Receives transcendence from DI container | Constructor parameter |
+| `#[Validate]` | Marks semantic validation method | Method attribute |
+| `#[Message(['en' => '...', 'ja' => '...'])]` | Multilingual exception message | Exception class attribute |
 
-## Domain Types (PHPDoc Union Types)
+## Metamorphosis Flow
 
-Use PHPDoc union types to define domain vocabulary:
+### Linear (Input → Final)
 
-```php
-final readonly class JTASProtocol
-{
-    /** @return 'emergency'|'observation' */
-    public function assess(float $bodyTemperature, int $heartRate): string
-    {
-        // ...
-    }
-}
-
-final readonly class EmergencyCase
-{
-    /** @var 'IMMEDIATE'|'DELAYED' */
-    public string $priority;
-    /** @var 'RED'|'GREEN' */
-    public string $color;
-}
-```
-
-This makes the domain vocabulary explicit and enables static analysis tools (Psalm, PHPStan) to catch invalid values.
-
-## Naming Conventions
-
-### Semantic Variables
-
-Semantic class name matches constructor parameter name (camelCase):
-
-- `BodyTemperature` class validates `$bodyTemperature` parameter
-- `HeartRate` class validates `$heartRate` parameter
-
-### Destiny Markers and Final Classes
-
-Final class receives the destiny marker matching its `#[Input]` type:
-
-```php
-// Destiny markers (empty classes that ARE the distinction)
-final readonly class Emergency {}
-final readonly class Observation {}
-
-// Final classes receive matching destiny via #[Input]
-final readonly class EmergencyCase
-{
-    public function __construct(
-        #[Input] public Emergency $being  // Receives Emergency marker
-    ) {}
-}
-
-final readonly class ObservationCase
-{
-    public function __construct(
-        #[Input] public Observation $being  // Receives Observation marker
-    ) {}
-}
-```
-
-## Transformation Flow
-
-### With Branching (Input → Being → Final)
-
-```
-Input (with #[Be([Being::class])])
-    ↓ Becoming executes
-Being (with #[Be([Final1::class, Final2::class])])
-    ↓ $being property determines branch
-Final (capability-specific type)
-```
-
-### Direct (Input → Final)
-
-When no branching is needed, Input can transform directly to Final:
+The simplest case — no branching needed:
 
 ```php
 #[Be([Hello::class])]
 final readonly class HelloInput
 {
-    public function __construct(public string $name) {}
+    public function __construct(
+        public string $name
+    ) {}
 }
 
 final readonly class Hello
 {
+    public string $greeting;
+
     public function __construct(
-        #[Input] public string $name,
-        #[Inject] Greeting $greeting
-    ) {}
+        #[Input] string $name,
+        #[Inject] Greeting $greeting,
+    ) {
+        $this->greeting = "{$greeting->greeting} {$name}";
+    }
 }
 ```
 
-## Error Handling
+### Branching (Input → Being → Final)
 
-When semantic validation fails, metamorphosis is rejected:
-
-```php
-try {
-    $becoming($input);
-} catch (SemanticVariableException $e) {
-    $messages = $e->getErrors()->getMessages('en');
-    // ["Vital signs indicate non-survivable conditions."]
-}
-```
-
-## Project Structure
-
-```
-src/
-├── Input/          # Starting points (raw data)
-├── Being/          # Intermediate transformations
-├── Final/          # Destinations (capability-specific types)
-├── Reason/         # Transcendent wisdom (domain logic)
-├── Semantic/       # Domain ontology (what CAN exist)
-├── Exception/      # Domain exceptions
-└── Module/         # DI configuration
-```
-
-## Example: Emergency Triage
-
-### Input Class
+When the outcome depends on runtime conditions:
 
 ```php
 #[Be([TriageAssessment::class])]
@@ -226,11 +91,7 @@ final readonly class PatientArrival
         public int $heartRate
     ) {}
 }
-```
 
-### Being Class
-
-```php
 #[Be([EmergencyCase::class, ObservationCase::class])]
 final readonly class TriageAssessment
 {
@@ -247,16 +108,10 @@ final readonly class TriageAssessment
             : new Observation();
     }
 }
-```
 
-### Final Classes
-
-```php
 final readonly class EmergencyCase
 {
-    /** @var 'IMMEDIATE'|'DELAYED' */
     public string $priority;
-    /** @var 'RED'|'GREEN' */
     public string $color;
 
     public function __construct(
@@ -273,75 +128,354 @@ final readonly class EmergencyCase
         return "Secure ER Room 1 immediately.";
     }
 }
+```
 
-final readonly class ObservationCase
+The `$being` property (union type) determines which Final class receives the transformation. The framework matches the type actually assigned to the candidate classes in `#[Be]`.
+
+Note: `$being` is a conventional name, not a framework requirement. Any public property participates in type matching.
+
+### Nested (Becoming within Becoming)
+
+`Becoming` can be injected as transcendence to trigger sub-chains:
+
+```php
+final readonly class OrderProcessing
 {
-    /** @var 'IMMEDIATE'|'DELAYED' */
-    public string $priority;
-    /** @var 'RED'|'GREEN' */
-    public string $color;
+    public PaymentResult $payment;
+    public ShippingResult $shipping;
 
     public function __construct(
-        #[Input] public float $bodyTemperature,
-        #[Input] public int $heartRate,
-        #[Input] public Observation $being
+        #[Input] Order $order,
+        #[Inject] Becoming $becoming
     ) {
-        $this->priority = 'DELAYED';
-        $this->color = 'GREEN';
-    }
-
-    public function assignWaitingArea(): string
-    {
-        return "Move to waiting area.";
+        $this->payment = $becoming(new PaymentInput($order->getPayment()));
+        $this->shipping = $becoming(new ShippingInput($order->getAddress()));
     }
 }
 ```
 
-### Execution
+## Executing Metamorphosis
 
 ```php
 $injector = new Injector(new AppModule());
-$becoming = new Becoming($injector, 'Be\\App\\Semantic');
+$becoming = new Becoming($injector, 'App\\Semantic');
 
-$patient = new PatientArrival(bodyTemperature: 39.5, heartRate: 90);
-$result = $becoming($patient);
-
-echo $result->priority;     // "IMMEDIATE"
-echo $result->assignER();   // "Secure ER Room 1 immediately."
+$input = new PatientArrival(bodyTemperature: 39.5, heartRate: 90);
+$result = $becoming($input);
+// $result IS an EmergencyCase — type determines capability
 ```
 
-## Why Being Over Doing
-
-### Traditional (Doing)
+`Becoming` is typically injected via DI:
 
 ```php
-$patient = new Patient($temp, $hr);
-if ($triageService->isEmergency($patient)) {
-    $patient->setStatus('emergency');
-    $this->erService->assign($patient);
+final readonly class TriagePage
+{
+    public function __construct(
+        private BecomingInterface $becoming
+    ) {}
+
+    public function __invoke(float $temp, int $hr): EmergencyCase|ObservationCase
+    {
+        return ($this->becoming)(new PatientArrival($temp, $hr));
+    }
 }
 ```
 
-Problems:
-- Patient can exist in invalid state
-- Status can be changed at any time
-- `erService->assign()` can be called on any patient
+## Semantic Variables
 
-### Be Framework (Being)
+Variable names carry meaning and constraints. Define once, automatically applied everywhere:
 
 ```php
-$patient = new PatientArrival($temp, $hr);
-$result = $becoming($patient);
-$result->assignER();  // Type-safe: only possible for EmergencyCase
+final class Email
+{
+    #[Validate]
+    public function validate(string $email): void
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidEmailException();
+        }
+    }
+}
+
+// Automatically applied to ANY constructor parameter named $email
+public function __construct(string $email) {}
 ```
 
-Benefits:
-- Non-survivable states cannot exist
-- Type IS the status (immutable)
-- Capabilities belong to existence
+### Name Matching Rules
+
+- Semantic class `Email` validates parameter `$email` (PascalCase → camelCase)
+- Semantic class `BodyTemperature` validates parameter `$bodyTemperature`
+- Matching is automatic — no explicit wiring needed
+
+### Decorating Names with Attributes
+
+Attributes refine existence conditions for the same name:
+
+```php
+final readonly class Age
+{
+    #[Validate]
+    public function validate(int $age): void
+    {
+        if ($age < 0 || $age > 150) { throw new InvalidAgeException(); }
+    }
+
+    #[Validate]
+    public function validateTeen(#[Teen] int $age): void
+    {
+        if ($age < 13 || $age > 19) { throw new InvalidTeenAgeException(); }
+    }
+}
+
+// Basic Age validation only
+public function __construct(int $age) {}
+
+// Age + Teen validation
+public function __construct(#[Teen] int $age) {}
+```
+
+### Cross-Field Validation (Names as Relations)
+
+When parameter names partially match, values are automatically passed:
+
+```php
+final readonly class DateRange
+{
+    #[Validate]
+    public function validate(string $startDate, string $endDate): void
+    {
+        if ($startDate > $endDate) { throw new InvalidDateRangeException(); }
+    }
+}
+
+// DateRange auto-applied because $startDate and $endDate are present
+public function __construct(string $startDate, string $endDate) {}
+```
+
+## Reason Layer
+
+The Reason Layer gathers the complete tool set for an existence to come into being, into a single object:
+
+```php
+final readonly class ExpressShipping
+{
+    public function __construct(
+        private PriorityCarrier $carrier,
+        private RealTimeTracker $tracker,
+    ) {}
+
+    public function calculateFee(Weight $weight): Fee { /* ... */ }
+    public function guaranteeDeliveryBy(Address $addr): DateTimeImmutable { /* ... */ }
+}
+```
+
+### Reason as $being (Dual Role)
+
+When a reason object is passed as `$being`, its type determines the transformation destination AND provides mode-specific methods:
+
+```php
+final readonly class ExpressDelivery
+{
+    public Fee $fee;
+
+    public function __construct(
+        #[Input] OrderData $order,
+        #[Input] ExpressShipping $being  // Type determines destination + provides methods
+    ) {
+        $this->fee = $being->calculateFee($order->weight);
+    }
+}
+```
+
+### Why Not Individual Injection?
+
+Individual `#[Inject]` scatters dependencies. Reason bundles them by meaning — "what does this existence need to come into being?" In tests, swap the entire precondition set at once.
+
+## Final Objects and $been
+
+Final Objects are the destination of metamorphosis. `$been` records completion evidence (who, when, what):
+
+```php
+final readonly class SuccessfulOrder
+{
+    public string $orderId;
+    public string $confirmationCode;
+    public BeenProcessed $been;
+
+    public function __construct(
+        #[Input] Money $total,
+        #[Input] CreditCard $card,
+        #[Inject] OrderIdGenerator $generator,
+        #[Inject] Receipt $receipt
+    ) {
+        $this->orderId = $generator->generate();
+        $this->confirmationCode = $receipt->generate($total);
+        $this->been = new BeenProcessed(
+            actor: $card->getHolderName(),
+            timestamp: new DateTimeImmutable(),
+            evidence: ['total' => $total->getAmount()]
+        );
+    }
+}
+```
+
+Two temporal axes:
+- `#[Be]` — what to become (direction towards future)
+- `$been` — evidence of completion (past perfect)
+
+## Semantic Exceptions
+
+### Domain Exceptions with Structured Data
+
+```php
+#[Message([
+    'en' => 'Vital signs indicate non-survivable conditions.',
+    'ja' => 'バイタルサインが生存不可能な状態を示しています。'
+])]
+final readonly class LethalVitalException extends DomainException {}
+```
+
+### Error Collection
+
+The framework collects ALL validation errors, not just the first:
+
+```php
+try {
+    $becoming(new UserInput('', 'invalid-email', 10));
+} catch (SemanticVariableException $e) {
+    $messages = $e->getErrors()->getMessages('en');
+    // ["Name cannot be empty", "Invalid email format", "Age must be at least 13"]
+}
+```
+
+### Errors as Existence
+
+Failure is a legitimate result of transformation:
+
+```php
+#[Be([ValidUser::class, InvalidUser::class])]
+final readonly class UserValidation
+{
+    public ValidUser|InvalidUser $being;
+
+    public function __construct(#[Input] string $data)
+    {
+        try {
+            $this->being = new ValidUser($data);
+        } catch (ValidationException $e) {
+            $this->being = new InvalidUser($e->getErrors());
+        }
+    }
+}
+```
+
+## Naming Conventions
+
+### Classes
+
+| Type | Pattern | Examples |
+|------|---------|----------|
+| Input | `{Domain}Input` | `UserInput`, `OrderInput`, `PatientArrival` |
+| Being | `{State}{Domain}` | `ValidatedUser`, `ProcessedOrder` |
+| Final | `{CompletedState}` | `RegisteredUser`, `EmergencyCase` |
+| Reason | `{Capability}` | `ExpressShipping`, `JTASProtocol` |
+| Semantic | `{MeaningName}` | `Email`, `BodyTemperature`, `Age` |
+
+### Anti-patterns
+
+```php
+// ❌ Action-oriented (Doing)
+class UserValidator, OrderProcessor, CreateUserRequest
+
+// ✅ Existence-oriented (Being)
+class ValidatedUser, ProcessedOrder, UserInput
+```
+
+### All classes are `final readonly`
+
+Every Input, Being, and Final class should be `final readonly class`.
+
+## Project Structure
+
+```
+src/
+├── Input/          # Starting points (pure immanence)
+├── Being/          # Intermediate transformations
+├── Moment/         # Essential parts constituting the whole (experimental)
+├── Final/          # Destinations (complete existence)
+├── Reason/         # Tool sets enabling existence
+├── Semantic/       # Domain vocabulary (what CAN exist)
+├── Exception/      # Domain exceptions (why existence fails)
+└── Module/         # DI configuration
+```
+
+## Side Effects
+
+Side effects are completed inside the constructor, delegated to Reason. The object itself decides — no external orchestrator tells it what to do. This is the autonomy that OOP originally intended.
+
+Persistence and external communication are implementation details confined to Reason. Existence types are freed from database schemas and API constraints.
+
+## Moment (Experimental)
+
+> This is an evolving concept that may be refined based on practical experience.
+
+A Moment is an essential part constituting a Final — a realizable potential that becomes actuality through `be()`. Used in the **Diamond Metamorphosis** pattern where multiple parallel pipelines converge into a single Final.
+
+```php
+final readonly class PaymentCompleted implements MomentInterface
+{
+    public PaymentCapture $capture;
+
+    public function __construct(
+        #[CardNumber] public string $cardNumber,
+        #[Amount] public int $amount,
+        #[Inject] PaymentGatewayInterface $gateway,
+    ) {
+        $this->capture = $gateway->authorize($cardNumber, $amount);
+    }
+
+    public function be(): void
+    {
+        $this->capture->be();  // Realize the potential
+    }
+}
+```
+
+The Final calls `be()` on its Moments in its own constructor — this is not external orchestration but **Doing for Being**: the Final realizing its parts in order to bring itself into existence.
+
+```php
+final readonly class OrderConfirmed
+{
+    public function __construct(
+        #[Inject] public InventoryReserved $inventory,
+        #[Inject] public PaymentCompleted $payment,
+        #[Inject] public ShippingArranged $shipping,
+    ) {
+        // Final's self-determination: realizing parts to bring itself into existence
+        $this->inventory->be();
+        $this->payment->be();
+        $this->shipping->be();
+    }
+}
+```
+
+## Type IS Capability
+
+Different types have different methods. Type determines what actions are possible:
+
+```php
+// EmergencyCase has assignER()
+// ObservationCase has assignWaitingArea()
+$result->assignER();  // Only possible for EmergencyCase — compile-time safe
+```
+
+You cannot assign an ER room to an observation patient. The type system enforces this.
 
 ## Documentation
 
 - English: https://be-framework.github.io/manuals/1.0/en/
 - Japanese: https://be-framework.github.io/manuals/1.0/ja/
 - Repository: https://github.com/be-framework/be-framework
+- App Skeleton: https://github.com/be-framework/app
+- Demos: https://github.com/be-framework/demos
+- Claude Code Skills: https://github.com/be-framework/skills

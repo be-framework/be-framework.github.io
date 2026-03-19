@@ -1,7 +1,7 @@
 ---
 layout: docs-en
 title: "10. Semantic Logging"
-category: Manual
+category: Draft
 permalink: /manuals/1.0/en/10-semantic-logging.html
 ---
 

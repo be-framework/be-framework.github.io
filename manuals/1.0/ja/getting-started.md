@@ -7,7 +7,7 @@ permalink: /manuals/1.0/ja/getting-started.html
 
 # Getting Started
 
-> 哲学を理解したら、実践してみましょう。
+> 概念を学んだら、実際に動かしてみましょう。
 
 ## 要件
 
@@ -88,7 +88,7 @@ final readonly class Hello
 ```
 
 - `#[Input]` は前の段階（HelloInput）からデータを受け取ります。
-- `#[Inject]` は外部からの能力（トランセンデンス）を受け取ります。
+- `#[Inject]` は外部からの能力（超越）を受け取ります。
 
 ### Reason クラス
 
@@ -99,9 +99,9 @@ final class Greeting
 }
 ```
 
-Greeting はトランセンデンス — 挨拶する力—を提供します。
+Greeting は超越 — 挨拶する力—を提供します。
 
-### 変態（メタモルフォーシス）の実行
+### 変容（メタモルフォーシス）の実行
 
 ```php
 $injector = new Injector(new AppModule());
@@ -122,7 +122,7 @@ Hello (Greeting が注入された状態)
     → "Hello World"
 ```
 
-入力オブジェクトは何もしていません — 変態を通じて Hello になった(BEING)のです。
+入力オブジェクトは何もしていません — 変容を通じて Hello になった(BEING)のです。
 
 ## セマンティック検証を試す
 
@@ -138,7 +138,7 @@ $input = new HelloInput('');
 php bin/app.php
 ```
 
-`Semantic/Name.php` が名前が空であることを検証するため、エラーメッセージが表示されます。空の名前では存在ができないのです。
+`Semantic/Name.php` が名前が空であることを検証するため、エラーメッセージが表示されます。空の名前は存在できないのです。
 
 ## 示された主要概念
 
@@ -146,7 +146,7 @@ php bin/app.php
 |------|----------|
 | **内在** | HelloInput の `$name` |
 | **超越** | `#[Inject]` で注入された `Greeting` |
-| **変態** | HelloInput → Hello の変換 |
+| **変容** | HelloInput → Hello の変換 |
 | **セマンティック検証** | Name.php が入力を検証 |
 
 ## 次のステップ

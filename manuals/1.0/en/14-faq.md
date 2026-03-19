@@ -7,8 +7,6 @@ permalink: /manuals/1.0/en/faq.html
 
 # Be Framework FAQ
 
-> Last updated: 2025-09-13
-
 ## 0) TL;DR
 
 ### Q. Is this a new "programming paradigm"?
@@ -23,22 +21,42 @@ While it's a significant paradigm shift philosophically, implementation-wise it 
 
 ### Q1. How is this different from MVC or DDD?
 
-A. MVC is a structural pattern for responsibility separation, DDD is a modeling methodology.
+A. They operate at different layers and can coexist.
 
-Be Framework is a design paradigm centered on "existence conditions and temporal transformation," where flow self-organizes through `#[Be]` and `$being`.
+Web MVC effectively functions as input/output responsibility separation, and DDD is a domain modeling methodology. Be Framework is a design paradigm that organizes object creation through "existence conditions and temporal transformation" — it can be called from an MVC Controller or used inside a DDD aggregate.
+
+Interestingly, what MVC originally aimed for — "projecting mental models" — and what DDD aimed for — "coding in business language" — are naturally realized in Be Framework through existence types and semantic variables.
+
+### Q1-a. How does this relate to CQRS?
+
+A. The separation of "decision-making" and "data retrieval" that CQRS achieves through external structure is naturally inherent within a single existence type in Be.
+
+The constructor is decision-making (Command), and public properties are data retrieval (Query). Business decisions that tend to get buried in generic methods like `updateUser()` are expressed as type names like `DeactivatedUser`, so intent is never lost from the code.
 
 ### Q2. Is this OOP or FP?
 
-A. It works with both. It emphasizes immutability and referential transparency while realizing one-time complete transformation in constructors (entelecheia) using OOP containers.
+A. It incorporates elements of both, but the relationship with OOP is more fundamental.
+
+OOP originally envisioned a world where autonomous objects cooperate through messages. In practice, however, service layers issue instructions while objects become obedient data containers. In Be, objects declare their own destiny through `#[Be]` and self-organize without external orchestrators. This is a recovery of the autonomy that OOP originally intended.
+
+### Q2-a. How are FP elements utilized?
+
+A. Existence types are immutable once transformation is complete.
+
+Side effects are localized to the constructor, and completed objects can be referenced as pure data. With clear preconditions (`#[Input]`) and postconditions (public properties), each existence type can be tested independently, and results are always predictable.
+
+Public properties are considered taboo in traditional OOP, but in practice objects circulate as typed values, and in tests postconditions can be verified directly. (For concrete testing approaches, see [Q13](#q13-whats-the-testing-strategy).)
 
 ### Q3. What's the benefit of defining "BEING (what something is)" first?
 
-A. It makes invalid states impossible to generate upfront.
+A. Invalid states become inexpressible altogether.
 
-Defensive if/guard statements are drastically reduced, and type = reachable state becomes API specification.
+The defensive if statements scattered throughout traditional code are necessary because invalid states are representable as types. In Be, types are existence conditions themselves, so there are no types representing invalid states, and the guard statements disappear with them. Type = reachable state becomes the API specification directly.
 
-### Q4. What are "temporal existence types"?  
-A. Types like `ValidatedUser`, `SavedUser`, `DeletedUser` express the "when" in progress.  
+### Q4. What are "temporal existence types"?
+
+A. Types like `ValidatedUser`, `SavedUser`, `DeletedUser` express the "when" in progress.
+
 Time and domain are inseparable (details: [Metamorphosis](./05-metamorphosis.html)).
 
 ---
@@ -51,7 +69,7 @@ A. It declares an object's destiny (what it will become next).
 
 You can specify single or multiple transformation candidates, and the framework automatically selects the continuation at runtime based on the type of the `$being` property.
 
-For details, see [Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html).
+For details, see [Metamorphosis](./05-metamorphosis.html).
 
 ### Q6. What's the role of the `$being` property?
 
@@ -111,9 +129,9 @@ function updateArticle(UserId $userId, AuthorId $authorId) {
 
 ### Q9. What is the "Reason Layer"?
 
-A. It injects the foundation = tool set that enables a certain existence state as objects.
+A. It gathers the foundation — the complete tool set — for an existence to come into being, into a single object.
 
-It bundles related tools meaningfully from traditional individual DI, improving testability.
+In traditional DI, dependencies are injected individually and scattered, making it hard to see "what are the preconditions for this existence?" Reason bundles the grounds for existence by meaning, so in tests you can swap out the entire set of preconditions at once.
 
 See [Reason Layer](./08-reason-layer.html) for details.
 
@@ -131,19 +149,25 @@ See [Final Objects](./04-final-objects.html) for details.
 
 ### Q11. Where do side effects occur?
 
-A. Principally completed by delegating to Reason within constructors. This eliminates the need for external orchestrators and huge service layers.
+A. Inside the constructor, delegated to Reason and completed there.
+
+Traditional service layers operate on objects from the outside — "save this," "notify that." In Be, the object itself completes side effects in its constructor. This is the autonomy described in [Q2](#q2-is-this-oop-or-fp) in action — no external orchestrator needed.
 
 ### Q12. How are exceptions handled?
 
 A. Using semantic exceptions that hold failures as collections (supporting multilingual messages). "Partial success/partial failure" can also be expressed as valid existence of Invalid~.
 
-See [Error Handling](./09-error-handling.html) for details.
+See [Semantic Exceptions](./09-error-handling.html) for details.
 
 ### Q13. What's the testing strategy?
 
-A. Verify each existence (type) individually. Preconditions = `#[Input]`, postconditions = `public` properties. Use cases can be kept sufficiently thin with `#[Be]` chain smoke tests.
+A. Verify each existence (type) independently.
 
-### Q15. When to choose "linear," "branching," or "nested"?
+As described in [Q2-a](#q2-a-how-are-fp-elements-utilized), preconditions (`#[Input]`) and postconditions (public properties) are explicit, making the test interface self-evident. No getters or reflection needed — assert public properties directly.
+
+Use case-level tests can be kept sufficiently thin with `#[Be]` chain smoke tests. DI has costs, but localized side effects and reduced bugs make it a net positive.
+
+### Q14. When to choose "linear," "branching," or "nested"?
 
 A. Procedure-dependent = linear / Results exclusive by conditions = branching / Convergence of independent processes = nested. When in doubt, start with minimal linear.
 
@@ -153,41 +177,45 @@ See [Implementation Guidelines](./05-metamorphosis.html) for details.
 
 ## 4) Integration with Existing Assets
 
-### Q16. Can this be introduced to existing MVC apps?
+### Q15. Can this be introduced to existing MVC apps?
 
 A. Yes. Replace the Use Case layer with Be, and just call `becoming(new …Input)` from Controllers. Gradually organize into immanent/transcendent.
 
-### Q17. Where do you use DB or external APIs?
+### Q16. Where do you use DB or external APIs?
 
-A. In Reason. Storage and transmission means are consolidated in Reason, separated from existence (state) definition.
+A. Confined to Reason.
 
-### Q18. What are the framework dependencies?
+Persistence and external communication are implementation details, not user concerns. By consolidating them in Reason, existence types are freed from database schemas and API constraints — the definition of existence is separated from technical means.
+
+### Q17. What are the framework dependencies?
 
 A. Core uses PHP standard + DI (e.g., Ray.Di). Integration with Laravel/Symfony etc. is possible via adapters.
 
-### Q19. Do static analysis and IDE completion work?
+### Q18. Do static analysis and IDE completion work?
 
 A. Very well since types are "states." Branching is made explicit with union types, and completion is safe too.
 
 ---
 
-## 5) Operations, Logging & Auditing
+## 5) Operations & Auditing
 
-### Q20. How are logs recorded?
+### Q19. How are logs recorded?
 
-A. Semantic logging is recommended (Koriym.SemanticLogger integration). Record transformation (from/to/reason/evidence) as structured JSON.
+A. Recording transformations (from/to/reason/evidence) as structured JSON is recommended.
 
-See [Semantic Logging](./10-semantic-logging.html) for details.
+The semantic logging mechanism is at the conceptual stage.
 
-### Q21. How does audit compliance work?
+### Q20. How does audit compliance work?
 
-A. `$been` (self-proof) + semantic logging can provide complete audit trails. Personal information follows minimum privilege principles at the Reason layer.
+A. `$been` (self-proof) provides the foundation for audit trails.
+
+Personal information follows minimum privilege principles at the Reason layer.
 
 ---
 
-## 7) Migration
+## 6) Migration
 
-### Q24. What are the migration steps for existing code? (Minimal steps)
+### Q21. What are the migration steps for existing code? (Minimal steps)
 
 A.
 1. Choose one representative use case
@@ -196,34 +224,31 @@ A.
 4. Consolidate external dependencies into Reason
 5. Call `becoming(new …Input)` from Controller
 6. Migrate validation to semantic variables / replace exceptions semantically
-7. Introduce semantic logging
 
 ---
 
-## 8) Future Features
+## 7) Future Features
 
-### Q25. What about `#[Accept]` (Extended Decision Making)?
+### Q22. What about `#[Accept]` (Extended Decision Making)?
 
 A. Conceptual stage. Plans to delegate undeterminable decisions to experts or AI, handling certainty and uncertainty in one framework.
 
-See [Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html) end note for details.
-
 ---
 
-## 9) Examples & Snippets
+## 8) Examples & Snippets
 
-### Q26. What's a minimal example of typical flow?
+### Q23. What's a minimal example of typical flow?
 
 A.
 ```php
 // 1) Input (immanent only)
-#[Be(UserProfile::class)]
+#[Be(ValidatedUser::class)]
 final readonly class UserInput {
     public function __construct(public string $name, public string $email) {}
 }
 
 // 2) Being (moment of transformation)
-final readonly class UserProfile {
+final readonly class ValidatedUser {
     public function __construct(
         #[Input] string $name,
         #[Input] string $email,
@@ -238,57 +263,28 @@ final readonly class UserProfile {
 }
 
 // 3) Execution (self-organization)
-$profile = $becoming(new UserInput($name, $email));
+$user = $becoming(new UserInput($name, $email));
 
-// Result: UserProfile object
-// $profile->display: "Formatted name"
-// $profile->isValid: true (for valid email)
+// Result: ValidatedUser object
+// $user->display: "Formatted name"
+// $user->isValid: true (for valid email)
 ```
 
 ---
 
-## 10) Detailed Term Explanations
+## 9) Detailed Term Explanations
 
 ### Being-oriented / Ontological
-A design philosophy that treats existence possibility and time as primary abstractions. It's a way of thinking that centers on "what can exist" rather than the traditional "what to do," understanding program states as temporal existence.
+A design philosophy that centers on "what can exist" rather than "what to do." It treats existence possibility and time as primary abstractions, understanding program states as temporal existence. As a result, states that cannot exist are never represented as types, so invalid states are naturally eliminated.
 
 ### Immanence / Transcendence
-Immanence refers to the intrinsic properties and information that an object naturally possesses. Transcendence refers to capabilities and information provided by the external environment or dependencies. In Be Framework, new existence emerges from the combination of these two.
-
-### Entelecheia
-A concept derived from Aristotelian philosophy, representing the "moment of transformation" when potentiality moves to actuality. In Be Framework, it refers to the moment when immanence and transcendence meet in the constructor to complete a new existence.
+Immanence (`#[Input]`) is the intrinsic properties an object possesses; transcendence (`#[Inject]`) is the power provided from outside. Transformation always follows the formula: immanence + transcendence → new immanence. Transcendence transforms the immanent and then vanishes.
 
 ### Reason Layer
-An aggregation of the foundation and tool set necessary for establishing a certain existence state as objects. It enhances testability and maintainability by meaningfully bundling traditional DI (Dependency Injection).
+An object that gathers the foundation and tool set necessary for an existence to come into being. See [Q9](#q9-what-is-the-reason-layer) for details.
 
 ### Semantic Variables
-A concept where variable names themselves express meaning and constraints. For example, `$validEmail` expresses the constraint that it must be a "valid Email" to exist, integrating scattered validation logic at the type level.
+A concept where variable names themselves express meaning and constraints. For example, `$email` expresses its meaning through the name, and as a type, carries the constraint that it must be a valid email to exist. It integrates scattered validation logic at the type level.
 
-### Semantic Exceptions / Semantic Logging
-A mechanism for holding failures and history not as simple strings, but as structured data with meaning. It supports multilingual compatibility and audit requirements, making system behavior traceable at the semantic level.
-
----
-
-## 11) Using AI Agents
-
-### Q27. How do I get AI to write Be Framework code?
-
-A. Simply ask the AI to read the llms-full.txt:
-
-```
-Please read https://be-framework.github.io/llms-full.txt
-```
-
-This file contains all the key concepts, naming conventions, and code examples needed for AI to understand and generate Be Framework code.
-
----
-
-## 12) Related Chapter Links
-
-* **[Overview](./01-overview.html)**: First encounter with being-oriented programming
-* **[Metamorphosis](./05-metamorphosis.html)**: Inseparability of time and domain
-* **[Semantic Variables](./06-semantic-variables.html)**: Domain-specific validation and type safety
-* **[Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html)**: Self-determining objects
-* **[Reason Layer](./08-reason-layer.html)**: Raison d'être and object existence foundations
-* **[Error Handling](./09-error-handling.html)**: Semantic exceptions and multilingual messages
-* **[Semantic Logging](./10-semantic-logging.html)**: Structured recording and audit trails
+### Semantic Exceptions
+A mechanism for holding failures not as simple strings, but as structured data with meaning. It supports multilingual compatibility and audit requirements, making system behavior traceable at the semantic level.
