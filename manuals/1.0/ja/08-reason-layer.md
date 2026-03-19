@@ -11,126 +11,123 @@ permalink: /manuals/1.0/ja/08-reason-layer.html
 >
 > 　　—ライプニッツ『充足理由律』（1714年）
 
-## なぜこの名前か？
+## 存在の理由
 
-存在理由層には2つの「理由」があります。
+`ExpressDelivery`がその存在でいられるのは、速達配送の能力を持っているからです。`StandardDelivery`がその存在でいられるのは、通常配送の能力を持っているからです。この「なぜその存在でいられるのか」の根拠が、**raison d'être**（レーゾンデートル：存在理由）です。
 
-### 1. 型マッチングの理由
-
-まず、フレームワークが次の変容先を決定する際の根拠となる型：
+存在理由層は、このraison d'êtreを一つのオブジェクトとして表現する設計パターンです。
 
 ```php
-final readonly class CasualGreeting
+final readonly class ExpressDelivery
 {
-    public string $greeting;
-    public string $emoji;
+    public Fee $fee;
 
     public function __construct(
-        #[Input] public string $name,        // 内在的性質
-        #[Input] public CasualStyle $being   // この$beingがCasualStyle型であること
+        #[Input] OrderData $order,             // 内在
+        #[Inject] ExpressShipping $reason      // 存在理由
     ) {
-        // $beingがCasualStyle型だからCasualGreetingに変容した
-        $this->greeting = $this->being->casualGreeting($name);
-        $this->emoji = $this->being->casualEmoji();
+        $this->fee = $reason->calculateFee($order->weight);
     }
 }
 ```
 
-`CasualStyle $being`という**型そのもの**が、なぜ`CasualGreeting`になるのかの理由です。フレームワークはこの型を読み取り、対応する変容先を自動選択します。
+`ExpressShipping`が`ExpressDelivery`のraison d'êtreです。速達配送に必要な道具一式をまとめて提供します。
 
-### 2. 存在の理由
+## $beingとしての存在理由
 
-次に、オブジェクトがその存在でいるための根拠としての理由：
+存在理由オブジェクトは`$being`として渡されることで、もう一つの役割を担います。その**型**が変容先の判別根拠になると同時に、その存在様式に固有のメソッド群を提供します。
 
 ```php
-final readonly class FormalGreeting
+final readonly class ExpressDelivery
 {
-    public string $greeting;
-    public string $businessCard;
-    
+    public Fee $fee;
+
     public function __construct(
-        #[Input] string $name,           // 内在的性質
-        #[Reason] FormalStyle $being     // 存在理由
+        #[Input] OrderData $order,
+        #[Input] ExpressShipping $being    // 型が変容先を決定し、速達固有のメソッドを提供
     ) {
-        // FormalStyleはformalGreeting()やformalBusinessCard()ができるからこそFormalStyleでいられる
-        $this->greeting = $being->formalGreeting($name);
-        $this->businessCard = $being->formalBusinessCard($name);
+        $this->fee = $being->calculateFee($order->weight);
+    }
+}
+
+final readonly class StandardDelivery
+{
+    public Fee $fee;
+
+    public function __construct(
+        #[Input] OrderData $order,
+        #[Input] StandardShipping $being   // 型が変容先を決定し、通常配送固有のメソッドを提供
+    ) {
+        $this->fee = $being->calculateFee($order->weight);
     }
 }
 ```
 
-`FormalGreeting`が`FormalGreeting`として存在できるのは、`FormalStyle`が必要な振る舞いを提供するからです。これが存在の理由です。
+`ExpressShipping $being`という型そのものが、なぜ`ExpressDelivery`になるのかの理由です。フレームワークはこの型を読み取り、対応する変容先を自動選択します。
 
 ## 存在理由クラスの定義
 
-存在理由クラスは、特定の存在様式を実現するメソッドを提供します：
+存在理由クラスは、特定の存在様式を実現するために必要なサービスをまとめたものです：
 
 ```php
 namespace App\Reason;
 
-final readonly class FormalStyle
-{
-    public function formalGreeting(string $name): string
-    {
-        return "おはようございます、{$name}様。";
-    }
-    
-    public function formalBusinessCard(string $name): string
-    {
-        return "【{$name}様】\n正式なご挨拶をさせていただきます。";
-    }
-}
-
-final readonly class CasualStyle  
-{
-    public function casualGreeting(string $name): string
-    {
-        return "やあ、{$name}！";
-    }
-    
-    public function casualMessage(string $name): string
-    {
-        return "Hi {$name}! 😊 よろしく！";
-    }
-}
-```
-
-## raison d'être としての存在理由
-
-存在理由層は、オブジェクトの**raison d'être**（レーゾンデートル：存在理由）を提供します。
-
-```php
-final readonly class ValidatedUser
+final readonly class ExpressShipping
 {
     public function __construct(
-        #[Input] string $email,
-        #[Reason] ValidationReason $raisonDEtre    // この存在の raison d'être
-    ) {
-        // ValidationReasonが、ValidatedUserの存在理由を提供
+        private PriorityCarrier $carrier,
+        private RealTimeTracker $tracker,
+    ) {}
+
+    public function calculateFee(Weight $weight): Fee        // 速達料金
+    {
+        return $this->carrier->expressFee($weight);
+    }
+
+    public function guaranteeDeliveryBy(Address $address): \DateTimeImmutable  // 配達日保証
+    {
+        return $this->carrier->guaranteedDate($address);
+    }
+
+    public function realTimeTrack(TrackingId $id): TrackingStatus  // リアルタイム追跡
+    {
+        return $this->tracker->realTimeStatus($id);
     }
 }
 ```
 
-**raison d'être**とは：
-- なぜそのオブジェクトがその存在でいられるのか
-- `ValidatedUser`の raison d'être は検証能力
-- `SavedUser`の raison d'être は保存能力
-- `DeletedUser`の raison d'être は削除・アーカイブ能力
+```php
+final readonly class StandardShipping
+{
+    public function __construct(
+        private RegularCarrier $carrier,
+        private BatchTracker $tracker,
+    ) {}
 
-存在理由オブジェクトは、そのオブジェクトがその状態でいるために必要な道具セットを提供します。これがBeフレームワークの「存在理由層」の名前の由来です。
+    public function calculateFee(Weight $weight): Fee        // 通常料金
+    {
+        return $this->carrier->standardFee($weight);
+    }
 
-## #[Inject]との違い
+    public function estimateDeliveryWindow(Address $address): DateRange  // 配達期間の見積もり
+    {
+        return $this->carrier->estimateWindow($address);
+    }
+}
+```
 
-存在理由層の独自価値は、従来の依存性注入との比較で明確になります：
+## 個別注入との違い
 
-**従来のInject**：
+存在理由層は`#[Inject]`を使います。では複数の`#[Inject]`をバラバラに使う場合と何が違うのでしょうか。
+
+**個別の注入**：
 ```php
 public function __construct(
-    #[Input] string $email,
-    #[Inject] EmailValidator $emailValidator,
-    #[Inject] PasswordChecker $passwordChecker, 
-    #[Inject] SecurityAuditor $auditor,
-    #[Inject] DatabaseSaver $saver
+    #[Input] OrderData $order,
+    #[Inject] PriorityCarrier $carrier,
+    #[Inject] RealTimeTracker $tracker,
+    #[Inject] InsuranceService $insurance,
+    #[Inject] DeliveryScheduler $scheduler
 ) {
     // バラバラの道具を個別に使用
 }
@@ -139,43 +136,14 @@ public function __construct(
 **存在理由層**：
 ```php
 public function __construct(
-    #[Input] string $email,
-    #[Reason] UserValidationReason $reason    // 関連道具がまとまった存在理由
+    #[Input] OrderData $order,
+    #[Inject] ExpressShipping $reason    // 関連道具がまとまった存在理由
 ) {
-    // ValidatedUserになるための道具一式が提供される
-    $this->result = $reason->validateUser($email, $this);
+    $this->fee = $reason->calculateFee($order->weight);
 }
 ```
 
-**違い**：
-- **Inject**: 個別の道具を別々に注入
-- **存在理由層**: 「その状態になるための道具セット」として意味的にまとまって提供
-
-**価値**：
-- **概念的まとまり**: 「ValidatedUserになるには何が必要？」が明確
-- **テストの簡素化**: 存在理由オブジェクト一つをモックすれば済む
-- **関心の分離**: 関連する道具が一か所に集約
-
-## 委譲による状態実現
-
-存在理由層では、オブジェクトが自身の状態実現を存在理由に委譲します：
-
-```php
-final readonly class SavedUser
-{
-    public function __construct(
-        #[Input] UserData $data,
-        #[Reason] SaveReason $reason    // 存在理由を受け取り
-    ) {
-        // 保存処理を存在理由に委譲
-        $this->result = $reason->saveUser($data);
-    }
-}
-```
-
-オブジェクト自身は「何になるか」を宣言し、存在理由は「どうやってその状態になるか」を実現します。この分離により、状態定義と実現手段が明確に分けられます。
-
-`SavedUser`になるためには保存用の道具セットが、`ValidatedUser`になるためには検証用の道具セットが必要です。存在理由オブジェクトは「この状態になるには何が必要か？」を明確に整理し、単一責任原則に従うため、テストも簡潔になります。
+「ExpressDeliveryになるには何が必要か？」という問いに、存在理由オブジェクト一つが答えます。オブジェクト自身は「何になるか」を宣言し、存在理由は「どうやってその状態になるか」を実現します。
 
 ---
 

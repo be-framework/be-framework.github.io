@@ -11,126 +11,123 @@ permalink: /manuals/1.0/en/08-reason-layer.html
 >
 > 　　—Leibniz, *Principle of Sufficient Reason* (1714)
 
-## Why This Name?
+## Reason for Existence
 
-The Reason Layer has two meanings of "reason":
+`ExpressDelivery` can exist as such because it has express shipping capabilities. `StandardDelivery` can exist as such because it has standard shipping capabilities. This foundation for "why it can be in that existence" is the **raison d'être**.
 
-### 1. Reason for Type Matching
-
-First, the type itself that serves as the basis for the framework to determine the next transformation destination:
+The Reason Layer is a design pattern that expresses this raison d'être as a single object.
 
 ```php
-final readonly class CasualGreeting
+final readonly class ExpressDelivery
 {
-    public string $greeting;
-    public string $emoji;
+    public Fee $fee;
 
     public function __construct(
-        #[Input] public string $name,        // Immanent property
-        #[Input] public CasualStyle $being   // This being CasualStyle type
+        #[Input] OrderData $order,             // Immanence
+        #[Inject] ExpressShipping $reason      // Reason for existence
     ) {
-        // $being transformed to CasualGreeting because it's CasualStyle type
-        $this->greeting = $this->being->casualGreeting($name);
-        $this->emoji = $this->being->casualEmoji();
+        $this->fee = $reason->calculateFee($order->weight);
     }
 }
 ```
 
-The **type itself** `CasualStyle $being` is the reason why it becomes `CasualGreeting`. The framework reads this type and automatically selects the corresponding transformation destination.
+`ExpressShipping` is the raison d'être of `ExpressDelivery`. It provides the complete tool set needed for express delivery.
 
-### 2. Reason for Existence
+## Reason as $being
 
-Next, the reason as the foundation for why an object can be in that existence:
+When a reason object is passed as `$being`, it takes on an additional role. Its **type** serves as the basis for determining the transformation destination, while simultaneously providing the methods specific to that mode of existence.
 
 ```php
-final readonly class FormalGreeting
+final readonly class ExpressDelivery
 {
-    public string $greeting;
-    public string $businessCard;
-    
+    public Fee $fee;
+
     public function __construct(
-        #[Input] string $name,           // Immanent property
-        #[Reason] FormalStyle $being     // Reason for existence
+        #[Input] OrderData $order,
+        #[Input] ExpressShipping $being    // Type determines transformation and provides express-specific methods
     ) {
-        // FormalStyle can be FormalStyle because it can do formalGreeting() and formalBusinessCard()
-        $this->greeting = $being->formalGreeting($name);
-        $this->businessCard = $being->formalBusinessCard($name);
+        $this->fee = $being->calculateFee($order->weight);
+    }
+}
+
+final readonly class StandardDelivery
+{
+    public Fee $fee;
+
+    public function __construct(
+        #[Input] OrderData $order,
+        #[Input] StandardShipping $being   // Type determines transformation and provides standard-specific methods
+    ) {
+        $this->fee = $being->calculateFee($order->weight);
     }
 }
 ```
 
-`FormalGreeting` can exist as `FormalGreeting` because `FormalStyle` provides the necessary behaviors. This is the reason for existence.
+The type `ExpressShipping $being` itself is the reason why it becomes `ExpressDelivery`. The framework reads this type and automatically selects the corresponding transformation destination.
 
 ## Defining Reason Classes
 
-Reason classes provide methods that realize specific modes of existence:
+Reason classes bundle the services necessary to realize a specific mode of existence:
 
 ```php
 namespace App\Reason;
 
-final readonly class FormalStyle
-{
-    public function formalGreeting(string $name): string
-    {
-        return "Good morning, Mr./Ms. {$name}.";
-    }
-    
-    public function formalBusinessCard(string $name): string
-    {
-        return "【{$name}】\nI would like to extend my formal greetings.";
-    }
-}
-
-final readonly class CasualStyle  
-{
-    public function casualGreeting(string $name): string
-    {
-        return "Hey, {$name}!";
-    }
-    
-    public function casualMessage(string $name): string
-    {
-        return "Hi {$name}! 😊 Nice to meet you!";
-    }
-}
-```
-
-## Reason for Existence as Raison d'être
-
-The Reason Layer provides the **raison d'être** of objects.
-
-```php
-final readonly class ValidatedUser
+final readonly class ExpressShipping
 {
     public function __construct(
-        #[Input] string $email,
-        #[Input] ValidationReason $raisonDEtre    // The raison d'être of this existence
-    ) {
-        // ValidationReason provides the raison d'être for ValidatedUser
+        private PriorityCarrier $carrier,
+        private RealTimeTracker $tracker,
+    ) {}
+
+    public function calculateFee(Weight $weight): Fee        // Express rate
+    {
+        return $this->carrier->expressFee($weight);
+    }
+
+    public function guaranteeDeliveryBy(Address $address): \DateTimeImmutable  // Guaranteed delivery date
+    {
+        return $this->carrier->guaranteedDate($address);
+    }
+
+    public function realTimeTrack(TrackingId $id): TrackingStatus  // Real-time tracking
+    {
+        return $this->tracker->realTimeStatus($id);
     }
 }
 ```
 
-**raison d'être** means:
-- Why an object can exist in that state
-- The raison d'être of `ValidatedUser` is validation capability
-- The raison d'être of `SavedUser` is saving capability  
-- The raison d'être of `DeletedUser` is deletion/archival capability
+```php
+final readonly class StandardShipping
+{
+    public function __construct(
+        private RegularCarrier $carrier,
+        private BatchTracker $tracker,
+    ) {}
 
-Reason objects provide the tool set necessary for an object to exist in that state. This is the origin of the name "Reason Layer" in the Be Framework.
+    public function calculateFee(Weight $weight): Fee        // Standard rate
+    {
+        return $this->carrier->standardFee($weight);
+    }
 
-## Difference from #[Inject]
+    public function estimateDeliveryWindow(Address $address): DateRange  // Estimated delivery window
+    {
+        return $this->carrier->estimateWindow($address);
+    }
+}
+```
 
-The unique value of the Reason Layer becomes clear when compared to traditional dependency injection:
+## Difference from Individual Injection
 
-**Traditional Inject**:
+The Reason Layer uses `#[Inject]`. So how does it differ from using multiple `#[Inject]` attributes separately?
+
+**Individual injection**:
 ```php
 public function __construct(
-    #[Input] string $email,
-    #[Inject] EmailValidator $emailValidator,
-    #[Inject] PasswordChecker $passwordChecker, 
-    #[Inject] SecurityAuditor $auditor,
-    #[Inject] DatabaseSaver $saver
+    #[Input] OrderData $order,
+    #[Inject] PriorityCarrier $carrier,
+    #[Inject] RealTimeTracker $tracker,
+    #[Inject] InsuranceService $insurance,
+    #[Inject] DeliveryScheduler $scheduler
 ) {
     // Using scattered tools individually
 }
@@ -139,43 +136,14 @@ public function __construct(
 **Reason Layer**:
 ```php
 public function __construct(
-    #[Input] string $email,
-    #[Input] UserValidationReason $reason    // Related tools bundled as reason for existence
+    #[Input] OrderData $order,
+    #[Inject] ExpressShipping $reason    // Related tools bundled as reason for existence
 ) {
-    // A complete tool set for becoming ValidatedUser is provided
-    $this->result = $reason->validateUser($email, $this);
+    $this->fee = $reason->calculateFee($order->weight);
 }
 ```
 
-**Differences**:
-- **Inject**: Individual tools injected separately
-- **Reason Layer**: Provided as a semantically coherent "tool set for achieving that state"
-
-**Value**:
-- **Conceptual coherence**: "What is needed to become ValidatedUser?" is clear
-- **Simplified testing**: Mock one reason object instead of many
-- **Separation of concerns**: Related tools are consolidated in one place
-
-## State Realization Through Delegation
-
-In the Reason Layer, objects delegate the realization of their state to reason objects:
-
-```php
-final readonly class SavedUser
-{
-    public function __construct(
-        #[Input] UserData $data,
-        #[Input] SaveReason $reason    // Receive reason for existence
-    ) {
-        // Delegate saving process to reason for existence
-        $this->result = $reason->saveUser($data);
-    }
-}
-```
-
-Objects themselves declare "what to become", while reason objects realize "how to achieve that state". This separation clearly divides state definition from realization means.
-
-`SavedUser` requires a saving tool set, `ValidatedUser` requires a validation tool set. Reason objects clearly organize "what is needed to achieve this state?" and follow the single responsibility principle, making tests concise as well.
+"What is needed to become ExpressDelivery?" — a single reason object answers that question. Objects themselves declare "what to become", while reason objects realize "how to achieve that state".
 
 ---
 
