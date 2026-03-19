@@ -7,7 +7,7 @@ permalink: /manuals/1.0/en/getting-started.html
 
 # Getting Started
 
-> Now that you understand the philosophy, let's put it into practice.
+> Now that you've learned the concepts, let's put them into practice.
 
 ## Requirements
 
