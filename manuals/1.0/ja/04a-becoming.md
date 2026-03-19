@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "5. 生成"
+title: "生成"
 category: Manual
 permalink: /manuals/1.0/ja/04a-becoming.html
 ---

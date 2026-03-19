@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "7. Semantic Variables"
+title: "6. Semantic Variables"
 category: Manual
 permalink: /manuals/1.0/en/06-semantic-variables.html
 ---

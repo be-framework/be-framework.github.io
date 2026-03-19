@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "5. Becoming"
+title: "Becoming"
 category: Manual
 permalink: /manuals/1.0/en/04a-becoming.html
 ---

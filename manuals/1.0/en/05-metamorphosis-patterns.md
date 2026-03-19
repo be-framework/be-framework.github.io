@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "6. Metamorphosis"
+title: "5. Metamorphosis"
 category: Manual
 permalink: /manuals/1.0/en/05-metamorphosis.html
 ---

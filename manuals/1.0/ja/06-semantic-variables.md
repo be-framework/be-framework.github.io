@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "7. 意味変数"
+title: "6. 意味変数"
 category: Manual
 permalink: /manuals/1.0/ja/06-semantic-variables.html
 ---

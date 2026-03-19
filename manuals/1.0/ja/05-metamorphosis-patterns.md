@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "6. 変容"
+title: "5. 変容"
 category: Manual
 permalink: /manuals/1.0/ja/05-metamorphosis.html
 ---
