@@ -75,7 +75,7 @@ public function __construct(#[Teen] int $age) {}
 意味変数は単独の制約だけでなく、変数間の関係も制約として持ちます。`#[Validate]`メソッドの引数名がコンストラクタの引数名と部分マッチすると、対応する値が自動的に渡されます：
 
 ```php
-// メールアドレスの一致確認
+// フォーマット検証 — メールアドレスの一致確認
 final readonly class EmailConfirmation
 {
     #[Validate]
@@ -89,7 +89,7 @@ final readonly class EmailConfirmation
 ```
 
 ```php
-// 開始日は終了日より前でなければならない
+// 順序比較 — 開始日は終了日より前
 final readonly class DateRange
 {
     #[Validate]
@@ -103,14 +103,18 @@ final readonly class DateRange
 ```
 
 ```php
-// 最小値は最大値以下でなければならない
-final readonly class MinMax
+// 外部サービス参照 — 郵便番号と都道府県の整合性
+final readonly class ZipPrefecture
 {
+    public function __construct(
+        private ZipResolver $resolver   // DIで注入
+    ) {}
+
     #[Validate]
-    public function validate(int $min, int $max): void
+    public function validate(string $zipCode, string $prefecture): void
     {
-        if ($min > $max) {
-            throw new MinExceedsMaxException();
+        if (!$this->resolver->matches($zipCode, $prefecture)) {
+            throw new ZipPrefectureMismatchException();
         }
     }
 }
@@ -119,20 +123,20 @@ final readonly class MinMax
 一度定義すれば、引数名がマッチする任意のコンストラクタに自動適用されます：
 
 ```php
-// EmailConfirmation + MinMax が自動適用
+// EmailConfirmation + DateRange が自動適用
 public function __construct(
     string $email,
     string $confirmEmail,
-    int $min,
-    int $max,
+    string $startDate,
+    string $endDate,
 ) {}
 ```
 
 ```php
-// DateRange が自動適用
+// ZipPrefecture が自動適用
 public function __construct(
-    string $startDate,
-    string $endDate,
+    string $zipCode,
+    string $prefecture,
 ) {}
 ```
 

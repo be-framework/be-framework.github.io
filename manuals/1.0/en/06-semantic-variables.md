@@ -75,7 +75,7 @@ The same `$age` gets different existential conditions depending on its attribute
 Semantic variables hold not only individual constraints but also relationships between variables. When a `#[Validate]` method's parameter names partially match a constructor's parameter names, the corresponding values are automatically passed:
 
 ```php
-// Email address confirmation match
+// Format validation — email address confirmation match
 final readonly class EmailConfirmation
 {
     #[Validate]
@@ -89,7 +89,7 @@ final readonly class EmailConfirmation
 ```
 
 ```php
-// Start date must be before end date
+// Ordering — start date must be before end date
 final readonly class DateRange
 {
     #[Validate]
@@ -103,14 +103,18 @@ final readonly class DateRange
 ```
 
 ```php
-// Minimum must not exceed maximum
-final readonly class MinMax
+// External service — zip code and prefecture consistency
+final readonly class ZipPrefecture
 {
+    public function __construct(
+        private ZipResolver $resolver   // Injected via DI
+    ) {}
+
     #[Validate]
-    public function validate(int $min, int $max): void
+    public function validate(string $zipCode, string $prefecture): void
     {
-        if ($min > $max) {
-            throw new MinExceedsMaxException();
+        if (!$this->resolver->matches($zipCode, $prefecture)) {
+            throw new ZipPrefectureMismatchException();
         }
     }
 }
@@ -119,20 +123,20 @@ final readonly class MinMax
 Define once, and they are automatically applied to any constructor whose argument names match:
 
 ```php
-// EmailConfirmation + MinMax auto-applied
+// EmailConfirmation + DateRange auto-applied
 public function __construct(
     string $email,
     string $confirmEmail,
-    int $min,
-    int $max,
+    string $startDate,
+    string $endDate,
 ) {}
 ```
 
 ```php
-// DateRange auto-applied
+// ZipPrefecture auto-applied
 public function __construct(
-    string $startDate,
-    string $endDate,
+    string $zipCode,
+    string $prefecture,
 ) {}
 ```
 

@@ -252,6 +252,28 @@ final readonly class DateRange
 public function __construct(string $startDate, string $endDate) {}
 ```
 
+External service validation also works as cross-field validation:
+
+```php
+final readonly class ZipPrefecture
+{
+    public function __construct(
+        private ZipResolver $resolver   // Injected via DI
+    ) {}
+
+    #[Validate]
+    public function validate(string $zipCode, string $prefecture): void
+    {
+        if (!$this->resolver->matches($zipCode, $prefecture)) {
+            throw new ZipPrefectureMismatchException();
+        }
+    }
+}
+
+// ZipPrefecture auto-applied because $zipCode and $prefecture are present
+public function __construct(string $zipCode, string $prefecture) {}
+```
+
 ## Reason Layer
 
 The Reason Layer gathers the complete tool set for an existence to come into being, into a single object:
