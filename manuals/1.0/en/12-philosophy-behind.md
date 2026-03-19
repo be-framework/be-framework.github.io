@@ -10,11 +10,13 @@ permalink: /manuals/1.0/en/12-philosophy-behind.html
 > "Everything flows" (Panta Rhei)
 > —Heraclitus (535-475 BC)
 
-## Why Read This?
+## Everything is Existence
 
-You've learned how Be Framework works. This chapter explores **why** it works this way—the philosophical ideas that shaped its design.
+Be—Being is Everything. This framework is built on the premise that everything is existence.
 
-These connections between ancient philosophy and modern code aren't meant to impress. They're offered because understanding them may help you see familiar problems differently, and perhaps find the patterns more intuitive.
+As we deepened our questions about domains, we arrived at questions of existence. What makes existence possible? How does existence transform? What does it mean to not exist?
+
+For 2,500 years, Eastern thinkers and Western philosophers have deepened their questions about existence. Yet this framework did not adopt philosophy as design principles. Rather, by deepening questions about domains, their teachings came to feel like testimony.
 
 ---
 
@@ -51,17 +53,7 @@ One way to see Be Framework: an attempt to move closer to that original vision�
 
 ## 2. The Question of "WHETHER?"
 
-### Three Questions
-
-| Question     | Focus          | Paradigm    |
-|--------------|----------------|-------------|
-| **HOW?**     | Implementation | Imperative  |
-| **WHAT?**    | Transformation | Functional  |
-| **WHETHER?** | Existence      | Ontological |
-
-Traditional programming asks "How to validate?" or "What to transform?"
-
-Ontological Programming suggests asking first: "Can this exist at all?"
+Procedural programming asks HOW?—how to do it. OOP asks WHAT?—what is it. Ontological programming asks first, WHETHER?—can it even exist.
 
 ```php
 #[Be(ValidatedUser::class)]
@@ -248,40 +240,25 @@ final readonly class Child
 - `#[Input]` — what carries forward
 - `#[Inject]` — what enables transformation but doesn't persist
 
----
+### Momentariness
 
-## 8. Immanence and Transcendence
-
-### Becoming Through Encounter
-
-Spinoza saw reality as interplay between what something already is (immanence) and what comes from beyond (transcendence).
+Buddhism has another teaching: kṣaṇa-vāda, momentariness. Every existence lasts only an instant, then immediately ceases.
 
 ```php
-final readonly class UserProfile
-{
-    public function __construct(
-        #[Input] string $name,           // What it already has
-        #[Input] string $email,          // Given nature
-        #[Inject] Formatter $formatter,  // External capability
-        #[Inject] Validator $validator   // World's contribution
-    ) {
-        $this->displayName = $formatter->format($name);
-        $this->isValid = $validator->validate($email);
-    }
-}
+$final = $becoming(new OrderInput($items, $customer, $payment));
+// OrderInput is born and immediately ceases
+// ValidOrder is born, and it too ceases
+// InStockOrder is born, and it too ceases
+// ...only the final object remains
 ```
 
-The pattern: **Given nature** + **External capability** → **New state**
-
-This resembles how people develop—not through internal properties alone, but through encounters with others, culture, and environment.
+From a distance, a flow of transformation. Up close, a series of cessation and arising. Each object exists for only a moment, passes forward to the next, and vanishes. What has transformed does not return to what it was before.
 
 ---
 
-## 9. Three Kinds of Transparency
+## 8. Two Kinds of Transparency
 
-Be Framework aims for clarity at three levels:
-
-### 1. Structural
+### Structural
 
 ```php
 UserInput → ValidatedUser → SavedUser → ActiveUser
@@ -289,7 +266,7 @@ UserInput → ValidatedUser → SavedUser → ActiveUser
 
 The transformation path is visible in the types.
 
-### 2. Semantic
+### Semantic
 
 ```php
 string $email     // Name suggests Email validation
@@ -298,112 +275,24 @@ string $password  // Name suggests Password validation
 
 Names carry meaning.
 
-### 3. Execution
-
-```json
-{
-  "metamorphosis": "UserInput → ValidatedUser",
-  "inputs": { "email": "user@example.com" },
-  "validations": ["email.format: passed"],
-  "result": "ValidatedUser created"
-}
-```
-
-Logs record what happened.
-
-When these align, the code can serve as its own documentation.
+When both structure and semantics are transparent, code serves as its own documentation.
 
 ---
 
-## 10. AI Collaboration
+## 9. Resonance
 
-Some decisions don't fit deterministic rules well. The `#[Accept]` pattern acknowledges this:
+These philosophies resonate with Be Framework.
 
-```php
-#[Be(DiagnosedPatient::class)]
-final readonly class PatientSymptoms
-{
-    public Diagnosis|Undetermined $being;
-
-    public function __construct(
-        #[Input] array $symptoms,
-        #[Accept] DiagnosticAI $ai
-    ) {
-        $result = $ai->analyze($symptoms);
-        $this->being = $result->confidence > 0.85
-            ? new Diagnosis($result)
-            : new Undetermined($symptoms, $result->suggestions);
-    }
-}
-```
-
-This suggests a division of concerns:
-
-- Humans define what states can exist and what they mean
-- AI can help determine which state applies
+| Source | Concept | Expression in Be |
+|---|---|---|
+| Heraclitus | Everything flows | `Input → Being → Final` |
+| Aristotle | Potentiality | `Success\|Failure $being` |
+| Laozi | Non-forcing | `#[Be]` declaration |
+| Spinoza | Necessary existence | Semantic variables |
+| Husserl | Transcendence in immanence | `#[Input]` + `#[Inject]` |
+| Zhuangzi | Self-testimony | `$been` |
+| Heidegger | Language is the house of Being | Class names construct the world |
+| Buddhism | Momentariness | Cessation and arising |
 
 ---
 
-## 11. Connections
-
-These philosophical ideas share common themes:
-
-| Source     | Concept                 | Expression in BOP        |
-|------------|-------------------------|--------------------------|
-| Heraclitus | Flow                    | `Input → Being → Final`  |
-| Aristotle  | Potentiality            | `Success|Failure $being` |
-| Sartre     | Existence precedes essence | Type determines capability |
-| Laozi      | Non-forcing             | `#[Be]` declaration      |
-| Buddhism   | Interdependence         | `#[Input]` + `#[Inject]` |
-| Spinoza    | Immanence/Transcendence | Input/Inject distinction |
-| Leibniz    | Sufficient reason       | Reason Layer*            |
-
-*See [Chapter 8: Reason Layer](./08-reason-layer.html) for details.*
-
-These aren't forced mappings—the patterns emerged and the philosophical parallels became apparent afterward.
-
----
-
-## 12. Shifting Perspective
-
-### Different Questions
-
-| Era         | Typical Question               |
-|-------------|--------------------------------|
-| Assembly    | "How to instruct the machine?" |
-| Procedural  | "What steps to execute?"       |
-| OOP         | "Who is responsible?"          |
-| Functional  | "What becomes what?"           |
-| Ontological | "What can exist?"              |
-
-### A Different Role
-
-This framing suggests the programmer's work includes:
-
-- Deciding what states are meaningful
-- Defining what existence is possible
-- Designing the structure of valid states
-
----
-
-## Where to Go from Here
-
-To explore further:
-
-1. **Re-read earlier chapters** — the patterns may look different now
-2. **Notice your habits** — when do you control vs. enable?
-3. **Experiment** — try asking "What should this become?" instead of "What should this do?"
-
----
-
-## Conclusion
-
-Be Framework draws on old ideas: flow, potentiality, interdependence, natural transformation. These aren't decorations—they shaped the design.
-
-Whether these philosophical connections resonate with you or not, the practical patterns remain: immutable objects, type-driven transformation, constructor-based metamorphosis.
-
-Ancient philosophers and modern programmers ask similar questions in different languages. A different paradigm offers a different way to see. And how we see shapes what we can build.
-
----
-
-*Next: Return to [Overview](./01-overview.html) or see [Reference](./11-reference-resources.html) for additional resources.*
