@@ -398,6 +398,6 @@ src/
 
 ## 次のステップ
 
-- [Semantic Variables](./06-semantic-variables.html) - 意味変数の詳細
-- [Metamorphosis](./05-metamorphosis.html) - 変容と分岐パターン
-- [Reason Layer](./08-reason-layer.html) - 超越の理解
+- [意味変数](./06-semantic-variables.html) - 意味変数の詳細
+- [変容](./05-metamorphosis.html) - 変容と分岐パターン
+- [存在理由層](./08-reason-layer.html) - 超越の理解
