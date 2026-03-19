@@ -7,18 +7,18 @@ permalink: /manuals/1.0/ja/demos.html
 
 # デモ
 
-Be Frameworkの概念を実際に動作する例で示します。
+実際に動くコードで、Be Frameworkの概念を体感してみましょう。
 
 ## Hello World デモ
 
-最もシンプルな変換です。名前を持つInputが、挨拶を持つFinalになります。
+最もシンプルな変容です。名前を持つInputが、挨拶を持つFinalになります。
 
 ```text
 HelloInput  →  Hello
 (name)         (greeting)
 ```
 
-### Input（潜在性）
+### Input
 
 ```php
 #[Be([Hello::class])]
@@ -32,7 +32,7 @@ final readonly class HelloInput
 
 `#[Be]`属性は、このInputが「何になれるか」を宣言します。
 
-### Final（現実態）
+### Final
 
 ```php
 final readonly class Hello
@@ -146,7 +146,7 @@ final class PaymentGateway implements PaymentGatewayInterface
 
 #### Final（エネルゲイア）
 
-すべてのMomentが自己完成により実現される収束点：
+すべてのMomentが収束する点です。`be()`を呼んでいるのは外部のオーケストレーターではなく、`OrderConfirmed`自身のコンストラクタです。Finalが「自分が存在するために」自らの部分を実現する——Doing for Beingです。
 
 ```php
 final readonly class OrderConfirmed
@@ -156,7 +156,7 @@ final readonly class OrderConfirmed
         #[Inject] public PaymentCompleted $payment,
         #[Inject] public ShippingArranged $shipping,
     ) {
-        // 自己完成：すべての部分を実現
+        // Finalの自己決定：自分が存在するために部分を実現する
         $this->inventory->be();
         $this->payment->be();
         $this->shipping->be();

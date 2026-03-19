@@ -7,18 +7,18 @@ permalink: /manuals/1.0/en/demos.html
 
 # Demos
 
-Working examples demonstrating Be Framework concepts in action.
+Experience Be Framework concepts through working code.
 
 ## Hello World Demo
 
-The simplest transformation. An Input with a name becomes a Final with a greeting.
+The simplest metamorphosis. An Input with a name becomes a Final with a greeting.
 
 ```text
 HelloInput  →  Hello
 (name)         (greeting)
 ```
 
-### Input (Potentiality)
+### Input
 
 ```php
 #[Be([Hello::class])]
@@ -32,7 +32,7 @@ final readonly class HelloInput
 
 The `#[Be]` attribute declares what this Input *can become*.
 
-### Final (Actuality)
+### Final
 
 ```php
 final readonly class Hello
@@ -146,7 +146,7 @@ final class PaymentGateway implements PaymentGatewayInterface
 
 #### Final (ἐνέργεια)
 
-The convergence point where all Moments are realized through self-completion:
+The convergence point for all Moments. It is not an external orchestrator calling `be()` — it is `OrderConfirmed` itself, in its own constructor, realizing its parts in order to exist. Doing for Being.
 
 ```php
 final readonly class OrderConfirmed
@@ -156,7 +156,7 @@ final readonly class OrderConfirmed
         #[Inject] public PaymentCompleted $payment,
         #[Inject] public ShippingArranged $shipping,
     ) {
-        // Self-completion: realize all parts
+        // Final's self-determination: realizing parts to bring itself into existence
         $this->inventory->be();
         $this->payment->be();
         $this->shipping->be();
