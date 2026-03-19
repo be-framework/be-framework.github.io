@@ -13,15 +13,15 @@ permalink: /manuals/1.0/ja/tutorial.html
 
 - [Getting Started](./getting-started.html) を完了していること
 - PHP 8.4+
-- [Be Framework の哲学](./01-overview.html) の基本的な理解
+- [Be Framework の概要](./01-overview.html) の基本的な理解
 
 ## はじめに
 
-このチュートリアルでは、Be Framework の核心哲学を示す救急トリアージシステムを構築します：オブジェクトは何かを「する」のではなく、何かに「なる」のです。
+このチュートリアルでは、Be Framework の核心を示す救急トリアージシステムを構築します：オブジェクトは何かを「する」のではなく、何かに「なる」のです。
 
 患者は「トリアージされる」のではありません。医学プロトコルという患者自身は持たない(=超越的な)知恵に基づいて、緊急症例または経過観察症例に**なる**のです。
 
-## 変態の流れ
+## 変容の流れ
 
 ```
 PatientArrival（生のバイタルサイン）
@@ -31,9 +31,9 @@ TriageAssessment（蛹の段階）
 EmergencyCase または ObservationCase（最終的な存在）
 ```
 
-## ステップ 1: オントロジーを定義する
+## ステップ 1: 存在の語彙を定義する
 
-ロジックを書く前に、**意味的変数**—このドメインで何が存在できるかの語彙—を定義します。
+ロジックを書く前に、**意味変数**——このドメインで何が存在できるかの語彙——を定義します。
 
 ### BodyTemperature
 
@@ -76,7 +76,7 @@ final class HeartRate
 }
 ```
 
-これらは単なる検証ルールではありません。ドメインオントロジー—何が存在できるかの語彙—を定義しています。この宣言的な基盤は、人間とAIの両方がドメインを理解するために読めるドキュメントとして機能します。（詳細は[セマンティック変数](./06-semantic-variables.html)を参照。）
+これらは単なる検証ルールではありません。何が存在できるかの語彙を定義しています。この宣言的な基盤は、人間とAIの両方がドメインを理解するために読めるドキュメントとして機能します。（詳細は[意味変数](./06-semantic-variables.html)を参照。）
 
 ## ステップ 2: 例外を定義する
 
@@ -122,7 +122,7 @@ final readonly class JTASProtocol
 }
 ```
 
-これが**Reason**—変態を可能にする外部の力です。幼虫が蝶になるために環境条件が必要なように、私たちのデータもトリアージされた患者になるために JTASProtocol が必要です。
+これが**Reason**—変容を可能にする外部の力です。幼虫が蝶になるために環境条件が必要なように、私たちのデータもトリアージされた患者になるために JTASProtocol が必要です。
 
 ## ステップ 4: Input クラスを作成
 
@@ -159,7 +159,7 @@ final readonly class Observation {} // 経過観察
 
 ## ステップ 6: Being クラスを作成
 
-ここで変態が起こります。患者は中間状態にあり、最終形態はまだ決まっていません：
+ここで変容が起こります。患者は中間状態にあり、最終形態はまだ決まっていません：
 
 ```php
 // src/Being/TriageAssessment.php
@@ -186,7 +186,7 @@ final readonly class TriageAssessment
 }
 ```
 
-`#[Inject]` が JTASProtocol を持ち込みます—外部からの超越的な知恵です。`$being` プロパティ（Union型）がどの Final クラスが変態を受け取るかを決定します。「ステータスを設定する」のではなく、患者がその運命になります。
+`#[Inject]` が JTASProtocol を持ち込みます—外部からの超越的な知恵です。`$being` プロパティ（Union型）がどの Final クラスが変容を受け取るかを決定します。「ステータスを設定する」のではなく、患者がその運命になります。
 
 ## ステップ 7: Final クラスを作成
 
@@ -262,7 +262,7 @@ final readonly class ObservationCase
 
 各型は異なるメソッドを持ちます。`EmergencyCase` には `assignER()` が、`ObservationCase` には `assignWaitingArea()` メソッドが存在します。型によって能力が決定されます — 経過観察の患者に救急室を割り当てることはできません。
 
-## ステップ 8: 変態を実行
+## ステップ 8: 変容を実行
 
 ```php
 // bin/app.php
@@ -286,7 +286,7 @@ echo $final->assignER();   // "直ちに救急室1を確保..."
 
 ## 時間的存在
 
-すべての存在は時間の中で変化し、Input から Being を経て Final へと変態します。
+すべての存在は時間の中で変化し、Input から Being を経て Final へと変容します。
 
 ```
 PatientArrival(39.5°C, 90 bpm)
@@ -315,9 +315,9 @@ try {
 }
 ```
 
-変態は拒否されます。致死的なバイタルサインを持つ患者は私たちのシステムに存在できません。
+変容は拒否されます。致死的なバイタルサインを持つ患者は私たちのシステムに存在できません。
 
-## パラダイムの転換
+## なぜこれが重要なのか
 
 ### 従来のアプローチ（Doing）
 
@@ -376,13 +376,13 @@ src/
     └── HeartRate.php
 ```
 
-## 哲学
+## 核心
 
-患者は「トリアージされる」のではなく、トリアージされた状態になります。`EmergencyCase` と `ObservationCase` は異なる能力を持つ異なる型です。一度変態すると、新たな変態なしにステータスは変更できません。
+患者は「トリアージされる」のではなく、トリアージされた状態になります。`EmergencyCase` と `ObservationCase` は異なる能力を持つ異なる型です。一度変容すると、新たな変容なしにステータスは変更できません。
 
 すべての存在は時間の中に存在し、常に変化していて決して静止することはありません。絶えることなく自我を超越したものと出会い、影響を受け、自らを形作っていきます。「在ることは、成ること。」
 
-## 他のドメインでの変態
+## 他のドメインでの変容
 
 同じパターンがあらゆる場所に適用されています：
 
@@ -394,10 +394,10 @@ src/
 | 裁判 | Evidence | Trial | Guilty/Acquitted | PenalCode |
 | 恒星進化 | GasCloud | Protostar | Star/BlackHole | PhysicsLaws |
 
-このようにすべてのドメインに変態があります。すべての存在に理由があります。全ては時間的存在です。
+このようにすべてのドメインに変容があります。すべての存在に理由があります。全ては時間的存在です。
 
 ## 次のステップ
 
-- [Semantic Variables](./06-semantic-variables.html) - セマンティック検証の詳細
-- [Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html) - 高度な分岐パターン
+- [Semantic Variables](./06-semantic-variables.html) - 意味変数の詳細
+- [Metamorphosis](./05-metamorphosis.html) - 変容と分岐パターン
 - [Reason Layer](./08-reason-layer.html) - 超越の理解

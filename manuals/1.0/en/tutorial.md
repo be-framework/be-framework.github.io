@@ -13,7 +13,7 @@ permalink: /manuals/1.0/en/tutorial.html
 
 - Complete [Getting Started](./getting-started.html)
 - PHP 8.4+
-- Basic understanding of [Be Framework philosophy](./01-overview.html)
+- Basic understanding of [Be Framework overview](./01-overview.html)
 
 ## Introduction
 
@@ -375,7 +375,7 @@ src/
     └── HeartRate.php
 ```
 
-## Key Insights
+## Key Insight
 
 The patient doesn't "get triaged"—they become a triaged state. `EmergencyCase` and `ObservationCase` are different types with different capabilities. Once transformed, status cannot change without new metamorphosis.
 
@@ -398,5 +398,5 @@ Every domain has its metamorphosis. Every existence has its reason.
 ## Next Steps
 
 - [Semantic Variables](./06-semantic-variables.html) - Deep dive into semantic validation
-- [Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html) - Advanced branching patterns
+- [Metamorphosis](./05-metamorphosis.html) - Metamorphosis and branching patterns
 - [Reason Layer](./08-reason-layer.html) - Understanding transcendence
