@@ -150,40 +150,8 @@ public function __construct(
 
 フォーマットから値の範囲、さらにビジネスルールまで——名前が存在の条件を定義します。
 
-## 失敗の意味
-
-存在が失敗したとき、その理由は意味を持たなければなりません：
-
-```php
-#[Message([
-    'en' => '{email} is not a valid email address.',
-    'ja' => '{email}は有効なメールアドレスではありません。'
-])]
-final readonly class InvalidEmailException extends DomainException
-{
-    public function __construct(public readonly string $email) {}
-}
-```
-
-フレームワークは最初の例外で止まるのではなく、**すべての検証エラー**を収集します：
-
-```php
-try {
-    $becoming(new UserRegistrationInput(
-        name: '',           // EmptyNameException
-        email: 'invalid',   // InvalidEmailException
-        age: -1             // InvalidAgeException
-    ));
-} catch (SemanticVariableException $e) {
-    $e->getErrors()->getMessages('ja');
-    // ['名前は空にできません。', '無効なメールアドレスです。', '無効な年齢です。']
-}
-```
-
-なぜ存在できないかの完全な理由が、ユーザーの言語で明らかになります。
-
-日本には「言霊」という概念があります。言葉には現実を定義する力が宿るという思想です。意味変数はまさにそれです——名前に込められた意味が、システム全体の整合性を支えます。
+名前に宿る制約が守られないとき、存在は失敗します。その扱い方は[意味例外](./09-error-handling.html)で学びます。
 
 ---
 
-オブジェクト自身が次の変容先を知っています。その仕組み、[型駆動変容](./07-type-driven-metamorphosis.html)へ ➡️
+存在する理由のない存在はありません。[存在理由層](./08-reason-layer.html)へ ➡️

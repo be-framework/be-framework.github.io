@@ -1,60 +1,48 @@
 ---
 layout: docs-ja
-title: "9. エラーハンドリング"
+title: "9. 意味例外"
 category: Manual
 permalink: /manuals/1.0/ja/09-error-handling.html
 ---
 
-# エラーハンドリング & 検証
+# 意味例外
 
 > 「過ちて改めざる、これを過ちという」
 >
 > 　　—孔子『論語』(紀元前551-479年)
 
-## 過ちの意味
+## 意味のある失敗
 
-Beフレームワークにおけるエラーハンドリングは例外をキャッチすることだけではありません—**存在が失敗したときに意味を保持する**ことです。
-
-## 汎用的例外を超えて
-
-従来のエラーハンドリングは意味を失います：
+汎用例外は**何が起きたか**を伝えます：
 
 ```php
-try {
-    $user = new User($name, $email, $age);
-} catch (Exception $e) {
-    // 何が間違っていたのか？なぜ？どう修正するのか？
+catch (Exception $e) {
     echo $e->getMessage();  // "検証に失敗しました"
 }
 ```
 
-## 意味的例外: 失敗における意味
-
-すべての失敗は**特定の存在論的意味**を持ちます：
+それに対して意味例外は**なぜ存在できないか**を伝えます：
 
 ```php
-try {
-    $user = $becoming(new UserInput($name, $email, $age));
-} catch (SemanticVariableException $e) {
+catch (SemanticVariableException $e) {
     foreach ($e->getErrors()->exceptions as $exception) {
         echo get_class($exception) . ": " . $exception->getMessage();
-        // EmptyNameException: 名前は空にできません。
-        // InvalidEmailFormatException: メール形式が無効です。
-        // AgeTooYoungException: 年齢は最低13歳でなければなりません。
+        // EmptyNameException: 名前は空にできません
+        // InvalidEmailException: メール形式が無効です
     }
 }
 ```
 
-## 例外階層
+## ドメイン例外クラス
 
-ドメイン例外は意味のあるカテゴリーを形成します：
+すべての例外は`DomainException`を継承します。技術的例外（`RuntimeException`、`InvalidArgumentException`等）は使いません。失敗は常に**ドメインの意味を持つ失敗**として表現されます：
 
 ```php
 abstract class DomainException extends Exception {}
 
 final readonly class EmptyNameException extends DomainException {}
 
-final readonly class InvalidEmailFormatException extends DomainException
+final readonly class InvalidEmailException extends DomainException
 {
     public function __construct(public string $invalidEmail)
     {
@@ -68,9 +56,22 @@ final readonly class NegativeAgeException extends AgeException {}
 final readonly class AgeTooHighException extends AgeException {}
 ```
 
-## 多言語エラーメッセージ
+ドメイン例外はメッセージだけでなく**構造化データ**を持ちます。`$invalidEmail`プロパティから、プログラムは無効なメールアドレスの値にアクセスできます——表示、APIレスポンス、ログなど、さまざまな用途に：
 
-意味的例外はユーザーの言語で話します：
+```php
+catch (InvalidEmailException $e) {
+    $logData = [
+        'invalid_email' => $e->invalidEmail,    // プログラムからアクセス可能
+        'user_ip' => $request->getClientIp(),
+        'timestamp' => now()
+    ];
+    Logger::warning('Invalid email attempt', $logData);
+}
+```
+
+## 多言語メッセージ
+
+`#[Message]`属性で、例外はユーザーの言語で話します：
 
 ```php
 #[Message([
@@ -81,56 +82,49 @@ final readonly class AgeTooHighException extends AgeException {}
 final readonly class EmptyNameException extends DomainException {}
 
 #[Message([
-    'en' => 'Age must be between {min} and {max} years.',
-    'ja' => '年齢は{min}歳から{max}歳の間でなければなりません。'
+    'en' => 'Age must be at least {min} years.',
+    'ja' => '年齢は最低{min}歳でなければなりません。'
 ])]
-final readonly class AgeOutOfRangeException extends DomainException
+final readonly class AgeTooYoungException extends DomainException
 {
-    public function __construct(
-        public int $age,
-        public int $min = 0,
-        public int $max = 150
-    ) {}
+    public function __construct(public int $min = 13) {}
 }
 ```
 
-## 自動エラー収集
+## エラー収集
 
-フレームワークは投げる前に**すべての検証失敗**を収集します：
+フレームワークは最初のエラーで止まらず、**すべての検証エラー**を収集します：
 
 ```php
-final readonly class UserValidation
-{
-    public function __construct(
-        #[Input] string $name,      // EmptyNameExceptionを投げる可能性
-        #[Input] string $email,     // InvalidEmailFormatExceptionを投げる可能性
-        #[Input] int $age           // NegativeAgeExceptionを投げる可能性
-    ) {
-        // いずれかの検証が失敗すると、すべてのエラーが収集される
-        // 単一のSemanticVariableExceptionがすべてを含む
-    }
+try {
+    $user = $becoming(new UserInput('', 'invalid-email', 10));
+} catch (SemanticVariableException $e) {
+    // 3つのエラーが同時に収集される:
+    // - EmptyNameException
+    // - InvalidEmailException
+    // - AgeTooYoungException
+
+    $messages = $e->getErrors()->getMessages('ja');
+    // ["名前は空にできません", "メール形式が無効です", "年齢は最低13歳でなければなりません"]
 }
 ```
 
-「即座に失敗」ではなく—**完全な理解と共に完全に失敗**。
+「即座に失敗」ではなく——**すべての問題を一度に理解**。
 
-## エラー回復パターン
+## エラーも存在の１つ
 
-エラーは独自の権利における**有効な存在**になります：
+エラー状態も変容の有効な結果として扱えます：
 
 ```php
 #[Be([ValidUser::class, InvalidUser::class])]
 final readonly class UserValidation
 {
     public ValidUser|InvalidUser $being;
-    
-    public function __construct(
-        #[Input] string $name,
-        #[Input] string $email,
-        #[Input] int $age
-    ) {
+
+    public function __construct(#[Input] string $data)
+    {
         try {
-            $this->being = new ValidUser($name, $email, $age);
+            $this->being = new ValidUser($data);
         } catch (ValidationException $e) {
             $this->being = new InvalidUser($e->getErrors());
         }
@@ -138,62 +132,8 @@ final readonly class UserValidation
 }
 ```
 
-## 意味ログ統合
-
-検証失敗は文脈と共に自動的にログされます：
-
-```php
-{
-    "event": "metamorphosis_failed",
-    "source_class": "UserInput",
-    "destination_class": "UserProfile", 
-    "errors": [
-        {
-            "exception": "EmptyNameException",
-            "message": "名前は空にできません",
-            "field": "name",
-            "value": ""
-        }
-    ]
-}
-```
-
-## 開発 vs プロダクション
-
-```php
-// 開発: 詳細なエラー詳細
-if (app()->environment('local')) {
-    $errors->getDetailedMessages();
-}
-
-// プロダクション: ユーザーフレンドリーなメッセージ
-$errors->getMessages('ja');
-// ["名前は空にできません。", "メール形式が無効です。"]
-```
-
-## エラー条件のテスト
-
-```php
-public function testCollectsAllValidationErrors(): void
-{
-    try {
-        $becoming(new UserInput('', 'invalid-email', -5));
-        $this->fail('SemanticVariableExceptionが予期されました');
-    } catch (SemanticVariableException $e) {
-        $errors = $e->getErrors();
-        $this->assertCount(3, $errors->exceptions);
-    }
-}
-```
-
-## 革命
-
-意味的例外はエラーハンドリングを**問題報告**から**意味保持**に変換します。
-
-存在が失敗したとき、理由は**明確で、実行可能で、多言語**になります。
-
-エラーは障害ではありません—それらは成功した変容へとユーザーを導く**有効な存在**です。
+例外で実行を止めるのではなく、エラーを型として表現する。失敗も成功と同じく、変容の正当な結果です。
 
 ---
 
-すべての変容はストーリー、[意味的ログ](./10-semantic-logging.html)として記録されます ➡️
+フレームワークの全体像は[リファレンス](./11-reference-resources.html)へ ➡️

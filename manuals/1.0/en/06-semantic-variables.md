@@ -150,40 +150,8 @@ public function __construct(
 
 From formats to value ranges to business rules—names define the conditions for existence.
 
-## The Meaning of Failure
-
-When existence fails, the reason must carry meaning:
-
-```php
-#[Message([
-    'en' => '{email} is not a valid email address.',
-    'ja' => '{email}は有効なメールアドレスではありません。'
-])]
-final readonly class InvalidEmailException extends DomainException
-{
-    public function __construct(public readonly string $email) {}
-}
-```
-
-The framework does not stop at the first exception—it collects **all validation errors**:
-
-```php
-try {
-    $becoming(new UserRegistrationInput(
-        name: '',           // EmptyNameException
-        email: 'invalid',   // InvalidEmailException
-        age: -1             // InvalidAgeException
-    ));
-} catch (SemanticVariableException $e) {
-    $e->getErrors()->getMessages('ja');
-    // ['名前は空にできません。', '無効なメールアドレスです。', '無効な年齢です。']
-}
-```
-
-The complete reason why existence is impossible becomes clear, in the user's language.
-
-In Japan, there is a concept called *kotodama*—the belief that words hold a spiritual power to define reality. Semantic variables are exactly this: the meaning embedded in names supports the integrity of the entire system.
+When constraints dwelling in names are violated, existence fails. Learn how to handle this in [Semantic Exceptions](./09-error-handling.html).
 
 ---
 
-Objects know their own next transformation. The mechanism, [Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html) ➡️
+No existence exists without reason. [Reason Layer](./08-reason-layer.html) ➡️
