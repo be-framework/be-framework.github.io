@@ -1,7 +1,7 @@
 ---
 layout: docs-en
 title: "13. Log-Driven Development"
-category: Manual
+category: Draft
 permalink: /manuals/1.0/en/13-vision-ldd.html
 ---
 

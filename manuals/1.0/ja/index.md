@@ -26,17 +26,11 @@ permalink: /manuals/1.0/ja/
 ## [6. 意味変数](./06-semantic-variables.html)
 ドメイン固有の検証と存在論的型安全性
 
-## [7. 型駆動変容](./07-type-driven-metamorphosis.html)
-ユニオン型と存在プロパティによる自己決定オブジェクト
-
 ## [8. 存在理由層](./08-reason-layer.html)
 オブジェクトの存在を可能にする理由と存在根拠
 
-## [9. エラーハンドリング & 検証](./09-error-handling.html)
+## [9. 意味例外](./09-error-handling.html)
 意味的例外と多言語エラーメッセージ
-
-## [10. 意味的ログ](./10-semantic-logging.html)
-オブジェクト変容の構造化記録と監査証跡
 
 ## [11. リファレンス](./11-reference-resources.html)
 フレームワーク開発に必要なリソースとリンク集

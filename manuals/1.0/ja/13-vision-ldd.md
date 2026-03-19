@@ -1,7 +1,7 @@
 ---
 layout: docs-ja
 title: "13. ログ駆動開発"
-category: Manual
+category: Draft
 permalink: /manuals/1.0/ja/13-vision-ldd.html
 ---
 

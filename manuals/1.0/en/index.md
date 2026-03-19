@@ -27,17 +27,11 @@ Inseparability of time and domain, self-determination of destiny
 ## [6. Semantic Variables](./06-semantic-variables.html)
 Domain-specific validation and ontological type safety
 
-## [7. Type-Driven Metamorphosis](./07-type-driven-metamorphosis.html)
-Self-determining objects with union types and the Being Property
-
 ## [8. Reason Layer](./08-reason-layer.html)
 Raison d'être and the reasons that enable object existence
 
-## [9. Error Handling & Validation](./09-error-handling.html)
+## [9. Semantic Exceptions](./09-error-handling.html)
 Semantic exceptions and multilingual error messages
-
-## [10. Semantic Logging](./10-semantic-logging.html)
-Structured recording and audit trails of object metamorphosis
 
 ## [11. Reference](./11-reference-resources.html)
 Essential resources and links for framework development
