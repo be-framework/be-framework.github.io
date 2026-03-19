@@ -95,4 +95,4 @@ if ($order instanceof SuccessfulOrder) {
 
 ---
 
-道は１つではありません。[変容](./05-metamorphosis.html)で様々な道を学びます ➡️
+宣言された変容はどう動き出すのか。[生成](./04a-becoming.html)へ ➡️

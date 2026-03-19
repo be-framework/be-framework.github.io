@@ -95,4 +95,4 @@ The Final Object knows that it is complete, from within.
 
 ---
 
-There is not just one way. Learn various paths in [Metamorphosis](./05-metamorphosis.html) ➡️
+How does declared metamorphosis come to life? On to [Becoming](./04a-becoming.html) ➡️
