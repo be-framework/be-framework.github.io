@@ -62,6 +62,26 @@ final readonly class ApplicationReview
 }
 ```
 
+## Type-Based Continuation
+
+Among the candidate classes specified in `#[Be()]`, the framework automatically selects the one whose constructor `#[Input]` parameter matches the type of a public property on the current object:
+
+```php
+// If ApplicationReview's property is of type ApprovedApplication,
+// this class is automatically selected because #[Input] type matches
+final readonly class ApprovalNotification
+{
+    public function __construct(
+        #[Input] ApprovedApplication $application,
+        #[Inject] Mailer $mailer
+    ) {
+        $mailer->send($application->getEmail(), 'Approved!');
+    }
+}
+```
+
+`$being` is a conventional property name often used for this self-determination pattern, but it is not a name required by the framework. Any public property participates in matching.
+
 ## Self-Organizing Pipelines
 
 Like UNIX pipes that combine simple commands to create powerful systems, Be Framework combines typed objects to create natural transformation flows.
@@ -71,7 +91,7 @@ Like UNIX pipes that combine simple commands to create powerful systems, Be Fram
 cat access.log | grep "404" | awk '{print $7}' | sort | uniq -c
 ```
 
-In UNIX, the shell controls the pipeline. In Be Framework, objects declare their own destiny with `#[Be()]`. No external control needed. No controllers, no orchestrators.
+In UNIX, the shell controls the pipeline. In Be Framework, objects declare their own destiny with `#[Be()]`. There is no external control such as controllers or orchestrators.
 
 Heraclitus said "the flowing is the river." Just as it is not that a river flows, but that the flowing itself is the river, domains in the Be Framework are temporal existence that never rest until they reach their end.
 

@@ -4,82 +4,59 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Jekyll-based documentation website for the Be Framework, a PHP framework focused on ontological programming concepts. The site serves as the manual and documentation hub, supporting both English and Japanese languages.
+Jekyll-based documentation website for the Be Framework, a PHP framework focused on ontological programming. Supports English and Japanese.
 
 ## Development Commands
 
-### Local Development Server
 ```bash
-./bin/serve.sh
+./bin/serve.sh          # Start Jekyll dev server via Docker on port 4000
+docker compose up       # Same as above
+bundle exec jekyll serve # If Ruby/Jekyll installed locally
 ```
-This starts a Docker container running Jekyll server on port 4000.
 
-### Alternative Development Methods
-- **Docker Compose**: `docker compose up` (same as serve.sh)
-- **Bundle/Jekyll**: `bundle exec jekyll serve` (if working locally with Ruby/Jekyll installed)
+Jekyll builds to `_site/` automatically. Never edit files in `_site/` — it is build output.
 
-### Build Process
-Jekyll automatically builds the site when serving. The generated site is output to `_site/` directory.
+## Architecture
 
-## Architecture & Structure
+### Page Rendering Pipeline
 
-### Core Structure
-- **Jekyll Configuration**: `_config.yml` - Main Jekyll configuration
-- **Content**: `manuals/1.0/` - Documentation content organized by version and language
-- **Layouts**: `_layouts/` - Jekyll templates for different page types
-- **Includes**: `_includes/` - Reusable template components, especially navigation
-- **Assets**: Static assets are in root and `_site/` after build
+1. Markdown files in `manuals/1.0/{en,ja}/` with frontmatter
+2. Layout templates in `_layouts/` (`docs-en.html`, `docs-ja.html`, `index.html`, `index_ja.html`)
+3. Shared header/footer in `_includes/manuals/1.0/` (header, footer, language-specific contents)
+4. `_plugins/sidebar_generator.rb` auto-generates sidebar navigation from pages with `category: Manual`
+5. `_includes/manuals/1.0/{en,ja}/contents.html` renders the sidebar using Liquid, iterating `site.pages`
 
-### Multi-language Support
-- **English**: `/manuals/1.0/en/`
-- **Japanese**: `/manuals/1.0/ja/`
-- Navigation templates automatically switch between languages
-- Layout templates: `docs-en.html` and `docs-ja.html`
+### Language Switching
 
-### Manual Structure
-The Be Framework manual is organized in 12 chapters:
-1. Overview - Introduction to being-oriented programming
-2. Input Classes - Starting points of transformation
-3. Being Classes - Intermediate transformations
-4. Final Objects - Transformation destinations
-5. Metamorphosis Patterns - Transformation patterns
-6. Semantic Variables - Domain validation and type safety
-7. Type-Driven Metamorphosis - Self-determining objects
-8. Reason Layer - Ontological capabilities
-9. Error Handling - Semantic exceptions
-10. Philosophy Behind - Framework philosophy
-11. Semantic Logging - Metamorphosis tracking
-12. From Doing to Being - Paradigm overview
+Language toggle works by replacing `/en/` ↔ `/ja/` in the page's permalink. For this to work, English and Japanese pages must have **mirrored permalink paths** — e.g., `/manuals/1.0/en/01-overview.html` and `/manuals/1.0/ja/01-overview.html`.
 
-### Navigation System
-- Main navigation is defined in `_includes/manuals/1.0/en/contents.html` (and ja version)
-- Navigation automatically highlights current page
-- Language switching functionality built into templates
-- Table of contents generated dynamically for articles
+### Required Page Frontmatter
 
-### Jekyll Setup
-- Uses `minima` theme
-- Rouge syntax highlighter
-- Kramdown markdown processor
-- GitHub Pages compatible configuration
-- Docker-based development environment
+Every manual page must include:
 
-## Key Files for Content Updates
+```yaml
+---
+layout: docs-en        # or docs-ja
+title: "1. Overview"
+category: Manual
+permalink: /manuals/1.0/en/01-overview.html
+---
+```
 
-### Adding New Manual Pages
-1. Create markdown file in appropriate language directory (`manuals/1.0/en/` or `/ja/`)
-2. Update navigation in `_includes/manuals/1.0/[lang]/contents.html`
-3. Add appropriate frontmatter with layout (`docs-en` or `docs-ja`)
+- `layout` determines language-specific template and sidebar
+- `category: Manual` is required for sidebar inclusion
+- `permalink` must follow the pattern `/manuals/1.0/{lang}/{filename}.html`
+- Pages under `convention/` or with `sidebar: false` are excluded from sidebar
 
-### Modifying Site Structure
-- Main site configuration: `_config.yml`
-- Page layouts: `_layouts/`
-- Reusable components: `_includes/`
-- Styling: Source styles live under your theme or `assets/` (do not edit `_site/`; it is build output)
+### Adding a New Manual Page
 
-### Content Guidelines
-- Manual pages use specific Jekyll layouts (`docs-en`, `docs-ja`)
-- Index page uses special `index` layout
-- Navigation must be manually updated when adding pages
-- Consistent frontmatter required for proper rendering
-- Use page permalinks (`.html`) for cross-links, e.g., `./02-input-classes.html` (avoid linking to `.md`)
+1. Create `.md` file in `manuals/1.0/en/` and `manuals/1.0/ja/` with proper frontmatter
+2. File naming: `NN-slug.md` (number prefix controls sort order in sidebar)
+3. Navigation sidebar is auto-generated — no manual nav update needed
+4. Cross-link to other pages using `.html` extensions (not `.md`): `./02-input-classes.html`
+
+### Other Files
+
+- `llms.txt` / `llms-full.txt` — LLM-friendly project documentation (linked from header as "LLMs")
+- `_plugins/sidebar_data.rb` / `sidebar_generator.rb` — Jekyll generators for sidebar data
+- `Dockerfile` — `jekyll/jekyll:pages` image with webrick

@@ -44,8 +44,8 @@ $user->notify();
 
 Be Framework focuses on BEING (what to be):
 ```php
-$rawData = new UserInput($_POST);
-$validatedUser = new ValidatedUser($rawData);
+$userInput = new UserInput($name, $email);
+$validatedUser = new ValidatedUser($userInput);
 $savedUser = new SavedUser($validatedUser);
 ```
 
@@ -77,13 +77,13 @@ function archiveUser(DeletedUser $user) { }
 
 Each type is not just data, but expresses a specific state of the object. In other words, the temporal change of the object is represented by the type, and you can only do what is possible at that time. For example, you cannot order a non-existent object to be deleted.
 
-## Why Not a "Controller"? (Wu Wei / Non-doing)
+## Why Not a "Controller"?
 
 The "Controller" in traditional MVC frameworks aims for "control and domination" as its name suggests. However, as systems become complex, this "approach of trying to control everything" becomes difficult.
 
 A Controller has "omnipotent freedom" to access all models and components, but having no constraints means implicitly bearing "infinite responsibility" to control and maintain consistency for every procedure in the system by itself.
 
-Be Framework adopts a different approach, incorporating the philosophy of "Wu Wei" (Non-doing) from Eastern philosophy. Rather than operations creating the target data, simple input objects like seeds meet other objects, grow naturally, and "transform themselves (Metamorphosis)" into the target final objects.
+Be Framework adopts a different approach. Rather than operations creating the target data, simple input objects like seeds meet other objects, grow naturally, and "transform themselves (Metamorphosis)" into the target final objects.
 
 ### Commander to Gardener:
 * The Commander orders subordinates (objects) to "Move!". But it is impossible to keep ordering all complex autonomous movements.

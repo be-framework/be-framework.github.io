@@ -20,7 +20,7 @@ This contains only the elements that the object itself possesses, with no extern
 ## Basic Structure
 
 ```php
-#[Be(UserProfile::class)]  // Destiny of Metamorphosis
+#[Be(ValidatedUser::class)]  // Destiny of Metamorphosis
 final readonly class UserInput
 {
     public function __construct(
@@ -34,9 +34,11 @@ final readonly class UserInput
 
 **Pure Identity**: Input Classes contain only *what the object fundamentally is*—no external dependencies or complex logic.
 
+**Use Case Origin**: Every use case has its own Input Class.
+
 **Destination (Object's Destiny)**: The `#[Be()]` attribute declares what this input will become.
 
-**Read-only Properties**: All data is immutable, representing a fixed identity that transforms rather than mutates.
+**Read-only Properties**: All properties are `readonly`. The values of the Input Class are never modified.
 
 ## Examples
 
@@ -64,14 +66,6 @@ final readonly class PaymentInput
     ) {}
 }
 ```
-
-## The Role of Immanence
-
-In Input Classes, everything is **Immanence**. There is no **Transcendence (transcendent power)** here. Transcendence explains powers provided from the outside that cannot be realized by oneself, and they appear later in **Being Classes**.
-
-For example, the `UserInput` class holds only raw data like email address and name. The power to validate if this email is valid, the power to save to the database, the power to send notifications—these are all Transcendence and do not exist in the Input Class. The Input Class simply declares "I am this kind of data".
-
-Input Classes are the starting point of transformation. They represent the first form that meets something beyond itself and changes into something new.
 
 ---
 
