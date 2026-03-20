@@ -91,7 +91,7 @@ Like UNIX pipes that combine simple commands to create powerful systems, Be Fram
 cat access.log | grep "404" | awk '{print $7}' | sort | uniq -c
 ```
 
-In UNIX, the shell controls the pipeline. In Be Framework, objects declare their own destiny with `#[Be()]`. There is no external control such as controllers or orchestrators.
+In UNIX, the shell controls the pipeline. In Be Framework, objects declare their own destiny with `#[Be()]`—no controller or orchestrator controls the flow.
 
 Heraclitus said "the flowing is the river." Just as it is not that a river flows, but that the flowing itself is the river, domains in the Be Framework are temporal existence that never rest until they reach their end.
 

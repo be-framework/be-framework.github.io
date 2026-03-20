@@ -126,7 +126,7 @@ final readonly class PaymentCompleted implements MomentInterface
 
 #### Reason（存在理由）
 
-Reasonは**内在と超越が出会う場所** - 内部データを外部システムやドメインルールに接続するステートレスなゲートウェイです。
+Reasonは内部データと外部システムを接続するステートレスなゲートウェイです。内在と超越が出会う場所とも言えます。
 
 ```php
 final class PaymentGateway implements PaymentGatewayInterface

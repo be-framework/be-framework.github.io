@@ -96,7 +96,7 @@ final class LethalVitalException extends DomainException
 
 ## ステップ 3: Reason（超越）を定義する
 
-JTASProtocol（Japan Triage and Acuity Scale）は開発者の恣意的なルールではありません。超越的な医学の知恵—世界に独立して存在する客観的な知識—を表します。Be Framework では、このようなドメインロジックは第一級市民(first class citizen)になります：注入可能、テスト可能で明示的に表されます。
+JTASProtocol（Japan Triage and Acuity Scale）は開発者の恣意的なルールではありません。超越的な医学の知恵、つまり世界に独立して存在する客観的な知識を表します。Be Frameworkでは、このようなドメインロジックを第一級市民として扱います。注入可能でテスト可能、かつ明示的に表現されます。
 
 ```php
 // src/Reason/JTASProtocol.php
@@ -155,7 +155,7 @@ final readonly class Emergency {} // 緊急
 final readonly class Observation {} // 経過観察
 ```
 
-これらは空のクラスではありません—それ自体が**区別**です。`Emergency` は `Observation` とは根本的に異なり型自体が意味を持ちます。
+これらは中身のないクラスに見えますが、型そのものが意味を持ちます。`Emergency` は `Observation` とは根本的に異なる存在です。
 
 ## ステップ 6: Being クラスを作成
 
