@@ -104,8 +104,6 @@ function processUser(ValidatedUser $user) {
 
 The idea: rather than handling errors, make certain errors impossible to represent.
 
-Sartre wrote "Existence precedes essence"—we exist first, then define ourselves. In Be Framework: Existence precedes action—what you ARE determines what you CAN DO.
-
 ---
 
 ## 4. Heraclitus: Everything Flows
