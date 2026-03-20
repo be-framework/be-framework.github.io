@@ -19,7 +19,7 @@ permalink: /manuals/1.0/ja/04a-becoming.html
 $finalObject = $becoming(new EmailInput($name, $email));
 ```
 
-`EmailInput` → `EmailValidation` → `UserCreation` → `WelcomeMessage`。各クラスの`#[Be()]`宣言に従い、チェーン全体が自動的に実行されます。各オブジェクトは生まれた瞬間に次の存在へと引き継がれ、消滅します。各オブジェクトは次のオブジェクトを生み出すと消滅し、この連鎖が終端まで続きます。
+`EmailInput` → `EmailValidation` → `UserCreation` → `WelcomeMessage`。各クラスの`#[Be()]`宣言に従い、チェーン全体が自動的に実行されます。各オブジェクトは次のオブジェクトを生み出すと消滅し、この連鎖が終端まで続きます。
 
 ## Becomingの取得
 

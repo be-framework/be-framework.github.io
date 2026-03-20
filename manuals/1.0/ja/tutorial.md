@@ -155,7 +155,7 @@ final readonly class Emergency {} // 緊急
 final readonly class Observation {} // 経過観察
 ```
 
-これらは中身のないクラスに見えますが、型そのものが意味を持ちます。`Emergency` は `Observation` とは根本的に異なり型自体が意味を持ちます。
+これらは中身のないクラスに見えますが、型そのものが意味を持ちます。`Emergency` は `Observation` とは根本的に異なる存在です。
 
 ## ステップ 6: Being クラスを作成
 
