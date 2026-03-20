@@ -35,7 +35,7 @@ catch (SemanticVariableException $e) {
 
 ## ドメイン例外クラス
 
-すべての例外は`DomainException`を継承します。技術的例外（`RuntimeException`、`InvalidArgumentException`等）は使いません。失敗は常に**ドメインの意味を持つ失敗**として表現されます：
+すべての例外は`DomainException`を継承します。ドメイン層では技術的例外（`RuntimeException`、`InvalidArgumentException`等）を使わず、常にドメイン例外を使います。失敗は常に**ドメインの意味を持つ失敗**として表現されます：
 
 ```php
 abstract class DomainException extends Exception {}
@@ -109,7 +109,7 @@ try {
 }
 ```
 
-「即座に失敗」ではなく——**すべての問題を一度に理解**。
+最初のエラーで即座に失敗するのではなく、すべての問題を一度に把握できます。
 
 ## エラーも存在の１つ
 
