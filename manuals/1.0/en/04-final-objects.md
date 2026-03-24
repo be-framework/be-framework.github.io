@@ -50,7 +50,7 @@ final readonly class SuccessfulOrder
 }
 ```
 
-`BeenProcessed` is a framework-provided class that records completion evidence—who, when, and on what basis the process completed.
+`BeenProcessed` is an application-defined class. What counts as "evidence of completion" depends on the domain—one application may need to record who deleted what and when, while another may only need a timestamp. You design the `$been` class to capture whatever your domain requires as proof.
 
 In contrast to Input Classes, Final Objects fully express the richness of the domain. Immanence has met Transcendence, undergone transformation, and reached a complete state that requires no further change. Success and failure share the same structure. A `FailedOrder` also has a `$been`—`BeenRejected`.
 
