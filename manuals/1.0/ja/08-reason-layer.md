@@ -65,6 +65,8 @@ final readonly class StandardDelivery
 
 `ExpressShipping $being`という型そのものが、なぜ`ExpressDelivery`になるのかの理由です。フレームワークはこの型を読み取り、対応する変容先を自動選択します。
 
+どのReasonオブジェクトも`#[Inject]`（超越の能力を提供）にも`$being`（運命を決定）にもなれます。違いはオブジェクト自体ではなく、使われ方にあります。ある文脈で`#[Inject]`として患者を評価する`JTASProtocol`が、別の文脈では`$being`として運命を決定することもできます。
+
 ## 存在理由クラスの定義
 
 存在理由クラスは、特定の存在様式を実現するために必要なサービスをまとめたものです：

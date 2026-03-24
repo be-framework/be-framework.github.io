@@ -65,6 +65,8 @@ final readonly class StandardDelivery
 
 The type `ExpressShipping $being` itself is the reason why it becomes `ExpressDelivery`. The framework reads this type and automatically selects the corresponding transformation destination.
 
+Any Reason object can serve as either `#[Inject]` (providing transcendent capabilities) or `$being` (determining destiny). The difference is not in the object itself, but in how it is used. A `JTASProtocol` that evaluates patients as `#[Inject]` in one context could determine destiny as `$being` in another.
+
 ## Defining Reason Classes
 
 Reason classes bundle the services necessary to realize a specific mode of existence:
