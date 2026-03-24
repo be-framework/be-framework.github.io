@@ -183,7 +183,14 @@ $capture->be();               // Commits the capture
 
 ### Moment: Holding Potential
 
-A class that holds a Potential from Reason is called a **Moment** (Hegel's 契機—an essential aspect that only makes sense as part of a whole). A Moment implements `MomentInterface`:
+A class that holds a Potential from Reason is called a **Moment** (Hegel's 契機—an essential aspect that only makes sense as part of a whole). A Moment implements `MomentInterface`, provided by the framework:
+
+```php
+interface MomentInterface
+{
+    public function be(): void;
+}
+```
 
 ```php
 final readonly class PaymentCompleted implements MomentInterface

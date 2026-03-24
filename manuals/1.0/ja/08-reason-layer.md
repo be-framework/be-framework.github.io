@@ -183,7 +183,14 @@ $capture->be();               // キャプチャを確定
 
 ### Moment: Potentialを保持する
 
-ReasonからPotentialを受け取って保持するクラスを**Moment**（ヘーゲルの契機—全体の中でのみ意味を持つ不可欠な側面）と呼びます。Momentは`MomentInterface`を実装します：
+ReasonからPotentialを受け取って保持するクラスを**Moment**（ヘーゲルの契機—全体の中でのみ意味を持つ不可欠な側面）と呼びます。Momentはフレームワークが提供する`MomentInterface`を実装します：
+
+```php
+interface MomentInterface
+{
+    public function be(): void;
+}
+```
 
 ```php
 final readonly class PaymentCompleted implements MomentInterface
