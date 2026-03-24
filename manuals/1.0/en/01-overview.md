@@ -106,4 +106,6 @@ Now back to the opening question. `new DeletedUser($activeUser)` is not an actio
 
 ## Let's Get Started
 
-Let's learn from the foundation. Everything starts from [Input Classes]({{ '/manuals/1.0/en/02-input-classes.html' | relative_url }}) →
+**Want to try it first?** Jump to the [Getting Started]({{ '/manuals/1.0/en/getting-started.html' | relative_url }}) guide for a hands-on Hello World, or the [Tutorial]({{ '/manuals/1.0/en/tutorial.html' | relative_url }}) for a real-world example.
+
+**Want to understand the concepts?** Continue to [Input Classes]({{ '/manuals/1.0/en/02-input-classes.html' | relative_url }}) to learn the foundations step by step →
