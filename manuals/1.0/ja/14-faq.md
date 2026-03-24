@@ -3,7 +3,6 @@ layout: docs-ja
 title: "FAQ"
 category: Manual
 permalink: /manuals/1.0/ja/faq.html
-
 ---
 
 # Be Framework FAQ
