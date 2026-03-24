@@ -443,7 +443,7 @@ Every Input, Being, and Final class should be `final readonly class`.
 src/
 ├── Input/          # Starting points (pure immanence)
 ├── Being/          # Intermediate transformations
-├── Moment/         # Essential parts constituting the whole (experimental)
+├── Moment/         # Essential parts constituting the whole
 ├── Final/          # Destinations (complete existence)
 ├── Reason/         # Tool sets enabling existence
 ├── Semantic/       # Domain vocabulary (what CAN exist)
@@ -457,9 +457,7 @@ Side effects are completed inside the constructor, delegated to Reason. The obje
 
 Persistence and external communication are implementation details confined to Reason. Existence types are freed from database schemas and API constraints.
 
-## Potential and Moment (Experimental)
-
-> This is an evolving concept that may be refined based on practical experience.
+## Potential and Moment
 
 Use this pattern when multiple external operations must succeed atomically — all commit together, or none at all. For simple cases where Reason returns an immediate value, this is unnecessary.
 
