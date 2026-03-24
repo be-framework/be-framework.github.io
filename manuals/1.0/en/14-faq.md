@@ -11,9 +11,11 @@ permalink: /manuals/1.0/en/faq.html
 
 ### Q. Is this a new "programming paradigm"?
 
-A. Yes. Be Framework makes temporal existence first-class citizens and designs based on "what something is" rather than "what it does."
+A. A pattern is a better answer to an existing question. A paradigm changes the question itself.
 
-While it's a significant paradigm shift philosophically, implementation-wise it coexists with OOP/FP/DDD and doesn't require replacing existing styles.
+`$email` is not validated externally — its very existence is proof of correctness. Semantic variables, self-determination, self-proof, choreography — these are not individual features but all derived from a single viewpoint: "seeing the world from the domain's own self."
+
+Procedural programming asked **HOW** (how to do it). Object-oriented programming asked **WHAT** (what is it). Being-oriented programming asks **WHETHER** (can it even exist).
 
 ---
 
@@ -25,19 +27,17 @@ A. They operate at different layers and can coexist.
 
 Web MVC effectively functions as input/output responsibility separation, and DDD is a domain modeling methodology. Be Framework is a design paradigm that organizes object creation through "existence conditions and temporal transformation" — it can be called from an MVC Controller or used inside a DDD aggregate.
 
-Interestingly, what MVC originally aimed for — "projecting mental models" — and what DDD aimed for — "coding in business language" — are naturally realized in Be Framework through existence types and semantic variables.
-
 ### Q1-a. How does this relate to CQRS?
 
-A. The separation of "decision-making" and "data retrieval" that CQRS achieves through external structure is naturally inherent within a single existence type in Be.
+A. CQRS is an architecture that separates "operations that change data (Command)" from "operations that read data (Query)." In Be, this separation is naturally inherent within a single existence type.
 
 The constructor is decision-making (Command), and public properties are data retrieval (Query). Business decisions that tend to get buried in generic methods like `updateUser()` are expressed as type names like `DeactivatedUser`, so intent is never lost from the code.
 
 ### Q2. Is this OOP or FP?
 
-A. It incorporates elements of both, but the relationship with OOP is more fundamental.
+A. OOP elements are central, but FP elements are also incorporated.
 
-OOP originally envisioned a world where autonomous objects cooperate through messages. In practice, however, service layers issue instructions while objects become obedient data containers. In Be, objects declare their own destiny through `#[Be]` and self-organize without external orchestrators. This is a recovery of the autonomy that OOP originally intended.
+In Be, objects declare their own destiny through `#[Be]` and self-organize without external orchestrators.
 
 ### Q2-a. How are FP elements utilized?
 
@@ -151,7 +151,7 @@ See [Final Objects](./04-final-objects.html) for details.
 
 A. Inside the constructor, delegated to Reason and completed there.
 
-Traditional service layers operate on objects from the outside — "save this," "notify that." In Be, the object itself completes side effects in its constructor. This is the autonomy described in [Q2](#q2-is-this-oop-or-fp) in action — no external orchestrator needed.
+Traditional service layers operate on objects from the outside — "save this," "notify that." In Be, the object itself completes side effects in its constructor. No external orchestrator needed.
 
 ### Q12. How are exceptions handled?
 
@@ -179,13 +179,11 @@ See [Implementation Guidelines](./05-metamorphosis.html) for details.
 
 ### Q15. Can this be introduced to existing MVC apps?
 
-A. Yes. Replace the Use Case layer with Be, and just call `becoming(new …Input)` from Controllers. Gradually organize into immanent/transcendent.
+A. Yes. Replace the Use Case layer with Be and call `becoming(new …Input)` from Controllers. Gradual migration is possible.
 
 ### Q16. Where do you use DB or external APIs?
 
-A. Confined to Reason.
-
-Persistence and external communication are implementation details, not user concerns. By consolidating them in Reason, existence types are freed from database schemas and API constraints — the definition of existence is separated from technical means.
+A. Confined to Reason. Existence types are freed from database schemas and API constraints — the definition of existence is separated from technical means.
 
 ### Q17. What are the framework dependencies?
 
@@ -249,6 +247,9 @@ final readonly class UserInput {
 
 // 2) Being (moment of transformation)
 final readonly class ValidatedUser {
+    public string $display;
+    public bool $isValid;
+
     public function __construct(
         #[Input] string $name,
         #[Input] string $email,
@@ -258,8 +259,6 @@ final readonly class ValidatedUser {
         $this->display = $fmt->format($name);
         $this->isValid = $v->validate($email);
     }
-    public string $display;
-    public bool $isValid;
 }
 
 // 3) Execution (self-organization)
