@@ -43,10 +43,10 @@ Each moment never returns, and new existence preserves previous forms as memory 
 Like living beings in reality, objects determine their own destiny through the interaction between immanence and transcendence. This is not following a predetermined route, but natural metamorphosis responding to the circumstances of that moment:
 
 ```php
-#[Be([ApprovedApplication::class, RejectedApplication::class])]
+#[Be([ApprovalNotification::class, RejectionNotification::class])]
 final readonly class ApplicationReview
 {
-    public ApprovedApplication|RejectedApplication $being;
+    public Approved|Rejected $being;
 
     public function __construct(
         #[Input] array $documents,                // Immanence
@@ -56,26 +56,28 @@ final readonly class ApplicationReview
 
         // Destiny is decided at this very moment
         $this->being = $result->isApproved()
-            ? new ApprovedApplication($documents, $result->getScore())
-            : new RejectedApplication($result->getReasons());
+            ? new Approved($documents, $result->getScore())
+            : new Rejected($result->getReasons());
     }
 }
 ```
 
+`Approved` and `Rejected` are Reason-layer destiny markers—small objects that carry the decision and its basis, analogous to `Emergency` and `Observation` in the triage tutorial. The decision logic lives in the Reason layer because it completes within the constructor. When deferred behavior is needed—methods to be called after construction, like `assignER()` in the triage example—those capabilities belong on the Final class.
+
 ## Type-Based Continuation
 
-Among the candidate classes specified in `#[Be()]`, the framework automatically selects the one whose constructor `#[Input]` parameter matches the type of a public property on the current object:
+Among the candidate classes specified in `#[Be()]`, the framework automatically selects the one whose constructor `#[Input]` parameter can be satisfied by the current object's public properties:
 
 ```php
-// If ApplicationReview's property is of type ApprovedApplication,
-// this class is automatically selected because #[Input] type matches
+// ApplicationReview's $being is of type Approved,
+// so this class is selected because #[Input] Approved matches
 final readonly class ApprovalNotification
 {
     public function __construct(
-        #[Input] ApprovedApplication $application,
+        #[Input] Approved $approval,
         #[Inject] Mailer $mailer
     ) {
-        $mailer->send($application->getEmail(), 'Approved!');
+        $mailer->send($approval->getEmail(), 'Approved!');
     }
 }
 ```
