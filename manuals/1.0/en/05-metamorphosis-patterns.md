@@ -49,15 +49,16 @@ final readonly class ApplicationReview
     public Approved|Rejected $being;
 
     public function __construct(
-        #[Input] array $documents,                // Immanence
-        #[Inject] ReviewService $reviewer         // Transcendence
+        #[Input] string $email,                    // Immanence
+        #[Input] array $documents,                 // Immanence
+        #[Inject] ReviewService $reviewer          // Transcendence
     ) {
         $result = $reviewer->evaluate($documents);
 
         // Destiny is decided at this very moment
         $this->being = $result->isApproved()
-            ? new Approved($documents, $result->getScore())
-            : new Rejected($result->getReasons());
+            ? new Approved($email, $result->getScore())
+            : new Rejected($email, $result->getReasons());
     }
 }
 ```
@@ -77,7 +78,7 @@ final readonly class ApprovalNotification
         #[Input] Approved $approval,
         #[Inject] Mailer $mailer
     ) {
-        $mailer->send($approval->documents, 'Approved! Score: ' . $approval->score);
+        $mailer->send($approval->email, 'Approved! Score: ' . $approval->score);
     }
 }
 ```
