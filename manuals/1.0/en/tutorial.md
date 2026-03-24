@@ -143,9 +143,9 @@ final readonly class PatientArrival
 
 The `#[Be]` attribute declares destiny: this arrival WILL BECOME a TriageAssessment.
 
-## Step 5: Create Destiny Markers
+## Step 5: Create Reason Objects
 
-These types represent the two possible destinies:
+These Reason objects represent the two possible destinies. The Reason determines the destiny—"this is it":
 
 ```php
 // src/Reason/Emergency.php
@@ -155,7 +155,7 @@ final readonly class Emergency {}
 final readonly class Observation {}
 ```
 
-These aren't empty classes—they ARE the distinction. An `Emergency` is fundamentally different from an `Observation`. The type itself carries meaning.
+These aren't empty classes—they ARE the distinction. An `Emergency` is fundamentally different from an `Observation`. The type itself carries meaning. When assigned to `$being`, the Reason's type determines which Final class comes next.
 
 ## Step 6: Create Being Class
 
@@ -367,9 +367,9 @@ src/
 │   ├── EmergencyCase.php       # Final form: emergency
 │   └── ObservationCase.php     # Final form: observation
 ├── Reason/
-│   ├── Emergency.php           # Destiny marker
-│   ├── JTASProtocol.php        # Transcendent wisdom
-│   └── Observation.php         # Destiny marker
+│   ├── Emergency.php           # Reason: determines destiny
+│   ├── JTASProtocol.php        # Reason: transcendent wisdom
+│   └── Observation.php         # Reason: determines destiny
 └── Semantic/
     ├── BodyTemperature.php     # What CAN exist
     └── HeartRate.php

@@ -62,7 +62,7 @@ final readonly class ApplicationReview
 }
 ```
 
-`Approved` and `Rejected` are Reason-layer destiny markers—small objects that carry the decision and its basis, analogous to `Emergency` and `Observation` in the triage tutorial. The decision logic lives in the Reason layer because it completes within the constructor. When deferred behavior is needed—methods to be called after construction, like `assignER()` in the triage example—those capabilities belong on the Final class.
+`Approved` and `Rejected` are Reason objects—like `Emergency` and `Observation` in the triage tutorial. The Reason determines the destiny: it carries the decision and its basis, and when assigned to `$being`, its type decides which class comes next. Decision logic that completes within the constructor belongs in the Reason layer. When deferred behavior is needed—methods to be called after construction, like `assignER()` in the triage example—those capabilities belong on the Final class.
 
 ## Type-Based Continuation
 

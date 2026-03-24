@@ -62,7 +62,7 @@ final readonly class ApplicationReview
 }
 ```
 
-`Approved`と`Rejected`はReason層の運命マーカーです。判定結果とその根拠を持つ小さなオブジェクトで、Tutorialの`Emergency`や`Observation`と同じ役割です。判定ロジックはコンストラクタ内で完結するのでReason層に置きます。一方、生成後に呼び出される振る舞い—Tutorialの`assignER()`のような遅延実行メソッド—はFinalクラスに持たせます。
+`Approved`と`Rejected`はReasonオブジェクトです。Tutorialの`Emergency`や`Observation`と同じ役割です。理由（Reason）が運命を決めます。判定結果とその根拠を持ち、`$being`に代入されると、その型が次のクラスを決定します。コンストラクタ内で完結する判定ロジックはReason層に置きます。一方、生成後に呼び出される振る舞い—Tutorialの`assignER()`のような遅延実行メソッド—はFinalクラスに持たせます。
 
 ## 型による継続
 

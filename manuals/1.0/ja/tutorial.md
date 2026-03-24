@@ -143,9 +143,9 @@ final readonly class PatientArrival
 
 `#[Be]` 属性は運命を宣言します：この到着は TriageAssessment に**なります**。
 
-## ステップ 5: 運命マーカーを作成
+## ステップ 5: Reasonオブジェクトを作成
 
-これらの型は2つの可能な運命を表します：
+これらのReasonオブジェクトは2つの可能な運命を表します。理由（Reason）が「これでいい」と運命を決めます：
 
 ```php
 // src/Reason/Emergency.php
@@ -155,7 +155,7 @@ final readonly class Emergency {} // 緊急
 final readonly class Observation {} // 経過観察
 ```
 
-これらは中身のないクラスに見えますが、型そのものが意味を持ちます。`Emergency` は `Observation` とは根本的に異なる存在です。
+これらは中身のないクラスに見えますが、型そのものが意味を持ちます。`Emergency` は `Observation` とは根本的に異なる存在です。`$being`に代入されると、Reasonの型が次のFinalクラスを決定します。
 
 ## ステップ 6: Being クラスを作成
 
@@ -368,9 +368,9 @@ src/
 │   ├── EmergencyCase.php       # 最終形態：緊急
 │   └── ObservationCase.php     # 最終形態：経過観察
 ├── Reason/
-│   ├── Emergency.php           # 運命マーカー
-│   ├── JTASProtocol.php        # 超越的な知恵
-│   └── Observation.php         # 運命マーカー
+│   ├── Emergency.php           # Reason: 運命を決定
+│   ├── JTASProtocol.php        # Reason: 超越的な知恵
+│   └── Observation.php         # Reason: 運命を決定
 └── Semantic/
     ├── BodyTemperature.php     # 何が存在できるか
     └── HeartRate.php
