@@ -51,7 +51,7 @@ Immanence meets Transcendence, the logic of transformation takes effect, and new
 
 ### Life (Being)
 
-The object exposes its "form as it should be" to the world as `public readonly` properties. But no one touches those properties—the object vanishes shortly after birth, making way for the next.
+The object exposes its "form as it should be" to the world as `public readonly` properties. The framework reads these properties and passes them as `#[Input]` to the next class in the chain. The object then vanishes, making way for the next.
 
 ### Becoming the Self You Want to Be
 

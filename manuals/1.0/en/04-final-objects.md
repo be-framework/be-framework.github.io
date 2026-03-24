@@ -50,6 +50,8 @@ final readonly class SuccessfulOrder
 }
 ```
 
+`BeenProcessed` is a framework-provided class that records completion evidence—who, when, and on what basis the process completed.
+
 In contrast to Input Classes, Final Objects fully express the richness of the domain. Immanence has met Transcendence, undergone transformation, and reached a complete state that requires no further change. Success and failure share the same structure. A `FailedOrder` also has a `$been`—`BeenRejected`.
 
 ## Completeness of Temporal Being
@@ -75,7 +77,7 @@ In traditional programming, external tests judge whether an object has been proc
 
 ## Multiple Final Destinies
 
-Objects can have multiple possible final forms determined by their nature:
+Objects can have multiple possible final forms determined by their nature. Here `$becoming` triggers the metamorphosis chain—this mechanism is explained in the [next chapter](./04a-becoming.html):
 
 ```php
 $order = $becoming(new OrderInput($items, $card));
