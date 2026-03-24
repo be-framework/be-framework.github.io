@@ -6,6 +6,8 @@ Be Framework is a PHP framework for ontological programming. Instead of telling 
 
 ## Why Being Over Doing
 
+A pattern is a better answer to an existing question. A paradigm changes the question itself. Procedural programming asked **HOW** (how to do it). Object-oriented programming asked **WHAT** (what is it). Being-oriented programming asks **WHETHER** (can it even exist).
+
 Traditional code scatters defensive if statements throughout — "what if called in this state?", "what if null?" — because invalid states are representable. Service layers orchestrate from outside, and objects become obedient data containers.
 
 In Be, types are existence conditions. There are no types for invalid states, so guard statements disappear. Objects declare their own destiny through `#[Be]` and self-organize without external orchestrators. Side effects complete inside the constructor. Once born, objects are immutable.
@@ -252,6 +254,24 @@ final readonly class DateRange
 public function __construct(string $startDate, string $endDate) {}
 ```
 
+Confirmation matching also works as cross-field validation:
+
+```php
+final readonly class EmailConfirmation
+{
+    #[Validate]
+    public function validate(string $email, string $confirmEmail): void
+    {
+        if ($email !== $confirmEmail) {
+            throw new EmailMismatchException();
+        }
+    }
+}
+
+// EmailConfirmation auto-applied because $email and $confirmEmail are present
+public function __construct(string $email, string $confirmEmail) {}
+```
+
 External service validation also works as cross-field validation:
 
 ```php
@@ -437,11 +457,37 @@ Side effects are completed inside the constructor, delegated to Reason. The obje
 
 Persistence and external communication are implementation details confined to Reason. Existence types are freed from database schemas and API constraints.
 
-## Moment (Experimental)
+## Potential and Moment (Experimental)
 
 > This is an evolving concept that may be refined based on practical experience.
 
-A Moment is an essential part constituting a Final — a realizable potential that becomes actuality through `be()`. Used in the **Diamond Metamorphosis** pattern where multiple parallel pipelines converge into a single Final.
+Use this pattern when multiple external operations must succeed atomically — all commit together, or none at all. For simple cases where Reason returns an immediate value, this is unnecessary.
+
+### Potential: Prepared but Uncommitted
+
+A Reason method prepares an external operation and returns a **Potential** — an object that holds a deferred operation, realized later via `be()`:
+
+```php
+final class PaymentGateway
+{
+    public function authorize(string $cardNumber, int $amount): PaymentCapture
+    {
+        $authCode = $this->api->authorize($cardNumber, $amount);
+
+        return new PaymentCapture(
+            $authCode,
+            $amount,
+            fn () => $this->api->capture($authCode, $amount),
+        );
+    }
+}
+```
+
+`PaymentCapture` is a Potential — payment is authorized but not yet captured. Calling `be()` commits it.
+
+### Moment: Holding Potential
+
+A class that holds a Potential is called a **Moment** — an essential part constituting a Final. A Moment implements `MomentInterface`:
 
 ```php
 final readonly class PaymentCompleted implements MomentInterface
@@ -449,9 +495,9 @@ final readonly class PaymentCompleted implements MomentInterface
     public PaymentCapture $capture;
 
     public function __construct(
-        #[CardNumber] public string $cardNumber,
-        #[Amount] public int $amount,
-        #[Inject] PaymentGatewayInterface $gateway,
+        #[Input] public string $cardNumber,
+        #[Input] public int $amount,
+        #[Inject] PaymentGateway $gateway,
     ) {
         $this->capture = $gateway->authorize($cardNumber, $amount);
     }
@@ -462,6 +508,8 @@ final readonly class PaymentCompleted implements MomentInterface
     }
 }
 ```
+
+### Convergence: Final Realizes Moments
 
 The Final calls `be()` on its Moments in its own constructor — this is not external orchestration but **Doing for Being**: the Final realizing its parts in order to bring itself into existence.
 
