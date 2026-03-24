@@ -37,6 +37,8 @@ final readonly class ValidatedUser
 }
 ```
 
+`#[Input]` parameters automatically receive values from the previous class's public properties by matching names. `UserInput`'s `public string $name` maps to `ValidatedUser`'s `#[Input] string $name`. `#[Inject]` parameters receive external dependencies from the DI container. The detailed rules of this automatic matching are explained in [Chapter 5: Metamorphosis](./05-metamorphosis-patterns.html).
+
 ## Objects as Temporal Beings
 
 In Be Framework, objects are not treated as static data structures, but as temporal beings that exist only within a specific moment in time.
