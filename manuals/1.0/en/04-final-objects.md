@@ -50,7 +50,7 @@ final readonly class SuccessfulOrder
 }
 ```
 
-The `$been` class is application-defined with a domain-specific name. `SuccessfulOrder` has `BeenConfirmed`, `FailedOrder` has `BeenRejected`, a `DeletedUser` might have `BeenDeleted`. What counts as "evidence of completion" depends on the domain—you design the class to capture whatever your domain requires as proof.
+The `$been` property uses an application-defined, domain-specific type. `SuccessfulOrder` has `BeenConfirmed`, `FailedOrder` has `BeenRejected`, a `DeletedUser` might have `BeenDeleted`. What counts as "evidence of completion" depends on the domain—you design the class to capture whatever your domain requires as proof.
 
 In contrast to Input Classes, Final Objects fully express the richness of the domain. Immanence has met Transcendence, undergone transformation, and reached a complete state that requires no further change.
 

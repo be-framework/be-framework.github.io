@@ -50,7 +50,7 @@ final readonly class SuccessfulOrder
 }
 ```
 
-`$been`クラスはアプリケーションが定義する、ドメイン固有の名前を持つクラスです。`SuccessfulOrder`には`BeenConfirmed`、`FailedOrder`には`BeenRejected`、`DeletedUser`なら`BeenDeleted`というように命名します。何を「完了の証跡」とするかはドメインによって異なり、必要な証跡に応じてクラスを設計します。
+`$been`プロパティはアプリケーションが定義する、ドメイン固有の型を持ちます。`SuccessfulOrder`には`BeenConfirmed`、`FailedOrder`には`BeenRejected`、`DeletedUser`なら`BeenDeleted`というように命名します。何を「完了の証跡」とするかはドメインによって異なり、必要な証跡に応じてクラスを設計します。
 
 入力クラスとは対照的に、最終オブジェクトはドメインの豊かさを完全に表現した存在です。内在が超越と出会い、変容を経て、これ以上変わる必要のない完全な状態に達しています。
 

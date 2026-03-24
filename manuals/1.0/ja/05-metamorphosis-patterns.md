@@ -77,7 +77,7 @@ final readonly class ApprovalNotification
         #[Input] Approved $approval,
         #[Inject] Mailer $mailer
     ) {
-        $mailer->send($approval->getEmail(), 'Approved!');
+        $mailer->send($approval->documents, 'Approved! Score: ' . $approval->score);
     }
 }
 ```
