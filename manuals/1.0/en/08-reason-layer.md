@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "8. Reason Layer"
+title: "Reason Layer"
 category: Manual
 permalink: /manuals/1.0/en/08-reason-layer.html
 ---

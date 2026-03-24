@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "8. 存在理由層"
+title: "存在理由層"
 category: Manual
 permalink: /manuals/1.0/ja/08-reason-layer.html
 ---

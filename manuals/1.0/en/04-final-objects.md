@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "4. Final Objects"
+title: "Final Objects"
 category: Manual
 permalink: /manuals/1.0/en/04-final-objects.html
 ---

@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "2. 入力クラス"
+title: "入力クラス"
 category: Manual
 permalink: /manuals/1.0/ja/02-input-classes.html
 ---

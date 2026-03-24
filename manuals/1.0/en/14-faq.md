@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "14. FAQ"
+title: "FAQ"
 category: Manual
 permalink: /manuals/1.0/en/faq.html
 ---

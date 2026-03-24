@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "3. Being Classes"
+title: "Being Classes"
 category: Manual
 permalink: /manuals/1.0/en/03-being-classes.html
 ---

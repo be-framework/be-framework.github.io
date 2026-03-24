@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "10. 意味的ログ"
+title: "意味的ログ"
 category: Draft
 permalink: /manuals/1.0/ja/10-semantic-logging.html
 ---

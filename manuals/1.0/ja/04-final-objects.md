@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "4. 最終オブジェクト"
+title: "最終オブジェクト"
 category: Manual
 permalink: /manuals/1.0/ja/04-final-objects.html
 ---

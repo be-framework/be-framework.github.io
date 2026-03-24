@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "2. Input Classes"
+title: "Input Classes"
 category: Manual
 permalink: /manuals/1.0/en/02-input-classes.html
 ---

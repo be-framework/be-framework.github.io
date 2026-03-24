@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "1. 概要"
+title: "概要"
 category: Manual
 permalink: /manuals/1.0/ja/01-overview.html
 ---

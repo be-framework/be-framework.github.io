@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "1. Overview"
+title: "Overview"
 category: Manual
 permalink: /manuals/1.0/en/01-overview.html
 ---

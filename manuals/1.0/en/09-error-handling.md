@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "9. Semantic Exceptions"
+title: "Semantic Exceptions"
 category: Manual
 permalink: /manuals/1.0/en/09-error-handling.html
 ---

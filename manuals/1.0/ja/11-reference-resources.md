@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "11. リファレンス"
+title: "リファレンス"
 category: Manual
 permalink: /manuals/1.0/ja/11-reference-resources.html
 ---

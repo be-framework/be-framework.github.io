@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "9. 意味例外"
+title: "意味例外"
 category: Manual
 permalink: /manuals/1.0/ja/09-error-handling.html
 ---

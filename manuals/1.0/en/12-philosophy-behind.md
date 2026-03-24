@@ -1,6 +1,6 @@
 ---
 layout: docs-en
-title: "12. Philosophy Behind"
+title: "Philosophy Behind"
 category: Manual
 permalink: /manuals/1.0/en/12-philosophy-behind.html
 ---

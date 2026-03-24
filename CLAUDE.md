@@ -37,7 +37,7 @@ Every manual page must include:
 ```yaml
 ---
 layout: docs-en        # or docs-ja
-title: "1. Overview"
+title: "Overview"
 category: Manual
 permalink: /manuals/1.0/en/01-overview.html
 ---
@@ -47,6 +47,7 @@ permalink: /manuals/1.0/en/01-overview.html
 - `category: Manual` is required for sidebar inclusion
 - `permalink` must follow the pattern `/manuals/1.0/{lang}/{filename}.html`
 - Pages under `convention/` or with `sidebar: false` are excluded from sidebar
+- `10-semantic-logging` and `13-vision-ldd` are intentionally hidden from the sidebar (`sidebar: false`)
 
 ### Adding a New Manual Page
 

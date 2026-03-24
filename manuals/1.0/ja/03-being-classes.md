@@ -1,6 +1,6 @@
 ---
 layout: docs-ja
-title: "3. 存在クラス"
+title: "存在クラス"
 category: Manual
 permalink: /manuals/1.0/ja/03-being-classes.html
 ---
