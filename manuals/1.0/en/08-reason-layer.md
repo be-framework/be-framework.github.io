@@ -65,6 +65,8 @@ final readonly class StandardDelivery
 
 The type `ExpressShipping $being` itself is the reason why it becomes `ExpressDelivery`. The framework reads this type and automatically selects the corresponding transformation destination.
 
+Any Reason object can serve as either `#[Inject]` (providing transcendent capabilities) or `$being` (determining destiny). The difference is not in the object itself, but in how it is used. A `JTASProtocol` that evaluates patients as `#[Inject]` in one context could determine destiny as `$being` in another.
+
 ## Defining Reason Classes
 
 Reason classes bundle the services necessary to realize a specific mode of existence:
@@ -144,6 +146,102 @@ public function __construct(
 ```
 
 "What is needed to become ExpressDelivery?" — a single reason object answers that question. Objects themselves declare "what to become", while reason objects realize "how to achieve that state".
+
+## Reason Returning Potential
+
+So far, Reason has returned immediate values like `Fee`. But consider order processing: inventory must be reserved, payment captured, and shipping arranged—and all three must succeed before any of them commit. If payment fails after inventory is reserved, that reservation must not persist.
+
+For this kind of all-or-nothing coordination, Reason returns a **Potential**—an object that holds a deferred operation, realized later via `be()`. This pattern is only needed when multiple external operations must all commit atomically.
+
+### Potential: Prepared but Uncommitted
+
+A Reason method prepares the external operation and returns a Potential:
+
+```php
+final class PaymentGateway
+{
+    public function authorize(string $cardNumber, int $amount): PaymentCapture
+    {
+        $authCode = $this->api->authorize($cardNumber, $amount);
+
+        return new PaymentCapture(
+            $authCode,
+            $amount,
+            fn () => $this->api->capture($authCode, $amount),
+        );
+    }
+}
+```
+
+`PaymentCapture` is a Potential—it holds the authorization code and a deferred capture operation. The payment is authorized but not yet captured. Calling `be()` commits it:
+
+```php
+$capture = $gateway->authorize($cardNumber, $amount);
+$capture->authorizationCode;  // Available immediately
+$capture->be();               // Commits the capture
+```
+
+### Moment: Holding Potential
+
+A class that holds a Potential from Reason is called a **Moment** (Hegel's 契機—an essential aspect that only makes sense as part of a whole). A Moment implements `MomentInterface`, provided by the framework:
+
+```php
+interface MomentInterface
+{
+    public function be(): void;
+}
+```
+
+```php
+final readonly class PaymentCompleted implements MomentInterface
+{
+    public PaymentCapture $capture;
+
+    public function __construct(
+        #[Input] public string $cardNumber,
+        #[Input] public int $amount,
+        #[Inject] PaymentGateway $gateway,
+    ) {
+        $this->capture = $gateway->authorize($cardNumber, $amount);
+    }
+
+    public function be(): void
+    {
+        $this->capture->be();
+    }
+}
+```
+
+### Convergence: Final Realizes Moments
+
+When multiple Moments must all succeed together, a Final Object receives them and calls `be()` on each. This is not an external command—it is self-completion:
+
+```php
+final readonly class OrderConfirmed
+{
+    public string $orderId;
+    public string $status;
+
+    public function __construct(
+        public InventoryReserved $inventory,
+        public PaymentCompleted $payment,
+        public ShippingArranged $shipping,
+    ) {
+        $this->inventory->be();
+        $this->payment->be();
+        $this->shipping->be();
+
+        $this->orderId = 'ORD-' . date('Ymd') . '-' . bin2hex(random_bytes(4));
+        $this->status = 'confirmed';
+    }
+}
+```
+
+If any Moment cannot be created (because its Reason failed), the Final Object is never constructed. If all Moments exist, `be()` commits every deferred operation. No manual rollback flags, no nested try-catch.
+
+### When to Use This Pattern
+
+Use Potential-returning Reason when multiple external operations must succeed atomically—all commit together, or none at all. For simple cases where Reason returns an immediate value, Potential is unnecessary.
 
 ---
 

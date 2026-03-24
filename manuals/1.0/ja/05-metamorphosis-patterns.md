@@ -43,39 +43,42 @@ final readonly class WelcomeMessage { /* ... */ }
 現実の生物と同様に、オブジェクトは内在と超越の相互作用によって、自身の運命を決定します。これは予め決められたルートを辿るのではなく、その瞬間の状況に応じた自然な変容です：
 
 ```php
-#[Be([ApprovedApplication::class, RejectedApplication::class])]
+#[Be([ApprovalNotification::class, RejectionNotification::class])]
 final readonly class ApplicationReview
 {
-    public ApprovedApplication|RejectedApplication $being;
+    public Approved|Rejected $being;
 
     public function __construct(
-        #[Input] array $documents,                // 内在
-        #[Inject] ReviewService $reviewer         // 超越
+        #[Input] string $email,                    // 内在
+        #[Input] array $documents,                 // 内在
+        #[Inject] ReviewService $reviewer          // 超越
     ) {
         $result = $reviewer->evaluate($documents);
 
         // 運命は今この瞬間に決まる
         $this->being = $result->isApproved()
-            ? new ApprovedApplication($documents, $result->getScore())
-            : new RejectedApplication($result->getReasons());
+            ? new Approved($email, $result->getScore())
+            : new Rejected($email, $result->getReasons());
     }
 }
 ```
 
+`Approved`と`Rejected`はReasonオブジェクトです。Tutorialの`Emergency`や`Observation`と同じ役割です。理由（Reason）が運命を決めます。判定結果とその根拠を持ち、`$being`に代入されると、その型が次のクラスを決定します。コンストラクタ内で完結する判定ロジックはReason層に置きます。一方、生成後に呼び出される振る舞い—Tutorialの`assignER()`のような遅延実行メソッド—はFinalクラスに持たせます。
+
 ## 型による継続
 
-次の変容先は自動的に選択されます。具体的には、`#[Be()]`で指定された候補クラスのうち、現在のオブジェクトのpublicプロパティの型と`#[Input]`引数の型が一致するクラスが選ばれます：
+`#[Be()]`で指定された候補クラスのうち、現在のオブジェクトのpublicプロパティで`#[Input]`コンストラクタ引数を満たせるクラスが自動的に選択されます：
 
 ```php
-// ApplicationReviewのプロパティがApprovedApplication型なら
-// #[Input]の型がマッチするこのクラスが自動的に選択される
+// ApplicationReviewの$beingがApproved型なので
+// #[Input] Approvedがマッチするこのクラスが選択される
 final readonly class ApprovalNotification
 {
     public function __construct(
-        #[Input] ApprovedApplication $application,
+        #[Input] Approved $approval,
         #[Inject] Mailer $mailer
     ) {
-        $mailer->send($application->getEmail(), 'Approved!');
+        $mailer->send($approval->email, 'Approved! Score: ' . $approval->score);
     }
 }
 ```
