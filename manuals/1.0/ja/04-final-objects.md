@@ -24,7 +24,7 @@ final readonly class SuccessfulOrder
     public string $confirmationCode;
     public DateTimeImmutable $timestamp;
     public string $message;
-    public BeenProcessed $been;          // 完了の証跡
+    public BeenConfirmed $been;          // 完了の証跡
 
     public function __construct(
         #[Input] Money $total,                    // 内在
@@ -37,7 +37,7 @@ final readonly class SuccessfulOrder
         $this->timestamp = new DateTimeImmutable();
         $this->message = "注文確認: {$this->orderId}";
 
-        $this->been = new BeenProcessed(
+        $this->been = new BeenConfirmed(
             actor: $card->getHolderName(),
             timestamp: $this->timestamp,
             evidence: [
@@ -50,9 +50,9 @@ final readonly class SuccessfulOrder
 }
 ```
 
-`BeenProcessed`はアプリケーションが定義するクラスです。何を「完了の証跡」とするかはドメインによって異なります。誰がいつどのように削除したかを記録する必要があるかもしれませんし、タイムスタンプだけで十分かもしれません。ドメインが必要とする証跡に応じて`$been`クラスを設計します。
+`$been`クラスはアプリケーションが定義する、ドメイン固有の名前を持つクラスです。`SuccessfulOrder`には`BeenConfirmed`、`FailedOrder`には`BeenRejected`、`DeletedUser`なら`BeenDeleted`というように命名します。何を「完了の証跡」とするかはドメインによって異なり、必要な証跡に応じてクラスを設計します。
 
-入力クラスとは対照的に、最終オブジェクトはドメインの豊かさを完全に表現した存在です。内在が超越と出会い、変容を経て、これ以上変わる必要のない完全な状態に達しています。成功も失敗も同じ構造です。たとえば`FailedOrder`も、拒否の証跡として`$been`を持ちます。
+入力クラスとは対照的に、最終オブジェクトはドメインの豊かさを完全に表現した存在です。内在が超越と出会い、変容を経て、これ以上変わる必要のない完全な状態に達しています。
 
 ## 時間的存在の完全性
 

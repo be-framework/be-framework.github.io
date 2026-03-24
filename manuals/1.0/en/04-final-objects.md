@@ -24,7 +24,7 @@ final readonly class SuccessfulOrder
     public string $confirmationCode;
     public DateTimeImmutable $timestamp;
     public string $message;
-    public BeenProcessed $been;          // Evidence of completion
+    public BeenConfirmed $been;          // Evidence of completion
 
     public function __construct(
         #[Input] Money $total,                    // Immanence
@@ -37,7 +37,7 @@ final readonly class SuccessfulOrder
         $this->timestamp = new DateTimeImmutable();
         $this->message = "Order Confirmed: {$this->orderId}";
 
-        $this->been = new BeenProcessed(
+        $this->been = new BeenConfirmed(
             actor: $card->getHolderName(),
             timestamp: $this->timestamp,
             evidence: [
@@ -50,9 +50,9 @@ final readonly class SuccessfulOrder
 }
 ```
 
-`BeenProcessed` is an application-defined class. What counts as "evidence of completion" depends on the domain—one application may need to record who deleted what and when, while another may only need a timestamp. You design the `$been` class to capture whatever your domain requires as proof.
+The `$been` class is application-defined with a domain-specific name. `SuccessfulOrder` has `BeenConfirmed`, `FailedOrder` has `BeenRejected`, a `DeletedUser` might have `BeenDeleted`. What counts as "evidence of completion" depends on the domain—you design the class to capture whatever your domain requires as proof.
 
-In contrast to Input Classes, Final Objects fully express the richness of the domain. Immanence has met Transcendence, undergone transformation, and reached a complete state that requires no further change. Success and failure share the same structure. A `FailedOrder` also has a `$been`—`BeenRejected`.
+In contrast to Input Classes, Final Objects fully express the richness of the domain. Immanence has met Transcendence, undergone transformation, and reached a complete state that requires no further change.
 
 ## Completeness of Temporal Being
 
