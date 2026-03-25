@@ -453,7 +453,7 @@ src/
 
 ## Side Effects
 
-Side effects are completed inside the constructor, delegated to Reason. The object itself decides — no external orchestrator tells it what to do. This is the autonomy that OOP originally intended.
+Side effects are completed inside the constructor, delegated to Reason. The object itself decides — no external orchestrator tells it what to do.
 
 Persistence and external communication are implementation details confined to Reason. Existence types are freed from database schemas and API constraints.
 
