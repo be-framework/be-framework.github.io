@@ -89,7 +89,7 @@ When vital signs indicate non-survivable conditions, the patient's existence is 
     'en' => 'Vital signs indicate non-survivable conditions.',
     'ja' => 'バイタルサインが生存不可能な状態を示しています。'
 ])]
-final class LethalVitalException extends DomainException
+final class LethalVitalException extends \DomainException
 {
 }
 ```

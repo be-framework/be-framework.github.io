@@ -35,14 +35,12 @@ catch (SemanticVariableException $e) {
 
 ## Domain Exception Classes
 
-All exceptions inherit from `DomainException`. Technical exceptions (`RuntimeException`, `InvalidArgumentException`, etc.) are not used. Failures are always expressed as **failures with domain meaning**:
+All exceptions extend PHP's `\DomainException`. Technical exceptions (`RuntimeException`, `InvalidArgumentException`, etc.) are not used. Failures are always expressed as **failures with domain meaning**:
 
 ```php
-abstract class DomainException extends Exception {}
+final readonly class EmptyNameException extends \DomainException {}
 
-final readonly class EmptyNameException extends DomainException {}
-
-final readonly class InvalidEmailException extends DomainException
+final readonly class InvalidEmailException extends \DomainException
 {
     public function __construct(public string $invalidEmail)
     {
@@ -51,7 +49,7 @@ final readonly class InvalidEmailException extends DomainException
 }
 
 // Age-related existence failures
-abstract class AgeException extends DomainException {}
+abstract class AgeException extends \DomainException {}
 final readonly class NegativeAgeException extends AgeException {}
 final readonly class AgeTooHighException extends AgeException {}
 ```
@@ -79,13 +77,13 @@ The `#[Message]` attribute lets exceptions speak in the user's language:
     'ja' => '名前は空にできません。',
     'es' => 'El nombre no puede estar vacío.'
 ])]
-final readonly class EmptyNameException extends DomainException {}
+final readonly class EmptyNameException extends \DomainException {}
 
 #[Message([
     'en' => 'Age must be at least {min} years.',
     'ja' => '年齢は最低{min}歳でなければなりません。'
 ])]
-final readonly class AgeTooYoungException extends DomainException
+final readonly class AgeTooYoungException extends \DomainException
 {
     public function __construct(public int $min = 13) {}
 }

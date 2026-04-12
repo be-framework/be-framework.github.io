@@ -89,7 +89,7 @@ final class HeartRate
     'en' => 'Vital signs indicate non-survivable conditions.',
     'ja' => 'バイタルサインが生存不可能な状態を示しています。'
 ])]
-final class LethalVitalException extends DomainException
+final class LethalVitalException extends \DomainException
 {
 }
 ```

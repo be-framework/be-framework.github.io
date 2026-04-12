@@ -35,14 +35,12 @@ catch (SemanticVariableException $e) {
 
 ## ドメイン例外クラス
 
-すべての例外は`DomainException`を継承します。ドメイン層では技術的例外（`RuntimeException`、`InvalidArgumentException`等）を使わず、常にドメイン例外を使います。失敗は常に**ドメインの意味を持つ失敗**として表現されます：
+すべての例外はPHPの`\DomainException`を継承します。ドメイン層では技術的例外（`RuntimeException`、`InvalidArgumentException`等）を使わず、常にドメイン例外を使います。失敗は常に**ドメインの意味を持つ失敗**として表現されます：
 
 ```php
-abstract class DomainException extends Exception {}
+final readonly class EmptyNameException extends \DomainException {}
 
-final readonly class EmptyNameException extends DomainException {}
-
-final readonly class InvalidEmailException extends DomainException
+final readonly class InvalidEmailException extends \DomainException
 {
     public function __construct(public string $invalidEmail)
     {
@@ -51,7 +49,7 @@ final readonly class InvalidEmailException extends DomainException
 }
 
 // 年齢関連の存在失敗
-abstract class AgeException extends DomainException {}
+abstract class AgeException extends \DomainException {}
 final readonly class NegativeAgeException extends AgeException {}
 final readonly class AgeTooHighException extends AgeException {}
 ```
@@ -79,13 +77,13 @@ catch (InvalidEmailException $e) {
     'ja' => '名前は空にできません。',
     'es' => 'El nombre no puede estar vacío.'
 ])]
-final readonly class EmptyNameException extends DomainException {}
+final readonly class EmptyNameException extends \DomainException {}
 
 #[Message([
     'en' => 'Age must be at least {min} years.',
     'ja' => '年齢は最低{min}歳でなければなりません。'
 ])]
-final readonly class AgeTooYoungException extends DomainException
+final readonly class AgeTooYoungException extends \DomainException
 {
     public function __construct(public int $min = 13) {}
 }
