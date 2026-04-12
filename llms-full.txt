@@ -329,6 +329,10 @@ final readonly class ExpressDelivery
 }
 ```
 
+### Dual Role
+
+Any Reason object can serve as either `#[Inject]` (providing transcendent capabilities) or `$being` (determining destiny). The difference is not in the object itself, but in how it is used.
+
 ### Why Not Individual Injection?
 
 Individual `#[Inject]` scatters dependencies. Reason bundles them by meaning — "what does this existence need to come into being?" In tests, swap the entire precondition set at once.
@@ -485,7 +489,14 @@ final class PaymentGateway
 
 ### Moment: Holding Potential
 
-A class that holds a Potential is called a **Moment** — an essential part constituting a Final. A Moment implements `MomentInterface`:
+A class that holds a Potential is called a **Moment** — an essential part constituting a Final. A Moment implements `MomentInterface`, provided by the framework:
+
+```php
+interface MomentInterface
+{
+    public function be(): void;
+}
+```
 
 ```php
 final readonly class PaymentCompleted implements MomentInterface
