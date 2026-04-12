@@ -44,13 +44,22 @@ final readonly class ValidatedUser
 
 ## Key Attributes
 
-| Attribute | Role | Source |
-|-----------|------|--------|
-| `#[Be([Target::class])]` | Declares metamorphosis destination(s) | Class attribute |
-| `#[Input]` | Receives immanence from previous stage | Constructor parameter |
-| `#[Inject]` | Receives transcendence from DI container | Constructor parameter |
-| `#[Validate]` | Marks semantic validation method | Method attribute |
-| `#[Message(['en' => '...', 'ja' => '...'])]` | Multilingual exception message | Exception class attribute |
+| Attribute | FQCN | Role |
+|-----------|------|------|
+| `#[Be([Target::class])]` | `Be\Framework\Attribute\Be` | Declares metamorphosis destination(s) |
+| `#[Input]` | `Ray\InputQuery\Attribute\Input` | Receives immanence from previous stage |
+| `#[Inject]` | `Ray\Di\Di\Inject` | Receives transcendence from DI container |
+| `#[Validate]` | `Be\Framework\Attribute\Validate` | Marks semantic validation method |
+| `#[Message]` | `Be\Framework\Attribute\Message` | Multilingual exception message |
+
+Key classes:
+
+| Class | FQCN |
+|-------|------|
+| `Becoming` | `Be\Framework\Becoming` |
+| `BecomingInterface` | `Be\Framework\BecomingInterface` |
+| `SemanticVariableException` | `Be\Framework\Exception\SemanticVariableException` |
+| `MomentInterface` | `Be\Framework\MomentInterface` |
 
 ## Metamorphosis Flow
 
@@ -378,7 +387,7 @@ Two temporal axes:
     'en' => 'Vital signs indicate non-survivable conditions.',
     'ja' => 'バイタルサインが生存不可能な状態を示しています。'
 ])]
-final readonly class LethalVitalException extends DomainException {}
+final readonly class LethalVitalException extends \DomainException {}
 ```
 
 ### Error Collection
