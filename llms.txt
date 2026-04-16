@@ -25,6 +25,7 @@ Be Framework is a PHP framework for ontological programming. Procedural programm
 - [Semantic Variables](https://be-framework.github.io/manuals/1.0/en/06-semantic-variables.html): Names as meaning and constraints
 - [Reason Layer](https://be-framework.github.io/manuals/1.0/en/08-reason-layer.html): Raison d'etre of existence
 - [Semantic Exceptions](https://be-framework.github.io/manuals/1.0/en/09-error-handling.html): Meaningful failures
+- [Semantic Logging](https://be-framework.github.io/manuals/1.0/en/10-semantic-logging.html): Proof of existence and structured metamorphosis records
 - [Demos](https://be-framework.github.io/manuals/1.0/en/demos.html): Working code examples
 - [FAQ](https://be-framework.github.io/manuals/1.0/en/faq.html): Common questions
 

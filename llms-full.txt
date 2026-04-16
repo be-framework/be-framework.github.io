@@ -348,35 +348,61 @@ Individual `#[Inject]` scatters dependencies. Reason bundles them by meaning —
 
 ## Final Objects and $been
 
-Final Objects are the destination of metamorphosis. `$been` records completion evidence (who, when, what):
+Final Objects are the destination of metamorphosis. `$been` is an immutable carrier that proves why the object is what it is:
 
 ```php
-final readonly class SuccessfulOrder
+final readonly class RegisteredUser
 {
-    public string $orderId;
-    public string $confirmationCode;
-    public BeenProcessed $been;
+    public string $userId;
+    public Been $been;
 
     public function __construct(
-        #[Input] Money $total,
-        #[Input] CreditCard $card,
-        #[Inject] OrderIdGenerator $generator,
-        #[Inject] Receipt $receipt
+        #[Input] string $email,
+        #[Inject] UserIdGenerator $idGen,
+        #[Inject] Been $been,
     ) {
-        $this->orderId = $generator->generate();
-        $this->confirmationCode = $receipt->generate($total);
-        $this->been = new BeenProcessed(
-            actor: $card->getHolderName(),
-            timestamp: new DateTimeImmutable(),
-            evidence: ['total' => $total->getAmount()]
-        );
+        $this->userId = $idGen->generate();
+        $this->been = $been->with(new UserCreatedContext(
+            userId: $this->userId,
+            email: $email,
+        ));
+
+        // Proof: the user was created with the input email
+        $event = $this->been->events[0];
+        assert($event instanceof UserCreatedContext);
+        assert($event->email === $this->email);
     }
 }
 ```
 
 Two temporal axes:
 - `#[Be]` — what to become (direction towards future)
-- `$been` — evidence of completion (past perfect)
+- `$been` — evidence of how it became (past perfect)
+
+`Been` is injected via `#[Inject]` and already contains the metamorphosis source/destination recorded by the framework. The developer appends domain events with `with()` and can `assert` causal chains — moving proof from test code into production code.
+
+## Semantic Logging
+
+Be Framework records each metamorphosis as a single structured JSON — not line-by-line text logs. One transformation, one JSON.
+
+```json
+{
+  "open": { "from": "UnverifiedEmail", "to": "RegisteredUser" },
+  "events": [
+    { "type": "email_format_asserted", "context": { "email": "alice@example.com" } },
+    { "type": "user_created", "context": { "userId": 42, "email": "alice@example.com" } }
+  ],
+  "close": { "properties": { "userId": 42, "email": "alice@example.com" } }
+}
+```
+
+Two recording mechanisms:
+- **`$been`** — constitutive proof carried by the Final object itself (first-person)
+- **`SemanticLoggerInterface`** — descriptive log for hierarchical operation recording (third-person)
+
+Usually `$been` is sufficient. `SemanticLoggerInterface` is for detailed intermediate step recording closer to traditional logging.
+
+The JSON serves four roles simultaneously: record, specification, proof, and DSL. It can be validated with JSON Schema for test-level rigor.
 
 ## Semantic Exceptions
 
