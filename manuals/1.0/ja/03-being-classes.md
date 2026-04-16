@@ -39,7 +39,7 @@ final readonly class ValidatedUser
 }
 ```
 
-`#[Input]`パラメータには、前のクラスのpublicプロパティが名前の一致により自動的に渡されます。`UserInput`の`public string $name`は`ValidatedUser`の`#[Input] string $name`に対応します。`#[Inject]`パラメータにはDIコンテナから外部の依存が注入されます。この自動マッチングの詳細なルールは[5章 変容](./05-metamorphosis-patterns.html)で説明します。
+`#[Input]`パラメータには、前のクラスのpublicプロパティが名前の一致により自動的に渡されます。`UserInput`の`public string $name`は`ValidatedUser`の`#[Input] string $name`に対応します。`#[Inject]`パラメータにはDIコンテナから外部の依存が注入されます。この自動マッチングの詳細なルールは[5章 変容](./05-metamorphosis.html)で説明します。
 
 ## 時間的存在としてのオブジェクト
 
