@@ -34,7 +34,9 @@ permalink: /manuals/1.0/ja/10-semantic-logging.html
 }
 ```
 
-ひとつの変容がひとつのJSONに収まります。変容元と変容先、途中の出来事、最終プロパティ — すべてが型付きの構造化データとして記録され、JSONスキーマで検証できます。
+従来のログは行単位のテキストが時系列に並ぶだけで、どの行が同じ操作に属するかは読み手の推測に委ねられます。
+
+意味的ログでは、ひとつの変容がひとつのJSONに収まります。変容元と変容先、途中の出来事、最終プロパティ — 「何が何になり、なぜそうなったか」が型付きの構造化データとして記録され、JSONスキーマで検証できます。
 
 Be Frameworkには二つの意味的記録の仕組みがあります。
 
@@ -48,9 +50,6 @@ Be Frameworkには二つの意味的記録の仕組みがあります。
 | 問い     | 何が起きたか                 | なぜ今の私なのか                 |
 | 文法     | doing                        | being                            |
 | 役割     | 記録                         | 証明                             |
-| 除去可否 | できる（開発専用可）         | できない（identityの一部）       |
-
-技術的基盤は[Koriym.SemanticLogger](https://github.com/koriym/Koriym.SemanticLogger)です。
 
 ## `$been` — 存在証明
 
@@ -107,7 +106,7 @@ final class EmailFormatAssertedContext extends AbstractContext
 
 DDDでいうドメインイベント — ビジネス上「起きたこと」を表すオブジェクトです。Finalオブジェクトが完了までに経験した事実を、アプリケーション固有のイベントコンテキストとして定義します。
 
-## 意味的ログ
+## SemanticLoggerInterface — 階層的な操作記録
 
 階層的な操作記録が必要な場合は、`SemanticLoggerInterface`を直接インジェクトします。
 
@@ -181,14 +180,16 @@ open/event/closeは[Koriym.SemanticLogger](https://github.com/koriym/Koriym.Sema
 
 openが変容の意図（何から何へ、どの材料で）、eventsが`$been->with()`で記録された出来事、closeが結果（最終プロパティと変容先）です。
 
-## ログ駆動開発への接続
+## ログからDSLへ
 
 従来のログは実行の記録です。コードが走った後に生まれ、デバッグに使われ、やがて消えます。
 
-このJSONは違います。実行の記録であると同時に、変容の仕様でもあります。「`UnverifiedEmail`が`RegisteredUser`になる過程で`email_format_asserted`と`user_inserted`が起きる」— これは過去の事実の記述としても、未来の期待の宣言としても読めます。しかも型付きの構造化データなので、AIが読み書きできるDSLとしても機能します。
+このJSONは違います。実行の記録であると同時に、変容の仕様でもあり、存在の証明でもあります。どこから来て、どう成ったのか、何であるのかの記録です。「`UnverifiedEmail`が`RegisteredUser`になる過程で`email_format_asserted`と`user_inserted`が起きる」— これは過去の事実の記述としても、未来の期待の宣言としても読めます。しかも型付きの構造化データなので、AIが読み書きできるDSLとしても機能します。
 
-記録、仕様、DSL。この三つが同じJSONに重なるとき、ログからコードを生成し、コードからログを生成する循環が可能になりえます。
+記録、仕様、証明、DSL。この四つが同じJSONに重なるとき、JSONスキーマによるテスト並みの厳密な検証と、ログからコードを生成しコードからログを生成する循環が可能になりえます。
 
 ---
+
+技術的基盤: [Koriym.SemanticLogger](https://github.com/koriym/Koriym.SemanticLogger)
 
 フレームワークの全体像は[リファレンス](./11-reference-resources.html)へ ➡️
