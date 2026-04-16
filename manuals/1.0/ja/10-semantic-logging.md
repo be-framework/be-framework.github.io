@@ -65,7 +65,6 @@ final class RegisteredUser
         $this->been = $been
             ->with(new EmailFormatAssertedContext(
                 email: $value,
-                pattern: '/^[^@]+@[^@]+$/',
             ))
             ->with(new UserInsertedContext(
                 userId: $this->userId,
@@ -91,7 +90,6 @@ final class EmailFormatAssertedContext extends AbstractContext
 
     public function __construct(
         public readonly string $email,
-        public readonly string $pattern,
     ) {}
 }
 ```
@@ -124,7 +122,7 @@ final class EmailFormatAssertedContext extends AbstractContext
   "events": [
     {
       "type": "email_format_asserted",
-      "context": { "email": "alice@example.com", "pattern": "/^[^@]+@[^@]+$/" }
+      "context": { "email": "alice@example.com" }
     },
     {
       "type": "user_inserted",
