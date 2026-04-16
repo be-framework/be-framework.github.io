@@ -13,37 +13,24 @@ permalink: /manuals/1.0/ja/10-semantic-logging.html
 
 ## 概要
 
-Be Frameworkでは、オブジェクトの変容が構造化ログとして自動記録されます。
+従来のログは「何が起きたか」を記録します。
 
-従来のログはイベントの断片的な記録です。`[INFO] User registered` と書かれたテキスト行からは、何がどう変わってその結果に至ったのかは読み取れません。意味的ログは変容の完全なストーリーを記録します。何が何になり、何を根拠にそうなったのか。
-
-技術的基盤は[Koriym.SemanticLogger](https://github.com/koriym/Koriym.SemanticLogger)です。型安全な構造化ログ、Open/Event/Closeパターン、JSONスキーマ検証を提供します。
-
-## 自動記録される変容ログ
-
-`Becoming`エンジンは変容のたびにログを自動出力します。開発者が記録コードを書く必要はありません。
-
-```php
-#[Be(RegisteredUser::class)]
-final readonly class UnverifiedEmail
-{
-    public function __construct(
-        public string $value,
-    ) {}
-}
+```
+[INFO] User registered: alice@example.com
 ```
 
-この`UnverifiedEmail`を`Becoming`に渡すだけで、以下の構造が記録されます。
+意味的ログは「なぜそうなったか」を記録します。メールの形式が検証され、ユーザーテーブルにIDが払い出され、その二つの事実を根拠にこのオブジェクトは`RegisteredUser`になった — その全体が構造化データとして残ります。
 
-- **open**: 変容の開始。どのクラスから何への変容か、引数の出自（`#[Input]`か`#[Inject]`か）
-- **events**: 変容の途中で起きた出来事
-- **close**: 変容の完了。最終オブジェクトのプロパティと変容先
+Be Frameworkには二つの意味的記録の仕組みがあります。
 
-openとcloseはフレームワークが自動で書きます。eventsは開発者が書く。この分担が意味的ログの基本構造です。
+- **`$been`** — Finalオブジェクトが自分の来歴を保持する証明（proof）
+- **`SemanticLoggerInterface`** — 階層的な操作を記録するログ（log）
+
+技術的基盤は[Koriym.SemanticLogger](https://github.com/koriym/Koriym.SemanticLogger)です。
 
 ## `$been` — 存在証明
 
-Finalオブジェクトは「自分が何者であるか」を知っています。`$been`はその証拠です。
+`$been`はFinalオブジェクトの来歴を型付きイベントの列として保持します。
 
 ```php
 final class RegisteredUser
@@ -74,9 +61,9 @@ final class RegisteredUser
 }
 ```
 
-`Been`は`#[Inject]`でDIコンテナから受け取ります。`with()`を呼ぶたびに新しい`Been`が返り、同時にSemanticLoggerのストリームにイベントが書き込まれます。不変コレクションでありながらライブ書き込みを行う。この二面性は意図的な設計です。
+`Been`は`#[Inject]`でDIコンテナから受け取ります。`with()`を呼ぶたびに新しい`Been`が返り、同時にSemanticLoggerのストリームにもイベントが書き込まれます。
 
-構築が完了したとき、`$been`はこのオブジェクトがなぜ今の状態にあるのかを型付きイベントの列として保持しています。外部のテストが検証するまでもなく、オブジェクト自身が自分の来歴を知っている。
+`Been`は証明に徹します。階層構造やスコープの概念はありません。「何がこのオブジェクトを今の状態にしたか」をフラットなイベント列で保持する — それだけです。
 
 ## イベントコンテキスト
 
@@ -98,9 +85,40 @@ final class EmailFormatAssertedContext extends AbstractContext
 
 フレームワークはドメインイベントを一切提供しません。何を「起きたこと」として記録するかはアプリケーションが決めます。
 
-## 出力されるJSON
+## 意味的ログ
 
-上記のコードを実行すると、以下のJSONが出力されます。
+階層的な操作記録が必要な場合は、`SemanticLoggerInterface`を直接インジェクトします。
+
+```php
+final class RegisteredUser
+{
+    public function __construct(
+        #[Input] string $value,
+        #[Inject] UserRepository $users,
+        #[Inject] SemanticLoggerInterface $logger,
+    ) {
+        // 意図を宣言（open）
+        $id = $logger->open(new DbTransactionContext(table: 'users'));
+
+        // 途中の出来事を記録（event）
+        $this->userId = $users->insert(['email' => $value]);
+        $logger->event(new RowInsertedContext(userId: $this->userId));
+
+        // 結果を記録（close）
+        $logger->close(new TransactionResultContext(committed: true), $id);
+    }
+}
+```
+
+open/event/closeは[Koriym.SemanticLogger](https://github.com/koriym/Koriym.SemanticLogger)の階層構造をそのまま使います。意図（intent）→ 出来事（occurrences）→ 結果（result）の三層で、ひとまとまりの操作を記録できます。
+
+`$been`が「このオブジェクトは何者か」の証明であるのに対し、`SemanticLoggerInterface`は「何がどう行われたか」の詳細な記録です。
+
+## 変容の自動記録
+
+`$been`や`SemanticLoggerInterface`とは別に、`Becoming`エンジンは変容そのものをopen/closeで自動記録します。開発者がこの記録コードを書く必要はありません。
+
+出力されるJSONの全体像です。
 
 ```json
 {
@@ -139,17 +157,15 @@ final class EmailFormatAssertedContext extends AbstractContext
 }
 ```
 
-openが「何から何へ、どの材料で」、eventsが「途中で何が起きたか」、closeが「結果として何を持っているか」。変容の全体がひとつのJSONに収まっています。
+openが変容の意図（何から何へ、どの材料で）、eventsが`$been->with()`で記録された出来事、closeが結果（最終プロパティと変容先）です。
 
-`$been`プロパティ自身はcloseの`properties`から自動的に除外されます。ログが自分自身を含めば無限再帰になる。
+`$been`プロパティ自身はcloseの`properties`から自動的に除外されます。
 
 ## ログ駆動開発への接続
 
-このJSONを眺めると、ひとつのことに気づきます。`$been`が内部に持つイベント列と、SemanticLoggerが外部に出力するJSON — この二つは同じものの表と裏です。
+`$been`が内部に持つイベント列と、SemanticLoggerが外部に出力するJSON。この二つは同じものの表と裏です。
 
-ということは、このJSONを先に手で書いて、そこからPHPクラスを生成することもできるのではないか。
-
-その発想がログ駆動開発（LDD）です。詳しくは[ログ駆動開発](./13-vision-ldd.html)の章で扱います。
+ということは、このJSONを先に手で書いて、そこからPHPクラスを生成することもできる。その発想がログ駆動開発（LDD）です。詳しくは[ログ駆動開発](./13-vision-ldd.html)の章で扱います。
 
 ---
 
