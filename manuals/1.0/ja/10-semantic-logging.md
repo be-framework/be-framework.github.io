@@ -13,24 +13,48 @@ permalink: /manuals/1.0/ja/10-semantic-logging.html
 
 ## 概要
 
-従来のログは「何が起きたか」を記録します。
+従来のログ:
 
 ```
 [INFO] User registered: alice@example.com
+[INFO] Verification passed
+[INFO] Insert into users table
 ```
 
-意味的ログは「なぜそうなったか」を記録します。メールの形式が検証され、ユーザーテーブルにIDが払い出され、その二つの事実を根拠にこのオブジェクトは`RegisteredUser`になった — その全体が構造化データとして残ります。
+意味的ログ:
+
+```json
+{
+  "open": { "from": "UnverifiedEmail", "to": "RegisteredUser" },
+  "events": [
+    { "type": "email_format_asserted", "context": { "email": "alice@example.com" } },
+    { "type": "user_inserted", "context": { "userId": 42, "email": "alice@example.com" } }
+  ],
+  "close": { "properties": { "userId": 42, "value": "alice@example.com" } }
+}
+```
+
+ひとつの変容がひとつのJSONに収まります。変容元と変容先、途中の出来事、最終プロパティ — すべてが型付きの構造化データとして記録され、JSONスキーマで検証できます。
 
 Be Frameworkには二つの意味的記録の仕組みがあります。
 
 - **`$been`** — Finalオブジェクトが自分の来歴を保持する証明（proof）
 - **`SemanticLoggerInterface`** — 階層的な操作を記録するログ（log）
 
+|          | log                          | `$been`                          |
+|----------|------------------------------|----------------------------------|
+| 性質     | descriptive（記述）          | constitutive（構成）             |
+| 視点     | 第三者（観測者）             | 一人称                           |
+| 問い     | 何が起きたか                 | なぜ今の私なのか                 |
+| 文法     | doing                        | being                            |
+| 役割     | 記録                         | 証明                             |
+| 除去可否 | できる（開発専用可）         | できない（identityの一部）       |
+
 技術的基盤は[Koriym.SemanticLogger](https://github.com/koriym/Koriym.SemanticLogger)です。
 
 ## `$been` — 存在証明
 
-`$been`はFinalオブジェクトの来歴を型付きイベントの列として保持します。
+Finalオブジェクトのコンストラクタで`Been`をインジェクトし、`with()`で出来事を記録していくと、そのオブジェクトがなぜ今の状態にあるかの証明になります。
 
 ```php
 final class RegisteredUser
@@ -61,9 +85,7 @@ final class RegisteredUser
 }
 ```
 
-`Been`は`#[Inject]`でDIコンテナから受け取ります。`with()`を呼ぶたびに新しい`Been`が返り、同時にSemanticLoggerのストリームにもイベントが書き込まれます。
-
-`Been`は証明に徹します。階層構造やスコープの概念はありません。「何がこのオブジェクトを今の状態にしたか」をフラットなイベント列で保持する — それだけです。
+`Been`は`#[Inject]`でDIコンテナから受け取ります。受け取った`Been`には変容の履歴がすでに記録されています。開発者は`with()`で、Finalオブジェクトの内部でしか知り得ない出来事 — メールを検証した、ユーザーを挿入した — を追記します。
 
 ## イベントコンテキスト
 
@@ -83,7 +105,7 @@ final class EmailFormatAssertedContext extends AbstractContext
 
 `TYPE`はログ上のイベント種別、`SCHEMA_URL`はそのイベントのJSONスキーマを指します。コンストラクタのプロパティがそのままJSONの`context`フィールドになります。
 
-フレームワークはドメインイベントを一切提供しません。何を「起きたこと」として記録するかはアプリケーションが決めます。
+DDDでいうドメインイベント — ビジネス上「起きたこと」を表すオブジェクトです。Finalオブジェクトが完了までに経験した事実を、アプリケーション固有のイベントコンテキストとして定義します。
 
 ## 意味的ログ
 
@@ -116,7 +138,7 @@ open/event/closeは[Koriym.SemanticLogger](https://github.com/koriym/Koriym.Sema
 
 ## 変容の自動記録
 
-`$been`や`SemanticLoggerInterface`とは別に、`Becoming`エンジンは変容そのものをopen/closeで自動記録します。開発者がこの記録コードを書く必要はありません。
+`$been`や`SemanticLoggerInterface`とは別に、変容そのものもフレームワークがopen/closeで自動記録します。開発者がこの記録コードを書く必要はありません。
 
 出力されるJSONの全体像です。
 
@@ -159,13 +181,13 @@ open/event/closeは[Koriym.SemanticLogger](https://github.com/koriym/Koriym.Sema
 
 openが変容の意図（何から何へ、どの材料で）、eventsが`$been->with()`で記録された出来事、closeが結果（最終プロパティと変容先）です。
 
-`$been`プロパティ自身はcloseの`properties`から自動的に除外されます。
-
 ## ログ駆動開発への接続
 
-`$been`が内部に持つイベント列と、SemanticLoggerが外部に出力するJSON。この二つは同じものの表と裏です。
+従来のログは実行の記録です。コードが走った後に生まれ、デバッグに使われ、やがて消えます。
 
-ということは、このJSONを先に手で書いて、そこからPHPクラスを生成することもできる。その発想がログ駆動開発（LDD）です。詳しくは[ログ駆動開発](./13-vision-ldd.html)の章で扱います。
+このJSONは違います。実行の記録であると同時に、変容の仕様でもあります。「`UnverifiedEmail`が`RegisteredUser`になる過程で`email_format_asserted`と`user_inserted`が起きる」— これは過去の事実の記述としても、未来の期待の宣言としても読めます。しかも型付きの構造化データなので、AIが読み書きできるDSLとしても機能します。
+
+記録、仕様、DSL。この三つが同じJSONに重なるとき、ログからコードを生成し、コードからログを生成する循環が可能になりえます。
 
 ---
 
