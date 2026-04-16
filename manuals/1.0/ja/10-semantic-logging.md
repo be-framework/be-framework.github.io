@@ -84,7 +84,7 @@ final class RegisteredUser
 }
 ```
 
-`Been`は`#[Inject]`でDIコンテナから受け取ります。受け取った`Been`には変容の履歴がすでに記録されています。開発者は`with()`で、Finalオブジェクトの内部でしか知り得ない出来事 — メールを検証した、ユーザーを挿入した — を追記します。
+`Been`は`#[Inject]`でDIコンテナから受け取ります。受け取った`Been`にはフレームワークが変容開始時に記録した変容元・変容先の情報がすでに含まれています。開発者は`with()`で、Finalオブジェクトの内部でしか知り得ない出来事 — メールを検証した、ユーザーを挿入した — を追記します。
 
 ## イベントコンテキスト
 
@@ -133,7 +133,7 @@ final class RegisteredUser
 
 open/event/closeは[Koriym.SemanticLogger](https://github.com/koriym/Koriym.SemanticLogger)の階層構造をそのまま使います。意図（intent）→ 出来事（occurrences）→ 結果（result）の三層で、ひとまとまりの操作を記録できます。
 
-`$been`が「このオブジェクトは何者か」の証明であるのに対し、`SemanticLoggerInterface`は「何がどう行われたか」の詳細な記録です。
+`$been`はFinalオブジェクトが何であるかの証明です。`SemanticLoggerInterface`は従来のログに近い、途中経過の詳細な記録です。通常は`$been`で足ります。
 
 ## 変容の自動記録
 
