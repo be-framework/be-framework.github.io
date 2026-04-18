@@ -379,6 +379,63 @@ Two temporal axes:
 - `#[Be]` — what to become (direction towards future)
 - `$been` — evidence of completion (past perfect)
 
+## Semantic Logging
+
+Traditional logs are lines of text arranged chronologically — the reader guesses which lines belong together. With semantic logging, one metamorphosis fits in one JSON. Source and destination, intermediate events, final properties — "what became what, and why" is recorded as typed, structured data.
+
+### `$been` — Proof of Existence
+
+Inject `Been` into the Final object's constructor and record events with `with()`:
+
+```php
+final readonly class RegisteredUser
+{
+    public readonly int $userId;
+    public readonly Been $been;
+
+    public function __construct(
+        #[Input] string $value,
+        #[Inject] EmailVerifier $verifier,
+        #[Inject] UserRepository $users,
+        #[Inject] Been $been,
+    ) {
+        if (! $verifier->check($value)) {
+            throw new UnbecomingException('email format failed');
+        }
+
+        $this->userId = $users->insert(['email' => $value]);
+        $this->been = $been
+            ->with(new EmailFormatAssertedContext(email: $value))
+            ->with(new UserInsertedContext(userId: $this->userId, email: $value));
+    }
+}
+```
+
+### Event Context
+
+Events passed to `Been` are subclasses of `AbstractContext`:
+
+```php
+final class EmailFormatAssertedContext extends AbstractContext
+{
+    public const string TYPE = 'email_format_asserted';
+    public const string SCHEMA_URL = 'https://example.com/schemas/email-format-asserted.json';
+
+    public function __construct(
+        public readonly string $email,
+    ) {}
+}
+```
+
+### Log vs $been
+
+|              | log                    | `$been`                     |
+|--------------|------------------------|-----------------------------|
+| Nature       | descriptive            | constitutive                |
+| Perspective  | third-person (observer)| first-person                |
+| Question     | What happened?         | Why am I what I am now?     |
+| Role         | record                 | proof                       |
+
 ## Semantic Exceptions
 
 ### Domain Exceptions with Structured Data

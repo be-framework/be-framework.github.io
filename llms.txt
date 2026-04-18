@@ -11,6 +11,7 @@ Be Framework is a PHP framework for ontological programming. Procedural programm
 - **Self-Organization**: Objects declare their own destiny via `#[Be]`. No external orchestrators or service layers needed.
 - **Semantic Variables**: Variable names carry meaning and constraints. `$email` must be a valid email to exist. Define once, automatically applied everywhere.
 - **Reason Layer**: Gathers the complete tool set for an existence to come into being, into a single object.
+- **Semantic Logging**: `$been` records proof of existence — why the object is what it is now. One metamorphosis, one JSON.
 - **Type IS Capability**: Different types have different methods. An `EmergencyCase` can `assignER()`; an `ObservationCase` cannot.
 
 ## Documentation
@@ -26,6 +27,7 @@ Be Framework is a PHP framework for ontological programming. Procedural programm
 - [Semantic Variables](https://be-framework.github.io/manuals/1.0/en/06-semantic-variables.html): Names as meaning and constraints
 - [Reason Layer](https://be-framework.github.io/manuals/1.0/en/08-reason-layer.html): Raison d'etre of existence
 - [Semantic Exceptions](https://be-framework.github.io/manuals/1.0/en/09-error-handling.html): Meaningful failures
+- [Semantic Logging](https://be-framework.github.io/manuals/1.0/en/10-semantic-logging.html): $been and structured logs
 - [Demos](https://be-framework.github.io/manuals/1.0/en/demos.html): Working code examples
 - [FAQ](https://be-framework.github.io/manuals/1.0/en/faq.html): Common questions
 
