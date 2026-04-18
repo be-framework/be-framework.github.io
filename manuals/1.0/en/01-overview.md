@@ -29,9 +29,9 @@ $activeUser = User::find($id);
 $deletedUser = new DeletedUser($activeUser);
 ```
 
-"DeletedUser"? What is that? you might think.
+You might think, "DeletedUser? What is that?"
 
-Actually, this question is the entrance to a new world of programming. Let's think about programming in a way you have never thought of before.
+This question is the entrance to a new world of programming. Let's think about programming in a way you have never thought of before.
 
 ## From 'What to Do' to 'What to Be'
 

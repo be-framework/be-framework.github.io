@@ -7,13 +7,17 @@ permalink: /manuals/1.0/ja/01-overview.html
 
 # 概要
 
+> 「なりたい自分になる (Becoming the self you want to be)」
+> Be Frameworkとは、オブジェクトが自らの意思で、なりたい自分へと変容するためのフレームワークです。
+
+マルセル・プルーストは言いました。
 > 真の航海とは、新しい風景を探すことではなく、新しい目を持つことである。
 > 
 > 　　—マルセル・プルースト『囚われの女』（À la recherche du temps perdu 第5巻）1923年
 
 ## DoingからBeingへ
 
-まず、これを見てください
+まず、これを見てください。
 
 ```php
 // 従来のユーザー削除方法
@@ -24,7 +28,7 @@ $user->delete();
 $activeUser = User::find($id);
 $deletedUser = new DeletedUser($activeUser);
 ```
-DeletedUserって何？と思うかもしれません。
+`DeletedUser`って何？と思うかもしれません。
 これまで考えてもみなかった方法で、プログラミングを考えてみましょう。
 
 ## 『何をするか』から『何であるか』へ
