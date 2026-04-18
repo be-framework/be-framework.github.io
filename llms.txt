@@ -1,5 +1,6 @@
 # Be Framework
 
+> "Becoming the self you want to be"
 > Objects don't DO things — they BECOME things.
 
 Be Framework is a PHP framework for ontological programming. Procedural programming asked **HOW**, OOP asked **WHAT**, Being-oriented programming asks **WHETHER** — can it even exist? Types are existence conditions — invalid states are structurally inexpressible. Metamorphosis replaces procedural action.

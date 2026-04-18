@@ -1,5 +1,6 @@
 # Be Framework — Complete Reference for LLMs
 
+> "Becoming the self you want to be"
 > Objects don't DO things — they BECOME things.
 
 Be Framework is a PHP framework for ontological programming. Instead of telling objects what to do, you declare what can exist. Invalid states are not checked for — they are structurally inexpressible. Metamorphosis replaces procedural action.
@@ -10,7 +11,7 @@ A pattern is a better answer to an existing question. A paradigm changes the que
 
 Traditional code scatters defensive if statements throughout — "what if called in this state?", "what if null?" — because invalid states are representable. Service layers orchestrate from outside, and objects become obedient data containers.
 
-In Be, types are existence conditions. There are no types for invalid states, so guard statements disappear. Objects declare their own destiny through `#[Be]` and self-organize without external orchestrators. Side effects complete inside the constructor. Once born, objects are immutable.
+In Be, types are existence conditions. There are no types for invalid states, so guard statements disappear. Objects declare their own destiny through `#[Be]` and self-organize without external orchestrators. Side effects are completed inside the constructor. Once born, objects are immutable.
 
 ## The Transformation Formula
 
@@ -197,7 +198,7 @@ final readonly class TriagePage
 Variable names carry meaning and constraints. Define once, automatically applied everywhere:
 
 ```php
-final class Email
+final readonly class Email
 {
     #[Validate]
     public function validate(string $email): void
