@@ -19,7 +19,7 @@ permalink: /manuals/1.0/ja/convention/directory-layout.html
 | `src/Final/`      | 終点。`#[Input]` データと `#[Inject]` サービスを受ける。                       | [Final オブジェクト](../04-final-objects.html) |
 | `src/Semantic/`   | セマンティック変数。クラス名 = パラメータ名。                                  | [セマンティック変数](../06-semantic-variables.html) |
 | `src/Exception/`  | セマンティック検証例外。`#[Message]` で多言語化。                               | [エラーハンドリング](../09-error-handling.html) |
-| `src/Reason/`     | 「存在理由」 — ある存在のしかたに必要なサービスを束ねたもの。                   | [Reason レイヤー](../08-reason-layer.html) |
+| `src/Reason/`     | 「存在理由」 — その存在に必要な能力を1つに集めたもの。                          | [Reason レイヤー](../08-reason-layer.html) |
 | `src/Module/`     | Ray.Di モジュール。`MODULE=<name>` 環境変数で有効モジュールを切り替える。       | [Ray.Di マニュアル](https://ray-di.github.io/manuals/1.0/ja/index.html) |
 | `src/Becoming/`   | フレームワーク配線層 — `BecomingInterface` の実装やデコレータ。                 | [Becoming](../04a-becoming.html) |
 | `src/Being/`      | 分岐 — `$being` 判別子 + `#[Be([A, B])]`。                                     | [Being クラス](../03-being-classes.html) |
@@ -38,7 +38,7 @@ final readonly class HelloInput
 }
 ```
 
-Input はデータだけでなく「次に何になるか」を持ちます。`#[Be(...)]` が次段への引き渡しになります。
+Input は外部から渡されるデータで作られる最初のドメインクラスです。`#[Be(...)]` 属性で「次に何になるか」を1つ、または複数持ちます。
 
 → [Input クラス](../02-input-classes.html)
 
@@ -58,7 +58,7 @@ final readonly class HelloFinal
 }
 ```
 
-`#[Be(...)]` は持ちません — ここが終点です。`#[Input]` は内在(前段から渡ってきたもの)、`#[Inject]` は超越(外から与えられるサービス)。完了の証拠は `#[Inject] Been` に記されます。
+変容の終点のクラスです。`#[Be(...)]` は持ちません。`#[Input]` は内在(前段から渡ってきたもの)、`#[Inject]` は超越(外から与えられるサービス)です。完了の証拠は `#[Inject] Been` で記されます。
 
 → [Final オブジェクト](../04-final-objects.html)
 
@@ -77,7 +77,7 @@ final class Email
 }
 ```
 
-クラス名そのものがパラメータ名です。`#[Validate]` は `$email` という名の引数すべてに自動で効きます — 一度定義すれば、アプリ全域に適用されます。
+クラス名がそのままパラメータ名になります。`#[Validate]` は `$email` という名の引数すべてに自動で効きます — 一度定義すれば、アプリ全域に適用されます。
 
 → [セマンティック変数](../06-semantic-variables.html)
 
@@ -91,7 +91,7 @@ final class Email
 final class InvalidEmailException extends \DomainException {}
 ```
 
-`#[Message]` の `en`/`ja` が i18n の単位です。`{email}` のようなプレースホルダは、throw 時に例外のプロパティから埋まります。
+`#[Message]` の `en`/`ja` で、言語ごとのメッセージを指定します。`{email}` のようなプレースホルダは、throw 時に例外のプロパティからアサインされます。
 
 → [エラーハンドリング](../09-error-handling.html)
 
@@ -112,7 +112,7 @@ final readonly class ExpressShipping
 }
 ```
 
-1つのオブジェクトが「`ExpressDelivery` になるために必要なものは?」に答えます — carrier と tracker を束ねる形で。`#[Inject]` で能力として使うことも、`$being` に型付けして次段を決めることもできます。
+「`ExpressDelivery` として存在するには何が必要か?」 — その答えが `ExpressShipping` です。その存在に必要な能力を1つに集めたクラスで、`#[Inject]` で能力として注入することも、`$being` の型として次段を決めることもできます。
 
 → [Reason レイヤー](../08-reason-layer.html)
 
@@ -129,7 +129,7 @@ final class AppModule extends AbstractModule
 }
 ```
 
-`MODULE=Dev` のような環境変数で切り替わります。代替モジュール側で `override` を使えば、本番配線に一切触れずに実装を差し替えられます。
+`MODULE=Dev` のような環境変数で切り替えるDIの束縛設定です。本番用の `AppModule` を変えずに、`DevModule` や `TestModule` で実装を差し替えられます。
 
 → [Ray.Di マニュアル](https://ray-di.github.io/manuals/1.0/ja/index.html)
 
@@ -151,7 +151,7 @@ final readonly class LoggingBecoming implements BecomingInterface
 }
 ```
 
-普段は触りません。メタモルフォーシスの実行そのものに手を入れたいとき(ログ・トレース・計測)だけ使います。ドメインコードは置きません。
+普段は触りません。メタモルフォーシスの実行そのものに手を入れたいとき(ログ・トレース・計測)だけ使います。
 
 → [Becoming](../04a-becoming.html)
 
@@ -172,7 +172,7 @@ final readonly class ApplicationReview
 }
 ```
 
-`$being` の実行時の型が `#[Be([...])]` の中から次段を選びます。プロパティ名はユニオン型でありさえすれば自由ですが、`$being` と書くと分岐点であることが一目で伝わります。
+次にどのクラスに分岐するかは、ユニオン型の `$being` プロパティで明示的に示します。実際には `#[Be([...])]` の候補のうち、引数が用意できるものが次のクラスとして選ばれます。
 
 → [Being クラス](../03-being-classes.html)
 
@@ -182,7 +182,7 @@ final readonly class ApplicationReview
 final class EmailFormatAssertedContext extends AbstractContext
 {
     public const string TYPE = 'email_format_asserted';
-    public const string SCHEMA_URL = 'https://example.com/schemas/email-format-asserted.json';
+    public const string SCHEMA_URL = '../schemas/email-format-asserted.json';
 
     public function __construct(
         public readonly string $email,
@@ -190,7 +190,7 @@ final class EmailFormatAssertedContext extends AbstractContext
 }
 ```
 
-`TYPE` はログに出るイベント名、`SCHEMA_URL` は外部スキーマへのリンクです。Final 内で `$been->with(new EmailFormatAssertedContext(...))` として添付します。
+`TYPE` はログに出るイベント名、`SCHEMA_URL` はスキーマへのリンクです。Final 内で `$been->with(new EmailFormatAssertedContext(...))` として、そのオブジェクトが成立したことの証拠を記録します。
 
 → [セマンティックロギング](../10-semantic-logging.html)
 
@@ -222,4 +222,4 @@ final readonly class PaymentCompleted implements MomentInterface
 
 ---
 
-3つのディレクトリ — `Being/`、`LogContext/`、`Moment/` — はデフォルトでは空です。スケルトンのデフォルトは `Input → Final` の線形パイプラインで、分岐・セマンティックロギング・Diamond パターンは opt-in です。空のまま置いておくことで、そのパターンが必要になるまで静的解析とカバレッジをクリーンに保てます。
+3つのディレクトリ — `Being/`、`LogContext/`、`Moment/` — はデフォルトでは空です。必要に応じて、クラスを追加していきます。

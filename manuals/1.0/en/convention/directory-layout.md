@@ -19,7 +19,7 @@ permalink: /manuals/1.0/en/convention/directory-layout.html
 | `src/Final/`      | Terminus. `#[Input]` data + `#[Inject]` services.                        | [Final Objects](../04-final-objects.html) |
 | `src/Semantic/`   | Semantic variables. Class name = parameter name.                         | [Semantic Variables](../06-semantic-variables.html) |
 | `src/Exception/`  | Semantic-validation exceptions with `#[Message]` for i18n.               | [Error Handling](../09-error-handling.html) |
-| `src/Reason/`     | Raison d'être — related services bundled as one mode of existence.        | [Reason Layer](../08-reason-layer.html) |
+| `src/Reason/`     | Raison d'être — capabilities an existence requires, gathered into one.    | [Reason Layer](../08-reason-layer.html) |
 | `src/Module/`     | Ray.Di modules. `MODULE=<name>` env switches the active module.          | [Ray.Di Manual](https://ray-di.github.io/manuals/1.0/en/index.html) |
 | `src/Becoming/`   | Framework wiring — `BecomingInterface` implementations/decorators.        | [Becoming](../04a-becoming.html) |
 | `src/Being/`      | Branching — `$being` discriminator + `#[Be([A, B])]`.                     | [Being Classes](../03-being-classes.html) |
@@ -38,7 +38,7 @@ final readonly class HelloInput
 }
 ```
 
-An Input carries not just data but the declaration of what it becomes. `#[Be(...)]` is the hand-off to the next form.
+An Input is the first domain class, built from data handed in from outside. `#[Be(...)]` declares what it becomes next — one candidate, or several.
 
 → [Input Classes](../02-input-classes.html)
 
@@ -58,7 +58,7 @@ final readonly class HelloFinal
 }
 ```
 
-No `#[Be(...)]` — this is the terminus. `#[Input]` is immanence (what came from the previous form); `#[Inject]` is transcendence (services from outside). Evidence of completion is recorded via `#[Inject] Been`.
+The terminus of metamorphosis. No `#[Be(...)]`. `#[Input]` is immanence (what came from the previous form); `#[Inject]` is transcendence (services from outside). Evidence of completion is recorded via `#[Inject] Been`.
 
 → [Final Objects](../04-final-objects.html)
 
@@ -77,7 +77,7 @@ final class Email
 }
 ```
 
-Class name *is* the parameter name. `#[Validate]` auto-applies to every argument named `$email`, anywhere in the app — define once, enforced everywhere.
+The class name becomes the parameter name. `#[Validate]` auto-applies to every argument named `$email`, anywhere in the app — define once, enforced everywhere.
 
 → [Semantic Variables](../06-semantic-variables.html)
 
@@ -91,7 +91,7 @@ Class name *is* the parameter name. `#[Validate]` auto-applies to every argument
 final class InvalidEmailException extends \DomainException {}
 ```
 
-`#[Message]` `en`/`ja` are the unit of i18n. Placeholders like `{email}` are filled from the exception's properties at throw time.
+`#[Message]` `en`/`ja` declare the per-language message. Placeholders like `{email}` are assigned from the exception's properties at throw time.
 
 → [Error Handling](../09-error-handling.html)
 
@@ -112,7 +112,7 @@ final readonly class ExpressShipping
 }
 ```
 
-One object answers "what's needed to exist as `ExpressDelivery`?" — carrier + tracker bundled together. Used as `#[Inject]` to provide capabilities, or as `$being` to let the type decide the next form.
+"What does it take to exist as `ExpressDelivery`?" — `ExpressShipping` is the answer. It gathers the capabilities that existence requires into one class, usable as `#[Inject]` to provide capabilities, or as the type of `$being` to decide the next form.
 
 → [Reason Layer](../08-reason-layer.html)
 
@@ -129,7 +129,7 @@ final class AppModule extends AbstractModule
 }
 ```
 
-Swapped via `MODULE=Dev` (or similar env). An alternate module can use `override` to substitute implementations without touching production wiring.
+DI bindings swapped via an env var like `MODULE=Dev`. A `DevModule` or `TestModule` substitutes implementations without touching the production `AppModule`.
 
 → [Ray.Di Manual](https://ray-di.github.io/manuals/1.0/en/index.html)
 
@@ -151,7 +151,7 @@ final readonly class LoggingBecoming implements BecomingInterface
 }
 ```
 
-Touched rarely — only when you need to instrument metamorphosis itself (logging, tracing, timing). Everyday domain code never lands here.
+Touched rarely — only when you need to instrument metamorphosis itself (logging, tracing, timing).
 
 → [Becoming](../04a-becoming.html)
 
@@ -172,7 +172,7 @@ final readonly class ApplicationReview
 }
 ```
 
-The runtime type of `$being` picks which `#[Be([...])]` candidate comes next. The name can be anything — only the union type matters — but `$being` signals "branching point" at a glance.
+Which class comes next is declared by the union-typed `$being` property. In practice, the framework picks the `#[Be([...])]` candidate whose constructor arguments can be satisfied.
 
 → [Being Classes](../03-being-classes.html)
 
@@ -182,7 +182,7 @@ The runtime type of `$being` picks which `#[Be([...])]` candidate comes next. Th
 final class EmailFormatAssertedContext extends AbstractContext
 {
     public const string TYPE = 'email_format_asserted';
-    public const string SCHEMA_URL = 'https://example.com/schemas/email-format-asserted.json';
+    public const string SCHEMA_URL = '../schemas/email-format-asserted.json';
 
     public function __construct(
         public readonly string $email,
@@ -190,7 +190,7 @@ final class EmailFormatAssertedContext extends AbstractContext
 }
 ```
 
-`TYPE` is the event name that lands in the log; `SCHEMA_URL` links to the external schema. Attached via `$been->with(new EmailFormatAssertedContext(...))` inside a Final.
+`TYPE` is the event name that lands in the log; `SCHEMA_URL` links to the schema. Inside a Final, `$been->with(new EmailFormatAssertedContext(...))` records the evidence that the object was established.
 
 → [Semantic Logging](../10-semantic-logging.html)
 
@@ -222,4 +222,4 @@ The constructor completes `authorize()` (the Potential), but not `capture()`. On
 
 ---
 
-Three directories — `Being/`, `LogContext/`, `Moment/` — ship empty. The skeleton's default is a linear `Input → Final` pipeline; branching, semantic logging, and the Diamond pattern are opt-in. Leaving them empty keeps static analysis and coverage clean until the project needs them.
+Three directories — `Being/`, `LogContext/`, `Moment/` — ship empty. Add classes as the project needs them.
