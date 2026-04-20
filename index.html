@@ -4,20 +4,39 @@ title: be-framework
 category: Index
 ---
 <div class="jumbotron">
-    <div><img src="./images/logo.png" alt="logo" width="256 px"></div>
+    <div class="hero-logo"><img src="./images/logo.png" alt="logo" width="256 px"></div>
 <!--    <div style="font-size: xxx-large; font-family: 'Arial Black',serif">Be Framework</div>-->
     <span class="sr-only">乾道變化、各正性命 — I Ching, Commentary on the Hexagram Qián (Circa 4th Century BC)</span>
     <style>
-        .hero-tagline { font-size: 1.8rem; }
-        @media (min-width: 1200px) {
-            .hero-tagline { white-space: nowrap; }
+        .hero-logo {
+            margin-bottom: 2.25rem;
+        }
+        .jumbotron > p.hero-tagline {
+            max-width: 72rem;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 1.5rem;
+            font-size: 1.85rem;
+            font-weight: 300;
+            line-height: 1.3;
+            text-wrap: balance;
+        }
+        .jumbotron > p.hero-tagline .hero-subtagline {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 1.65rem;
+        }
+        @media (max-width: 767.98px) {
+            .jumbotron > p.hero-tagline {
+                padding: 0 1rem;
+                font-size: 1.65rem;
+            }
+            .jumbotron > p.hero-tagline .hero-subtagline { font-size: 1.5rem; }
         }
     </style>
     <p class="hero-tagline">
-        <br>
         As the Way <strong>transforms</strong>, each thing settles into its <strong>nature</strong> and <strong>destiny</strong>.
-        <br>
-        The Being-Oriented Framework for PHP
+        <span class="hero-subtagline">The Being-Oriented Framework for PHP</span>
     </p>
 
     <a class="intl btn btn-primary" href="/manuals/1.0/en/index.html">
