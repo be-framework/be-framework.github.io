@@ -26,7 +26,7 @@ composer install
 ## サンプルを実行
 
 ```bash
-php bin/app.php
+php bin/be.php
 ```
 
 出力:
@@ -126,7 +126,7 @@ Hello (Greeting が注入された状態)
 
 ## セマンティック検証を試す
 
-`bin/app.php` を編集して空の名前を渡してみましょう:
+`bin/be.php` を編集して空の名前を渡してみましょう:
 
 ```php
 $input = new HelloInput('');
@@ -135,7 +135,7 @@ $input = new HelloInput('');
 再度実行:
 
 ```bash
-php bin/app.php
+php bin/be.php
 ```
 
 `Semantic/Name.php` が名前が空であることを検証するため、エラーメッセージが表示されます。空の名前は存在できないのです。

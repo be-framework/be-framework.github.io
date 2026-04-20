@@ -265,7 +265,7 @@ final readonly class ObservationCase
 ## ステップ 8: 変容を実行
 
 ```php
-// bin/app.php
+// bin/be.php
 
 use Be\App\Input\PatientArrival;
 use Be\App\Module\AppModule;

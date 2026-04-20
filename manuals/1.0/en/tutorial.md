@@ -264,7 +264,7 @@ Each type has different methods. `EmergencyCase` can `assignER()`, while `Observ
 ## Step 8: Execute the Metamorphosis
 
 ```php
-// bin/app.php
+// bin/be.php
 
 use Be\App\Input\PatientArrival;
 use Be\App\Module\AppModule;

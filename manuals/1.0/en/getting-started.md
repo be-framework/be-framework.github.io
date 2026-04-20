@@ -26,7 +26,7 @@ composer install
 ## Run the Example
 
 ```bash
-php bin/app.php
+php bin/be.php
 ```
 
 Output:
@@ -126,7 +126,7 @@ The input didn't "do" anything—it **became** Hello through metamorphosis.
 
 ## Try Semantic Validation
 
-Edit `bin/app.php` to pass an empty name:
+Edit `bin/be.php` to pass an empty name:
 
 ```php
 $input = new HelloInput('');
@@ -135,7 +135,7 @@ $input = new HelloInput('');
 Run again:
 
 ```bash
-php bin/app.php
+php bin/be.php
 ```
 
 You'll see an error message because `Semantic/Name.php` validates that name cannot be empty.
