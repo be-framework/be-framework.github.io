@@ -9,102 +9,217 @@ permalink: /manuals/1.0/ja/convention/directory-layout.html
 
 > 「論理的空間の中にある諸事実が、世界である」
 >
-> 　　—ルートヴィヒ・ウィトゲンシュタイン（『論理哲学論考』1.13, 1921年）
+> 　　—ルートヴィヒ・ウィトゲンシュタイン(『論理哲学論考』1.13, 1921年)
 
 ## 全体マップ
 
 | dir | 役割 | マニュアル |
 |---|---|---|
-| `src/Input/`      | パイプラインの起点。`#[Be([Target::class])]` で次段を宣言。                                | [Input クラス](../02-input-classes.html) |
-| `src/Final/`      | 終点。`#[Input]` でデータ、`#[Inject]` でサービスを受け取る。                              | [Final オブジェクト](../04-final-objects.html) |
-| `src/Semantic/`   | セマンティック変数（バリデータ）。クラス名 = パラメータ名（camelCase）。                   | [セマンティック変数](../06-semantic-variables.html) |
-| `src/Exception/`  | セマンティック検証例外。`#[Message]` で多言語化。                                          | [エラーハンドリング](../09-error-handling.html) |
-| `src/Reason/`     | 「存在を可能にするもの」— Entity、Media（Command/Query）、ポリシー、ガード。               | [Reason レイヤー](../08-reason-layer.html) |
-| `src/Module/`     | Ray.Di モジュール。`MODULE=<name>` で有効モジュールを切り替え。                            | （スケルトン固有） |
-| `src/Becoming/`   | フレームワーク配線層。ユーザーコードを置く場所ではない。                                    | [Becoming](../04a-becoming.html) |
-| `src/Being/`      | *(空)* `$being` 判別子 + `#[Be([FinalA, ...])]` を使う Branching 中間形。                  | [Being クラス](../03-being-classes.html) |
-| `src/LogContext/` | *(空)* `Been` に添えるセマンティックログのイベントクラス。                                  | [セマンティックロギング](../10-semantic-logging.html) |
-| `src/Moment/`     | *(空)* Diamond の部分 — `MomentInterface` を実装し、`be()` で潜在性を実現。                | [メタモルフォーシスパターン](../05-metamorphosis-patterns.html) |
+| `src/Input/`      | パイプラインの起点。`#[Be(...)]` を宣言。                                     | [Input クラス](../02-input-classes.html) |
+| `src/Final/`      | 終点。`#[Input]` データと `#[Inject]` サービスを受ける。                       | [Final オブジェクト](../04-final-objects.html) |
+| `src/Semantic/`   | セマンティック変数。クラス名 = パラメータ名。                                  | [セマンティック変数](../06-semantic-variables.html) |
+| `src/Exception/`  | セマンティック検証例外。`#[Message]` で多言語化。                               | [エラーハンドリング](../09-error-handling.html) |
+| `src/Reason/`     | 「存在理由」 — ある存在のしかたに必要なサービスを束ねたもの。                   | [Reason レイヤー](../08-reason-layer.html) |
+| `src/Module/`     | Ray.Di モジュール。`MODULE=<name>` 環境変数で有効モジュールを切り替える。       | [Ray.Di マニュアル](https://ray-di.github.io/manuals/1.0/ja/index.html) |
+| `src/Becoming/`   | フレームワーク配線層 — `BecomingInterface` の実装やデコレータ。                 | [Becoming](../04a-becoming.html) |
+| `src/Being/`      | 分岐 — `$being` 判別子 + `#[Be([A, B])]`。                                     | [Being クラス](../03-being-classes.html) |
+| `src/LogContext/` | `Been` に添えるセマンティックログのイベントクラス。                              | [セマンティックロギング](../10-semantic-logging.html) |
+| `src/Moment/`     | Moment — Reason が返した Potential を保持し、`be()` で実現する。                | [メタモルフォーシスパターン](../05-metamorphosis-patterns.html) |
 
-## ディレクトリ別リファレンス
+## `src/Input/`
 
-### `src/Input/`
+```php
+#[Be(HelloFinal::class)]
+final readonly class HelloInput
+{
+    public function __construct(
+        #[Input] public string $name,
+    ) {}
+}
+```
 
-**役割**: あらゆるメタモルフォーシスパイプラインの起点。
-**置くもの**: `<Domain>Input` という命名の final readonly クラス。`#[Be([Target::class])]` で次の姿を宣言する。
-**置かないもの**: 検証、サービス、ビジネスロジック — Input は純粋なデータと「次は何になるか」の宣言だけ。
-**スケルトン例**: `HelloInput.php`
-**詳しく**: [Input クラス](../02-input-classes.html)
+Input はデータだけでなく「次に何になるか」を持ちます。`#[Be(...)]` が次段への引き渡しになります。
 
-### `src/Final/`
+→ [Input クラス](../02-input-classes.html)
 
-**役割**: パイプラインの終点 — Input が変容した先の姿。
-**置くもの**: コンストラクタで `#[Input]` データと `#[Inject]` サービスを受け取り、結果の状態を凍結する final readonly クラス。
-**置かないもの**: `#[Be(...)]` 宣言 — Final に到達した時点でパイプラインは終わる。
-**スケルトン例**: `HelloFinal.php`
-**詳しく**: [Final オブジェクト](../04-final-objects.html)
+## `src/Final/`
 
-### `src/Semantic/`
+```php
+final readonly class HelloFinal
+{
+    public string $message;
 
-**役割**: パラメータに型レベルで意味を与える。クラス名そのものがパラメータ名。
-**置くもの**: バリデータクラス（例: `EmailAddress`、`CustomerId`）。コンストラクタで制約を強制し、違反時は例外を投げる。
-**置かないもの**: 汎用的な値オブジェクト — セマンティック変数は特定のパラメータ名に紐づく。
-**スケルトン例**: `Name.php`
-**詳しく**: [セマンティック変数](../06-semantic-variables.html)
+    public function __construct(
+        #[Input] string $name,
+        #[Inject] Greeting $greeting,
+    ) {
+        $this->message = $greeting->say($name);
+    }
+}
+```
 
-### `src/Exception/`
+`#[Be(...)]` は持ちません — ここが終点です。`#[Input]` は内在(前段から渡ってきたもの)、`#[Inject]` は超越(外から与えられるサービス)。完了の証拠は `#[Inject] Been` に記されます。
 
-**役割**: 多言語対応メッセージ付きのセマンティック検証失敗。
-**置くもの**: `#[Message(en: "...", ja: "...")]` を付けた例外クラス。`src/Semantic/` のコンストラクタから throw される。
-**置かないもの**: 汎用的な実行時エラー — それはフレームワークの関心事であって、ドメインのセマンティクスではない。
-**スケルトン例**: `InvalidNameException.php`
-**詳しく**: [エラーハンドリング](../09-error-handling.html)
+→ [Final オブジェクト](../04-final-objects.html)
 
-### `src/Reason/`
+## `src/Semantic/`
 
-**役割**: 「存在を可能にするもの」。Entity、Media（Ray.MediaQuery による Command/Query インタフェース）、ポリシー、ガードを収める。
-**置くもの**: リポジトリインタフェース、Ray.MediaQuery インタフェース、ポリシークラス、それらが読み書きする Entity。
-**置かないもの**: 具象サービスの実装はモジュールに置く — Reason は契約とルールの層。
-**スケルトン例**: `Hello/HelloEntity.php`、`Hello/SayHelloInterface.php`
-**詳しく**: [Reason レイヤー](../08-reason-layer.html)
+```php
+final class Email
+{
+    #[Validate]
+    public function validate(string $email): void
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidEmailException();
+        }
+    }
+}
+```
 
-### `src/Module/`
+クラス名そのものがパラメータ名です。`#[Validate]` は `$email` という名の引数すべてに自動で効きます — 一度定義すれば、アプリ全域に適用されます。
 
-**役割**: 依存性配線。各モジュールは Ray.Di のモジュールクラス。
-**置くもの**: `AppModule`（本番配線）と、`DevModule`、`TestModule` などの代替。`MODULE=<name>` 環境変数で選択する。
-**置かないもの**: アプリケーションロジック — モジュールはインタフェースと実装の束縛だけを行う。
-**スケルトン例**: `AppModule.php`、`DevModule.php`
-**詳しく**: スケルトン固有（スケルトンの `CLAUDE.md` を参照）。
+→ [セマンティック変数](../06-semantic-variables.html)
 
-### `src/Becoming/`
+## `src/Exception/`
 
-**役割**: フレームワーク配線層 — `Becoming` 自体のアダプタ。
-**置くもの**: デコレータや代替の `BecomingInterface` 実装（例: 実行ごとにセマンティックログを書き出すもの）。
-**置かないもの**: アプリケーションコード。フレームワークの動作方法に関するものでなければここではない。
-**スケルトン例**: `DevBecoming.php`
-**詳しく**: [Becoming](../04a-becoming.html)
+```php
+#[Message(
+    en: 'Invalid email: {email}',
+    ja: '不正なメールアドレス: {email}',
+)]
+final class InvalidEmailException extends \DomainException {}
+```
 
-### `src/Being/` *(デフォルトでは空)*
+`#[Message]` の `en`/`ja` が i18n の単位です。`{email}` のようなプレースホルダは、throw 時に例外のプロパティから埋まります。
 
-**役割**: 分岐の中間形。`$being` 判別子を持ち `#[Be([FinalA::class, FinalB::class])]` を宣言するクラス。フレームワークが実行時に次の姿を選ぶ。
-**置くもの**: 分岐ポイントごとに 1 ファイル — `$being` がユニオン型を返す `<Domain>Being.php`。
-**置かないもの**: 線形パイプライン — 中間形を経由せず Input から Final まで直行する場合は不要。
-**スケルトン例**: *(デフォルトでは空)*
-**詳しく**: [Being クラス](../03-being-classes.html)
+→ [エラーハンドリング](../09-error-handling.html)
 
-### `src/LogContext/` *(デフォルトでは空)*
+## `src/Reason/`
 
-**役割**: パイプライン内で起きたことを記述する、`Been` に添えるセマンティックログのイベントクラス。
-**置くもの**: `AbstractContext` のサブクラス。イベントにちなんだ名前（例: `OrderFinalizedContext`）。
-**置かないもの**: 単なる DTO — これらのクラスは `koriym/semantic-logger` が読み取り、ツリーへ描画する。
-**スケルトン例**: *(デフォルトでは空)*
-**詳しく**: [セマンティックロギング](../10-semantic-logging.html)
+```php
+final readonly class ExpressShipping
+{
+    public function __construct(
+        private PriorityCarrier $carrier,
+        private RealTimeTracker $tracker,
+    ) {}
 
-### `src/Moment/` *(デフォルトでは空)*
+    public function calculateFee(Weight $weight): Fee
+    {
+        return $this->carrier->expressFee($weight);
+    }
+}
+```
 
-**役割**: Diamond パターンの部分。*潜在性* を保持し、`be()` でそれを実現する `MomentInterface` の実装。
-**置くもの**: 捉える瞬間にちなんだ名前のクラス（`PaymentCapture`、`InventoryReservation`）。周囲のパイプラインから `realize` callable が配線される。
-**置かないもの**: 単発の操作 — Moment は線形ステップではなく、Diamond の収束パターンのためのもの。
-**スケルトン例**: *(デフォルトでは空)*
-**詳しく**: [メタモルフォーシスパターン](../05-metamorphosis-patterns.html)
+1つのオブジェクトが「`ExpressDelivery` になるために必要なものは?」に答えます — carrier と tracker を束ねる形で。`#[Inject]` で能力として使うことも、`$being` に型付けして次段を決めることもできます。
 
+→ [Reason レイヤー](../08-reason-layer.html)
+
+## `src/Module/`
+
+```php
+final class AppModule extends AbstractModule
+{
+    protected function configure(): void
+    {
+        $this->bind(PriorityCarrier::class)->to(FedExPriority::class);
+        $this->bind(RealTimeTracker::class)->to(FedExTracker::class);
+    }
+}
+```
+
+`MODULE=Dev` のような環境変数で切り替わります。代替モジュール側で `override` を使えば、本番配線に一切触れずに実装を差し替えられます。
+
+→ [Ray.Di マニュアル](https://ray-di.github.io/manuals/1.0/ja/index.html)
+
+## `src/Becoming/`
+
+```php
+final readonly class LoggingBecoming implements BecomingInterface
+{
+    public function __construct(
+        private Becoming $inner,
+        private LoggerInterface $logger,
+    ) {}
+
+    public function __invoke(object $input): object
+    {
+        $this->logger->info('becoming', ['input' => $input::class]);
+        return ($this->inner)($input);
+    }
+}
+```
+
+普段は触りません。メタモルフォーシスの実行そのものに手を入れたいとき(ログ・トレース・計測)だけ使います。ドメインコードは置きません。
+
+→ [Becoming](../04a-becoming.html)
+
+## `src/Being/`
+
+```php
+#[Be([Approved::class, Rejected::class])]
+final readonly class ApplicationReview
+{
+    public Approved|Rejected $being;
+
+    public function __construct(
+        #[Input] LoanApplication $app,
+        #[Inject] CreditCheck $check,
+    ) {
+        $this->being = $check->evaluate($app);
+    }
+}
+```
+
+`$being` の実行時の型が `#[Be([...])]` の中から次段を選びます。プロパティ名はユニオン型でありさえすれば自由ですが、`$being` と書くと分岐点であることが一目で伝わります。
+
+→ [Being クラス](../03-being-classes.html)
+
+## `src/LogContext/`
+
+```php
+final class EmailFormatAssertedContext extends AbstractContext
+{
+    public const string TYPE = 'email_format_asserted';
+    public const string SCHEMA_URL = 'https://example.com/schemas/email-format-asserted.json';
+
+    public function __construct(
+        public readonly string $email,
+    ) {}
+}
+```
+
+`TYPE` はログに出るイベント名、`SCHEMA_URL` は外部スキーマへのリンクです。Final 内で `$been->with(new EmailFormatAssertedContext(...))` として添付します。
+
+→ [セマンティックロギング](../10-semantic-logging.html)
+
+## `src/Moment/`
+
+```php
+final readonly class PaymentCompleted implements MomentInterface
+{
+    public PaymentCapture $capture;
+
+    public function __construct(
+        #[Input] string $cardNumber,
+        #[Input] int $amount,
+        #[Inject] PaymentGateway $gateway,
+    ) {
+        $this->capture = $gateway->authorize($cardNumber, $amount);
+    }
+
+    public function be(): void
+    {
+        $this->capture->be();
+    }
+}
+```
+
+コンストラクタで `authorize()` は済みます(Potential)が、`capture()` はまだです。全 Moment を生成できた Final だけが `be()` を一斉に呼びます — 部分的なコミットは起こりません。
+
+→ [メタモルフォーシスパターン](../05-metamorphosis-patterns.html)
+
+---
+
+3つのディレクトリ — `Being/`、`LogContext/`、`Moment/` — はデフォルトでは空です。スケルトンのデフォルトは `Input → Final` の線形パイプラインで、分岐・セマンティックロギング・Diamond パターンは opt-in です。空のまま置いておくことで、そのパターンが必要になるまで静的解析とカバレッジをクリーンに保てます。

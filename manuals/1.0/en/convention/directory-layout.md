@@ -15,96 +15,211 @@ permalink: /manuals/1.0/en/convention/directory-layout.html
 
 | dir | role | manual |
 |---|---|---|
-| `src/Input/`      | Pipeline entry. Declares `#[Be([Target::class])]`.                                  | [Input Classes](../02-input-classes.html) |
-| `src/Final/`      | Terminus. Receives `#[Input]` data + `#[Inject]` services.                          | [Final Objects](../04-final-objects.html) |
-| `src/Semantic/`   | Semantic variables (validators). Class name = parameter name (camelCase).           | [Semantic Variables](../06-semantic-variables.html) |
-| `src/Exception/`  | Semantic-validation exceptions with `#[Message]` for i18n.                          | [Error Handling](../09-error-handling.html) |
-| `src/Reason/`     | "What makes existence possible" — Entity, Media (Command/Query), policies, guards.  | [Reason Layer](../08-reason-layer.html) |
-| `src/Module/`     | Ray.Di modules. `MODULE=<name>` env switches the active module.                     | (skeleton-specific) |
-| `src/Becoming/`   | Framework wiring layer. Not user code.                                              | [Becoming](../04a-becoming.html) |
-| `src/Being/`      | *(empty)* Branching intermediate with `$being` discriminator + `#[Be([FinalA, ...])]`. | [Being Classes](../03-being-classes.html) |
-| `src/LogContext/` | *(empty)* Semantic-log event classes attached to `Been`.                            | [Semantic Logging](../10-semantic-logging.html) |
-| `src/Moment/`     | *(empty)* Diamond parts — `implements MomentInterface`, `be()` realizes potential.  | [Metamorphosis Patterns](../05-metamorphosis-patterns.html) |
+| `src/Input/`      | Pipeline entry. Declares `#[Be(...)]`.                                   | [Input Classes](../02-input-classes.html) |
+| `src/Final/`      | Terminus. `#[Input]` data + `#[Inject]` services.                        | [Final Objects](../04-final-objects.html) |
+| `src/Semantic/`   | Semantic variables. Class name = parameter name.                         | [Semantic Variables](../06-semantic-variables.html) |
+| `src/Exception/`  | Semantic-validation exceptions with `#[Message]` for i18n.               | [Error Handling](../09-error-handling.html) |
+| `src/Reason/`     | Raison d'être — related services bundled as one mode of existence.        | [Reason Layer](../08-reason-layer.html) |
+| `src/Module/`     | Ray.Di modules. `MODULE=<name>` env switches the active module.          | [Ray.Di Manual](https://ray-di.github.io/manuals/1.0/en/index.html) |
+| `src/Becoming/`   | Framework wiring — `BecomingInterface` implementations/decorators.        | [Becoming](../04a-becoming.html) |
+| `src/Being/`      | Branching — `$being` discriminator + `#[Be([A, B])]`.                     | [Being Classes](../03-being-classes.html) |
+| `src/LogContext/` | Semantic-log event classes attached to `Been`.                            | [Semantic Logging](../10-semantic-logging.html) |
+| `src/Moment/`     | Moment — holds a Potential from Reason, realized via `be()`.              | [Metamorphosis Patterns](../05-metamorphosis-patterns.html) |
 
-## Per-directory reference
+## `src/Input/`
 
-### `src/Input/`
+```php
+#[Be(HelloFinal::class)]
+final readonly class HelloInput
+{
+    public function __construct(
+        #[Input] public string $name,
+    ) {}
+}
+```
 
-**Role**: The starting point of every metamorphosis pipeline.
-**Put here**: Final-readonly classes named `<Domain>Input` that declare `#[Be([Target::class])]` to nominate their next form.
-**Don't put here**: Validation, services, or business logic — Input is pure data + a forward-looking declaration.
-**Skeleton example**: `HelloInput.php`
-**Deep dive**: [Input Classes](../02-input-classes.html)
+An Input carries not just data but the declaration of what it becomes. `#[Be(...)]` is the hand-off to the next form.
 
-### `src/Final/`
+→ [Input Classes](../02-input-classes.html)
 
-**Role**: The terminus of a pipeline — the form an Input becomes.
-**Put here**: Final-readonly classes that take `#[Input]` data + `#[Inject]` services in the constructor and freeze the resulting state.
-**Don't put here**: `#[Be(...)]` declarations — once you reach Final, the pipeline ends.
-**Skeleton example**: `HelloFinal.php`
-**Deep dive**: [Final Objects](../04-final-objects.html)
+## `src/Final/`
 
-### `src/Semantic/`
+```php
+final readonly class HelloFinal
+{
+    public string $message;
 
-**Role**: Type-level meaning for parameters. The class name *is* the parameter name.
-**Put here**: Validator classes (e.g. `EmailAddress`, `CustomerId`) whose constructor enforces the constraint and throws on violation.
-**Don't put here**: Generic value objects — Semantic variables are anchored to a specific parameter name.
-**Skeleton example**: `Name.php`
-**Deep dive**: [Semantic Variables](../06-semantic-variables.html)
+    public function __construct(
+        #[Input] string $name,
+        #[Inject] Greeting $greeting,
+    ) {
+        $this->message = $greeting->say($name);
+    }
+}
+```
 
-### `src/Exception/`
+No `#[Be(...)]` — this is the terminus. `#[Input]` is immanence (what came from the previous form); `#[Inject]` is transcendence (services from outside). Evidence of completion is recorded via `#[Inject] Been`.
 
-**Role**: Semantic-validation failures with i18n-ready messages.
-**Put here**: Exception classes annotated with `#[Message(en: "...", ja: "...")]` and thrown from `src/Semantic/` constructors.
-**Don't put here**: General runtime errors — those are framework concerns, not domain semantics.
-**Skeleton example**: `InvalidNameException.php`
-**Deep dive**: [Error Handling](../09-error-handling.html)
+→ [Final Objects](../04-final-objects.html)
 
-### `src/Reason/`
+## `src/Semantic/`
 
-**Role**: "What makes existence possible." Houses Entities, Media (Command/Query interfaces via Ray.MediaQuery), policies, and guards.
-**Put here**: Repository interfaces, Ray.MediaQuery interfaces, policy classes, and the entities they read or write.
-**Don't put here**: Concrete service implementations belong in modules — Reason holds the contracts and rules.
-**Skeleton example**: `Hello/HelloEntity.php`, `Hello/SayHelloInterface.php`
-**Deep dive**: [Reason Layer](../08-reason-layer.html)
+```php
+final class Email
+{
+    #[Validate]
+    public function validate(string $email): void
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidEmailException();
+        }
+    }
+}
+```
 
-### `src/Module/`
+Class name *is* the parameter name. `#[Validate]` auto-applies to every argument named `$email`, anywhere in the app — define once, enforced everywhere.
 
-**Role**: Dependency wiring. Each module is a Ray.Di module class.
-**Put here**: `AppModule` (production wiring) plus alternates like `DevModule`, `TestModule`. The `MODULE=<name>` env var picks one.
-**Don't put here**: Application logic — modules only bind interfaces to implementations.
-**Skeleton example**: `AppModule.php`, `DevModule.php`
-**Deep dive**: skeleton-specific (see the skeleton's `CLAUDE.md`).
+→ [Semantic Variables](../06-semantic-variables.html)
 
-### `src/Becoming/`
+## `src/Exception/`
 
-**Role**: Framework wiring layer — adapters around `Becoming` itself.
-**Put here**: Decorators or alternate `BecomingInterface` implementations (e.g. one that writes a semantic log on every run).
-**Don't put here**: Application code. If it isn't about how the framework runs, it doesn't go here.
-**Skeleton example**: `DevBecoming.php`
-**Deep dive**: [Becoming](../04a-becoming.html)
+```php
+#[Message(
+    en: 'Invalid email: {email}',
+    ja: '不正なメールアドレス: {email}',
+)]
+final class InvalidEmailException extends \DomainException {}
+```
 
-### `src/Being/` *(empty by default)*
+`#[Message]` `en`/`ja` are the unit of i18n. Placeholders like `{email}` are filled from the exception's properties at throw time.
 
-**Role**: Branching intermediates. A class that holds a `$being` discriminator and declares `#[Be([FinalA::class, FinalB::class])]` so the framework picks the next form at runtime.
-**Put here**: One file per branching point — `<Domain>Being.php` returning a union type for `$being`.
-**Don't put here**: Linear pipelines — those go straight from Input to Final without an intermediate.
-**Skeleton example**: *(empty by default)*
-**Deep dive**: [Being Classes](../03-being-classes.html)
+→ [Error Handling](../09-error-handling.html)
 
-### `src/LogContext/` *(empty by default)*
+## `src/Reason/`
 
-**Role**: Semantic-log event classes that attach to `Been` to describe what happened in the pipeline.
-**Put here**: `AbstractContext` subclasses named after the event (e.g. `OrderFinalizedContext`).
-**Don't put here**: Plain DTOs — these classes are read by `koriym/semantic-logger` and rendered into the tree.
-**Skeleton example**: *(empty by default)*
-**Deep dive**: [Semantic Logging](../10-semantic-logging.html)
+```php
+final readonly class ExpressShipping
+{
+    public function __construct(
+        private PriorityCarrier $carrier,
+        private RealTimeTracker $tracker,
+    ) {}
 
-### `src/Moment/` *(empty by default)*
+    public function calculateFee(Weight $weight): Fee
+    {
+        return $this->carrier->expressFee($weight);
+    }
+}
+```
 
-**Role**: Diamond-pattern parts. A `MomentInterface` implementation that holds a *potential* and realizes it via `be()`.
-**Put here**: Classes named after the moment they capture (`PaymentCapture`, `InventoryReservation`) with a `realize` callable wired in by the surrounding pipeline.
-**Don't put here**: One-shot operations — Moments are for the diamond convergence pattern, not linear steps.
-**Skeleton example**: *(empty by default)*
-**Deep dive**: [Metamorphosis Patterns](../05-metamorphosis-patterns.html)
+One object answers "what's needed to exist as `ExpressDelivery`?" — carrier + tracker bundled together. Used as `#[Inject]` to provide capabilities, or as `$being` to let the type decide the next form.
 
+→ [Reason Layer](../08-reason-layer.html)
+
+## `src/Module/`
+
+```php
+final class AppModule extends AbstractModule
+{
+    protected function configure(): void
+    {
+        $this->bind(PriorityCarrier::class)->to(FedExPriority::class);
+        $this->bind(RealTimeTracker::class)->to(FedExTracker::class);
+    }
+}
+```
+
+Swapped via `MODULE=Dev` (or similar env). An alternate module can use `override` to substitute implementations without touching production wiring.
+
+→ [Ray.Di Manual](https://ray-di.github.io/manuals/1.0/en/index.html)
+
+## `src/Becoming/`
+
+```php
+final readonly class LoggingBecoming implements BecomingInterface
+{
+    public function __construct(
+        private Becoming $inner,
+        private LoggerInterface $logger,
+    ) {}
+
+    public function __invoke(object $input): object
+    {
+        $this->logger->info('becoming', ['input' => $input::class]);
+        return ($this->inner)($input);
+    }
+}
+```
+
+Touched rarely — only when you need to instrument metamorphosis itself (logging, tracing, timing). Everyday domain code never lands here.
+
+→ [Becoming](../04a-becoming.html)
+
+## `src/Being/`
+
+```php
+#[Be([Approved::class, Rejected::class])]
+final readonly class ApplicationReview
+{
+    public Approved|Rejected $being;
+
+    public function __construct(
+        #[Input] LoanApplication $app,
+        #[Inject] CreditCheck $check,
+    ) {
+        $this->being = $check->evaluate($app);
+    }
+}
+```
+
+The runtime type of `$being` picks which `#[Be([...])]` candidate comes next. The name can be anything — only the union type matters — but `$being` signals "branching point" at a glance.
+
+→ [Being Classes](../03-being-classes.html)
+
+## `src/LogContext/`
+
+```php
+final class EmailFormatAssertedContext extends AbstractContext
+{
+    public const string TYPE = 'email_format_asserted';
+    public const string SCHEMA_URL = 'https://example.com/schemas/email-format-asserted.json';
+
+    public function __construct(
+        public readonly string $email,
+    ) {}
+}
+```
+
+`TYPE` is the event name that lands in the log; `SCHEMA_URL` links to the external schema. Attached via `$been->with(new EmailFormatAssertedContext(...))` inside a Final.
+
+→ [Semantic Logging](../10-semantic-logging.html)
+
+## `src/Moment/`
+
+```php
+final readonly class PaymentCompleted implements MomentInterface
+{
+    public PaymentCapture $capture;
+
+    public function __construct(
+        #[Input] string $cardNumber,
+        #[Input] int $amount,
+        #[Inject] PaymentGateway $gateway,
+    ) {
+        $this->capture = $gateway->authorize($cardNumber, $amount);
+    }
+
+    public function be(): void
+    {
+        $this->capture->be();
+    }
+}
+```
+
+The constructor completes `authorize()` (the Potential), but not `capture()`. Only a Final that could construct *every* Moment then calls `be()` on each — so partial commits never happen.
+
+→ [Metamorphosis Patterns](../05-metamorphosis-patterns.html)
+
+---
+
+Three directories — `Being/`, `LogContext/`, `Moment/` — ship empty. The skeleton's default is a linear `Input → Final` pipeline; branching, semantic logging, and the Diamond pattern are opt-in. Leaving them empty keeps static analysis and coverage clean until the project needs them.
