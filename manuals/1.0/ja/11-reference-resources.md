@@ -20,4 +20,5 @@ permalink: /manuals/1.0/ja/11-reference-resources.html
 ## 開発リファレンス
 
 - [命名規約](./convention/naming-standards.html) — 存在指向の命名原則
+- [ディレクトリ構成](./convention/directory-layout.html) — `src/<dir>/` 各スロットの役割と置くもの
 - [背後にある哲学](./12-philosophy-behind.html) — 存在論的プログラミングの思想的ルーツ
