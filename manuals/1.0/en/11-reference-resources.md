@@ -20,4 +20,5 @@ permalink: /manuals/1.0/en/11-reference-resources.html
 ## Development Reference
 
 - [Naming Standards](./convention/naming-standards.html) — Being-oriented naming principles
+- [Directory Layout](./convention/directory-layout.html) — Canonical `src/<dir>/` slots and what each is for
 - [Philosophy Behind](./12-philosophy-behind.html) — Philosophical roots of ontological programming
