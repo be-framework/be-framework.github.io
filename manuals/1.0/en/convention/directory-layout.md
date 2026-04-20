@@ -7,9 +7,9 @@ permalink: /manuals/1.0/en/convention/directory-layout.html
 
 # Be Framework Directory Layout
 
-> Ten `src/<dir>/` slots, each with a single responsibility
-
-Every Be Framework application uses the same set of `src/<dir>/` slots. Some are mandatory from day one; others stay empty until the pattern that needs them appears. The [skeleton](https://github.com/be-framework/skeleton) ships them all so you can drop code into the right place without guessing.
+> "The facts in logical space are the world."
+>
+> —Ludwig Wittgenstein (*Tractatus Logico-Philosophicus*, 1.13, 1921)
 
 ## Source map
 
@@ -108,14 +108,3 @@ Every Be Framework application uses the same set of `src/<dir>/` slots. Some are
 **Skeleton example**: *(empty by default)*
 **Deep dive**: [Metamorphosis Patterns](../05-metamorphosis-patterns.html)
 
-## Why three directories are empty by default
-
-`src/Being/`, `src/LogContext/`, and `src/Moment/` ship as `.gitkeep` placeholders. They correspond to optional patterns (Branching, Semantic Logging, Diamond convergence) that not every application needs.
-
-Keeping them empty means:
-
-- **Static analysis stays clean** — no example classes to confuse PHPStan or psalm.
-- **Coverage reports stay honest** — no boilerplate inflating or deflating the percentage.
-- **The shape of the project signals intent** — a file in `src/Being/` means *this app uses branching*, not *this is what the skeleton happened to ship with*.
-
-When you adopt one of these patterns, drop the first real class into the matching directory and the slot is no longer empty.
