@@ -17,10 +17,8 @@ permalink: /manuals/1.0/ja/getting-started.html
 ## インストール
 
 ```bash
-git clone https://github.com/be-framework/app my-project
+composer create-project be-framework/skeleton:dev-1.x my-project
 cd my-project
-rm -rf .git
-composer install
 ```
 
 ## サンプルを実行
