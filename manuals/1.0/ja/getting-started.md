@@ -17,7 +17,7 @@ permalink: /manuals/1.0/ja/getting-started.html
 ## インストール
 
 ```bash
-composer create-project be-framework/skeleton:dev-1.x my-project
+composer create-project be-framework/skeleton:dev-0.x my-project
 cd my-project
 ```
 
