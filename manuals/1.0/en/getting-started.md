@@ -17,14 +17,14 @@ permalink: /manuals/1.0/en/getting-started.html
 ## Installation
 
 ```bash
-composer create-project be-framework/skeleton:dev-0.x my-project
+composer create-project be-framework/skeleton my-project --stability dev
 cd my-project
 ```
 
 ## Run the Example
 
 ```bash
-php bin/be.php
+composer dev
 ```
 
 Output:
@@ -38,6 +38,8 @@ That's it! Let's look at the code.
 ## Project Structure
 
 ```
+bin/
+└── be.php                  # CLI entrypoint
 src/
 ├── Input/
 │   └── HelloInput.php      # Starting point
@@ -133,7 +135,7 @@ $input = new HelloInput('');
 Run again:
 
 ```bash
-php bin/be.php
+composer dev
 ```
 
 You'll see an error message because `Semantic/Name.php` validates that name cannot be empty.

@@ -17,14 +17,14 @@ permalink: /manuals/1.0/ja/getting-started.html
 ## インストール
 
 ```bash
-composer create-project be-framework/skeleton:dev-0.x my-project
+composer create-project be-framework/skeleton my-project --stability dev
 cd my-project
 ```
 
 ## サンプルを実行
 
 ```bash
-php bin/be.php
+composer dev
 ```
 
 出力:
@@ -38,6 +38,8 @@ Hello World
 ## プロジェクト構造
 
 ```
+bin/
+└── be.php                  # CLIエントリポイント
 src/
 ├── Input/
 │   └── HelloInput.php      # 出発点
@@ -133,7 +135,7 @@ $input = new HelloInput('');
 再度実行:
 
 ```bash
-php bin/be.php
+composer dev
 ```
 
 `Semantic/Name.php` が名前が空であることを検証するため、エラーメッセージが表示されます。空の名前は存在できないのです。
