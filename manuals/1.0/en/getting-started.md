@@ -17,22 +17,28 @@ permalink: /manuals/1.0/en/getting-started.html
 ## Installation
 
 ```bash
-git clone https://github.com/be-framework/app my-project
+composer create-project be-framework/skeleton:0.x-dev my-project
 cd my-project
-rm -rf .git
-composer install
 ```
 
 ## Run the Example
 
 ```bash
-php bin/app.php
+composer dev
 ```
+
+This runs `php bin/be.php 'hello?name=World'` and writes a semantic log to `var/log/<timestamp>.json`.
 
 Output:
 
 ```txt
 Hello World
+```
+
+You can also invoke directly with a BEAR.Sunday-style URI:
+
+```bash
+php bin/be.php 'hello?name=Alice'
 ```
 
 That's it! Let's look at the code.
@@ -126,16 +132,10 @@ The input didn't "do" anything—it **became** Hello through metamorphosis.
 
 ## Try Semantic Validation
 
-Edit `bin/app.php` to pass an empty name:
-
-```php
-$input = new HelloInput('');
-```
-
-Run again:
+Run with an empty name:
 
 ```bash
-php bin/app.php
+php bin/be.php 'hello?name='
 ```
 
 You'll see an error message because `Semantic/Name.php` validates that name cannot be empty.
