@@ -17,14 +17,14 @@ permalink: /manuals/1.0/en/tutorial.html
 
 ## Introduction
 
-In this tutorial, we'll build an emergency triage system that demonstrates the core philosophy of Be Framework: **objects don't DO things—they BECOME things.**
+This tutorial picks up from [Getting Started](./getting-started.html) and builds an emergency triage system that demonstrates the core philosophy of Be Framework: **objects don't DO things—they BECOME things.**
 
 A patient doesn't "get triaged." They **become** an emergency case or an observation case, based on the transcendent wisdom of medical protocol.
 
 ## The Metamorphosis
 
 ```
-PatientArrival (raw vital signs)
+PatientArrivalInput (raw vital signs)
     ↓ JTAS Protocol assesses
 TriageAssessment (the chrysalis stage)
     ↓ Destiny is determined
@@ -129,10 +129,10 @@ This is the **Reason**—the external force that enables metamorphosis. Just as 
 The starting point—raw vital signs at the moment of arrival:
 
 ```php
-// src/Input/PatientArrival.php
+// src/Input/PatientArrivalInput.php
 
 #[Be([TriageAssessment::class])]
-final readonly class PatientArrival
+final readonly class PatientArrivalInput
 {
     public function __construct(
         public float $bodyTemperature,
@@ -263,32 +263,32 @@ Each type has different methods. `EmergencyCase` can `assignER()`, while `Observ
 
 ## Step 8: Execute the Metamorphosis
 
-```php
-// bin/be.php
+Keep the skeleton's generic `bin/be.php` entrypoint and invoke your new input by path:
 
-use Be\App\Input\PatientArrival;
-use Be\App\Module\AppModule;
-use Be\Framework\Becoming;
-use Ray\Di\Injector;
-
-$injector = new Injector(new AppModule());
-$becoming = new Becoming($injector, 'Be\\App\\Semantic');
-
-// High fever patient
-$patient = new PatientArrival(bodyTemperature: 39.5, heartRate: 90);
-$final = $becoming($patient);
-
-echo $final->priority;     // "IMMEDIATE"
-echo $final->color;        // "RED"
-echo $final->assignER();   // "Secure ER Room 1 immediately..."
+```bash
+php bin/be.php 'patientArrival?bodyTemperature=39.5&heartRate=90'
 ```
+
+Output:
+
+```json
+{
+  "priority": "IMMEDIATE",
+  "color": "RED",
+  "bodyTemperature": 39.5,
+  "heartRate": 90,
+  "being": {}
+}
+```
+
+`bin/be.php` maps the URI path `patientArrival` to `Be\App\Input\PatientArrivalInput`, parses the query string, and runs the same metamorphosis pipeline you used in Getting Started.
 
 ## Temporal Existence
 
 All existence flows through time—from Input through Being to Final.
 
 ```
-PatientArrival(39.5°C, 90 bpm)
+PatientArrivalInput(39.5°C, 90 bpm)
     ↓ #[Be([TriageAssessment::class])]
 TriageAssessment
     ├─ JTASProtocol->assess() returns 'emergency'
@@ -302,16 +302,14 @@ EmergencyCase (because $being is Emergency)
 
 ## Handling Non-Survivable Existence
 
-```php
-// Temperature outside survivable range
-$invalid = new PatientArrival(bodyTemperature: 50.0, heartRate: 80);
+```bash
+php bin/be.php 'patientArrival?bodyTemperature=50.0&heartRate=80'
+```
 
-try {
-    $becoming($invalid);
-} catch (SemanticVariableException $e) {
-    echo $e->getErrors()->getMessages('en')[0];
-    // "Vital signs indicate non-survivable conditions."
-}
+Output:
+
+```txt
+Vital signs indicate non-survivable conditions.
 ```
 
 The metamorphosis is **rejected**. A patient with lethal vital signs cannot exist in our system.
@@ -336,7 +334,7 @@ Problems:
 ### Be Framework Approach (Being)
 
 ```php
-$patient = new PatientArrival($temp, $hr);
+$patient = new PatientArrivalInput($temp, $hr);
 $final = $becoming($patient);
 
 // $final IS an EmergencyCase or ObservationCase
@@ -360,7 +358,7 @@ src/
 ├── Exception/
 │   └── LethalVitalException.php
 ├── Input/
-│   └── PatientArrival.php      # Entry point
+│   └── PatientArrivalInput.php # Entry point
 ├── Module/
 │   └── AppModule.php           # DI configuration
 ├── Final/
@@ -387,7 +385,7 @@ The same pattern applies everywhere:
 
 | Domain | Input | Being | Final | Reason |
 |--------|-------|-------|---------|--------|
-| Triage | PatientArrival | TriageAssessment | Emergency/Observation | JTASProtocol |
+| Triage | PatientArrivalInput | TriageAssessment | Emergency/Observation | JTASProtocol |
 | Brewing | RawMaterials | Fermentation | PremiumSake/Vinegar | YeastCulture |
 | Immigration | VisaApplication | ConsularReview | Resident/Visitor | ImmigrationLaw |
 | Justice | Evidence | Trial | Guilty/Acquitted | PenalCode |
