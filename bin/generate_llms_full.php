@@ -46,10 +46,21 @@ foreach ($iterator as $file) {
 
 sort($files, SORT_STRING);
 
-$content = rtrim((string) file_get_contents($llmsFile)) . "\n\n---\n\n# Full Documentation\n\n";
+$llmsContent = file_get_contents($llmsFile);
+if ($llmsContent === false) {
+    fwrite(STDERR, "Failed to read llms.txt at {$llmsFile}\n");
+    exit(1);
+}
+
+$content = rtrim($llmsContent) . "\n\n---\n\n# Full Documentation\n\n";
 
 foreach ($files as $file) {
-    $markdown = (string) file_get_contents($file);
+    $markdown = file_get_contents($file);
+    if ($markdown === false) {
+        fwrite(STDERR, "Failed to read markdown file at {$file}\n");
+        exit(1);
+    }
+
     $markdown = preg_replace('/\A---\s*\R.*?\R---\s*\R/ms', '', $markdown, 1) ?? $markdown;
     $markdown = trim($markdown);
 
@@ -62,7 +73,11 @@ foreach ($files as $file) {
     $content .= $markdown . "\n\n";
 }
 
-file_put_contents($outputFile, $content);
+$bytesWritten = file_put_contents($outputFile, $content);
+if ($bytesWritten === false || $bytesWritten !== strlen($content)) {
+    fwrite(STDERR, "Failed to write complete llms-full.txt to {$outputFile}\n");
+    exit(1);
+}
 
 echo "Generated llms-full.txt successfully.\n";
 echo 'Included files: ' . count($files) . "\n";
