@@ -1,6 +1,7 @@
 ---
-layout: index
+layout: docs-en
 title: "Three Lines of While-Loop and Fifteen Thinkers — A Be Framework Review"
+category: Manual
 ---
 
 # Three Lines of While-Loop and Fifteen Thinkers — A Be Framework Review

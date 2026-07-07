@@ -1,6 +1,7 @@
 ---
-layout: index
+layout: docs-ja
 title: "二つのループ — エージェントコーディング時代のBe Framework"
+category: Manual
 ---
 
 # 二つのループ — エージェントコーディング時代のBe Framework

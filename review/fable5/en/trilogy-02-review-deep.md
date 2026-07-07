@@ -1,6 +1,7 @@
 ---
-layout: index
+layout: docs-en
 title: "The Constructor, The Last Honest Place — Be Framework Reconsidered"
+category: Manual
 ---
 
 # The Constructor, The Last Honest Place — Be Framework Reconsidered

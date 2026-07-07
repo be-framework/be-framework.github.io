@@ -1,6 +1,7 @@
 ---
-layout: index
+layout: docs-ja
 title: "3行のwhileループと15人の思想家 — Be Framework 評論"
+category: Manual
 ---
 
 # 3行のwhileループと15人の思想家 — Be Framework 評論

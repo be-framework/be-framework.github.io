@@ -1,6 +1,7 @@
 ---
-layout: index
+layout: docs-ja
 title: "コンストラクタという最後の正直な場所 — Be Framework 再考"
+category: Manual
 ---
 
 # コンストラクタという最後の正直な場所 — Be Framework 再考

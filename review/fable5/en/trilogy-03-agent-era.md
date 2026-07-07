@@ -1,6 +1,7 @@
 ---
-layout: index
+layout: docs-en
 title: "Two Loops — Be Framework in the Age of Agent Coding"
+category: Manual
 ---
 
 # Two Loops — Be Framework in the Age of Agent Coding
