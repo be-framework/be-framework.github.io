@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-md navbar-light">
+    <div class="navigation-header">
+        <div class="ml-auto d-sm-block d-md-none">
+            <ul class="navbar-nav language-list">
+                <li>
+                    <a class="{% if page.layout == 'review-en' %}active{% endif %}" href="{{ page.url | replace: '/ja/', '/en/' }}">En</a>
+                </li>
+                <li>
+                    <a class="{% if page.layout == 'review-ja' %}active{% endif %}" href="{{ page.url | replace: '/en/', '/ja/' }}">Ja</a>
+                </li>
+            </ul>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+    <div class="collapse navbar-collapse" id="Navber">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link {% if page.url contains '/review/fable5/en/trilogy-01-review.html' %}active{% endif %}"
+                   {% if page.url contains '/review/fable5/en/trilogy-01-review.html' %}aria-current="page"{% endif %}
+                   href="/review/fable5/en/trilogy-01-review.html">Three Lines of While-Loop and Fifteen Thinkers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if page.url contains '/review/fable5/en/trilogy-02-review-deep.html' %}active{% endif %}"
+                   {% if page.url contains '/review/fable5/en/trilogy-02-review-deep.html' %}aria-current="page"{% endif %}
+                   href="/review/fable5/en/trilogy-02-review-deep.html">The Constructor, The Last Honest Place</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if page.url contains '/review/fable5/en/trilogy-03-agent-era.html' %}active{% endif %}"
+                   {% if page.url contains '/review/fable5/en/trilogy-03-agent-era.html' %}aria-current="page"{% endif %}
+                   href="/review/fable5/en/trilogy-03-agent-era.html">Two Loops</a>
+            </li>
+        </ul>
+    </div>
+</nav>

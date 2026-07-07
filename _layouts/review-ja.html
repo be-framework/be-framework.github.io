@@ -1,0 +1,16 @@
+{% include manuals/1.0/header.html %}
+<main class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-md-3 col-lg-2">
+            <div class="side-bar">
+                {% include review/fable5/ja/sidebar.html %}
+            </div>
+        </div>
+        <div class="col-md-9 col-lg-10">
+            <article id="article" class="markdown-body" style="max-width: 800px;">
+                {{ content }}
+            </article>
+        </div>
+    </div>
+</main>
+{% include manuals/1.0/footer.html %}

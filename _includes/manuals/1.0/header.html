@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{% if page.layout == 'docs-ja' %}ja{% else %}en{% endif %}">
+<html lang="{% if page.layout == 'docs-ja' or page.layout == 'review-ja' %}ja{% else %}en{% endif %}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -7,7 +7,7 @@
     <meta name="description" content="Be Framework is a being-oriented framework that transforms objects through their deepest nature, implementing semantic variables and ontological programming patterns.">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    {% if page.category == 'Manual' or page.category == 'Convention' %}
+    {% if page.category == "Manual" or page.category == "Convention" or page.category == "Review" %}
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.css">
     <link rel="stylesheet" href="/css/syntax.css">
     {% endif %}
@@ -32,13 +32,13 @@
                 </li>
             </ul>
         </div>
-        {% if page.category == 'Manual' %}
+        {% if page.category == 'Manual' or page.category == 'Review' %}
         <ul class="navbar-nav ml-md-auto d-none d-md-flex language-list">
             <li>
-                <a class="{% if page.layout == 'docs-en' %}active{% endif %}" href="{{ page.permalink | replace: '/ja/', '/en/' }}">En</a>
+                <a class="{% if page.layout == 'docs-en' or page.layout == 'review-en' %}active{% endif %}" href="{{ page.url | replace: '/ja/', '/en/' }}">En</a>
             </li>
             <li>
-                <a class="{% if page.layout == 'docs-ja' %}active{% endif %}" href="{{ page.permalink | replace: '/en/', '/ja/' }}">Ja</a>
+                <a class="{% if page.layout == 'docs-ja' or page.layout == 'review-ja' %}active{% endif %}" href="{{ page.url | replace: '/en/', '/ja/' }}">Ja</a>
             </li>
         </ul>
         {% endif %}
