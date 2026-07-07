@@ -2,6 +2,7 @@
 layout: review-ja
 title: "二つのループ — エージェントコーディング時代のBe Framework"
 category: Manual
+permalink: /review/fable5/ja/trilogy-03-agent-era.html
 ---
 
 # 二つのループ — エージェントコーディング時代のBe Framework
