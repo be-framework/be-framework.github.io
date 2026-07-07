@@ -1,8 +1,6 @@
 ---
 layout: review-en
 title: "Two Loops — Be Framework in the Age of Agent Coding"
-category: Manual
-permalink: /review/fable5/en/trilogy-03-agent-era.html
 ---
 
 # Two Loops — Be Framework in the Age of Agent Coding

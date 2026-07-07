@@ -1,8 +1,6 @@
 ---
 layout: review-ja
 title: "3行のwhileループと15人の思想家 — Be Framework 評論"
-category: Manual
-permalink: /review/fable5/ja/trilogy-01-review.html
 ---
 
 # 3行のwhileループと15人の思想家 — Be Framework 評論

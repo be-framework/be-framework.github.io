@@ -1,8 +1,6 @@
 ---
 layout: review-ja
 title: "コンストラクタという最後の正直な場所 — Be Framework 再考"
-category: Manual
-permalink: /review/fable5/ja/trilogy-02-review-deep.html
 ---
 
 # コンストラクタという最後の正直な場所 — Be Framework 再考

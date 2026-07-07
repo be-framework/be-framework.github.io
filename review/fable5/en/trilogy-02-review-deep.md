@@ -1,8 +1,6 @@
 ---
 layout: review-en
 title: "The Constructor, The Last Honest Place — Be Framework Reconsidered"
-category: Manual
-permalink: /review/fable5/en/trilogy-02-review-deep.html
 ---
 
 # The Constructor, The Last Honest Place — Be Framework Reconsidered
