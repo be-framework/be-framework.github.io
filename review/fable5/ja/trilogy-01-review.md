@@ -1,4 +1,5 @@
 ---
+category: Review
 layout: review-ja
 title: "3行のwhileループと15人の思想家 — Be Framework 評論"
 ---

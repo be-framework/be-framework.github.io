@@ -1,4 +1,5 @@
 ---
+category: Review
 layout: review-ja
 title: "コンストラクタという最後の正直な場所 — Be Framework 再考"
 ---

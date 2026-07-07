@@ -1,4 +1,5 @@
 ---
+category: Review
 layout: review-ja
 title: "二つのループ — エージェントコーディング時代のBe Framework"
 ---

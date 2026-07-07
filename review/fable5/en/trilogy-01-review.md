@@ -1,4 +1,5 @@
 ---
+category: Review
 layout: review-en
 title: "Three Lines of While-Loop and Fifteen Thinkers — A Be Framework Review"
 ---
