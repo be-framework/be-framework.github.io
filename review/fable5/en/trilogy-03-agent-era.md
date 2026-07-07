@@ -1,5 +1,5 @@
 ---
-layout: index
+layout: index_ja
 title: "Two Loops — Be Framework in the Age of Agent Coding"
 ---
 

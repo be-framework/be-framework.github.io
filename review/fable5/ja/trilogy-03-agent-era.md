@@ -1,5 +1,5 @@
 ---
-layout: index
+layout: index_ja
 title: "二つのループ — エージェントコーディング時代のBe Framework"
 ---
 
