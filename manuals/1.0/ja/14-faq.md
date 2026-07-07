@@ -305,3 +305,11 @@ $user = $becoming(new UserInput($name, $email));
 ### 意味的例外（Semantic Exceptions）
 
 失敗を単純な文字列ではなく、意味を持った構造化されたデータとして保持する仕組みです。多言語対応や監査要件に対応し、システムの動作を意味レベルで追跡可能にします。
+
+---
+
+## 10) さらに深く
+
+### Q. もっと深く知りたいのですが？
+
+A. 高性能LLM（Fable 5）による中立的な三部作の評論があります。まずは[3行のwhileループと15人の思想家 — Be Framework 評論](/review/fable5/ja/trilogy-01-review.html)からどうぞ。

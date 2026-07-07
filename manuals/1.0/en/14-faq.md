@@ -287,3 +287,11 @@ A concept where variable names themselves express meaning and constraints. For e
 
 ### Semantic Exceptions
 A mechanism for holding failures not as simple strings, but as structured data with meaning. It supports multilingual compatibility and audit requirements, making system behavior traceable at the semantic level.
+
+---
+
+## 10) Going Deeper
+
+### Q. Where can I learn more?
+
+A. A trilogy of neutral review articles by the high-performance LLM Fable 5 offers a multifaceted analysis. Start with the first: [Three Lines of While-Loop and Fifteen Thinkers — A Be Framework Review](/review/fable5/en/trilogy-01-review.html).
