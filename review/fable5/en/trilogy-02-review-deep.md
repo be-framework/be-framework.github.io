@@ -1,5 +1,5 @@
 ---
-layout: index_ja
+layout: index
 title: "The Constructor, The Last Honest Place — Be Framework Reconsidered"
 ---
 

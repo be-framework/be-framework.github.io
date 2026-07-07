@@ -1,5 +1,5 @@
 ---
-layout: index_ja
+layout: index
 title: "Three Lines of While-Loop and Fifteen Thinkers — A Be Framework Review"
 ---
 
