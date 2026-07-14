@@ -17,14 +17,14 @@ permalink: /manuals/1.0/ja/tutorial.html
 
 ## はじめに
 
-このチュートリアルでは、Be Framework の核心を示す救急トリアージシステムを構築します：オブジェクトは何かを「する」のではなく、何かに「なる」のです。
+このチュートリアルは [Getting Started](./getting-started.html) の続きとして、Be Framework の核心を示す救急トリアージシステムを構築します：オブジェクトは何かを「する」のではなく、何かに「なる」のです。
 
 患者は「トリアージされる」のではありません。医学プロトコルという患者自身は持たない(=超越的な)知恵に基づいて、緊急症例または経過観察症例に**なる**のです。
 
 ## 変容の流れ
 
 ```
-PatientArrival（生のバイタルサイン）
+PatientArrivalInput（生のバイタルサイン）
     ↓ JTAS プロトコルが評価
 TriageAssessment（蛹の段階）
     ↓ 運命が決定される
@@ -129,10 +129,10 @@ final readonly class JTASProtocol
 出発点—到着時の生のバイタルサイン：
 
 ```php
-// src/Input/PatientArrival.php
+// src/Input/PatientArrivalInput.php
 
 #[Be([TriageAssessment::class])]
-final readonly class PatientArrival
+final readonly class PatientArrivalInput
 {
     public function __construct(
         public float $bodyTemperature,
@@ -264,32 +264,32 @@ final readonly class ObservationCase
 
 ## ステップ 8: 変容を実行
 
-```php
-// bin/be.php
+スケルトンの汎用 `bin/be.php` エントリポイントはそのまま使い、新しい input を path で呼び出します。
 
-use Be\App\Input\PatientArrival;
-use Be\App\Module\AppModule;
-use Be\Framework\Becoming;
-use Ray\Di\Injector;
-
-$injector = new Injector(new AppModule());
-$becoming = new Becoming($injector, 'Be\\App\\Semantic');
-
-// 高熱の患者
-$patient = new PatientArrival(bodyTemperature: 39.5, heartRate: 90);
-$final = $becoming($patient);
-
-echo $final->priority;     // "IMMEDIATE"
-echo $final->color;        // "RED"
-echo $final->assignER();   // "直ちに救急室1を確保..."
+```bash
+php bin/be.php 'patientArrival?bodyTemperature=39.5&heartRate=90'
 ```
+
+出力:
+
+```json
+{
+  "priority": "IMMEDIATE",
+  "color": "RED",
+  "bodyTemperature": 39.5,
+  "heartRate": 90,
+  "being": {}
+}
+```
+
+`bin/be.php` は URI の path `patientArrival` を `Be\App\Input\PatientArrivalInput` にマップし、query string を constructor 引数として渡して、Getting Started と同じ変容パイプラインを実行します。
 
 ## 時間的存在
 
 すべての存在は時間の中で変化し、Input から Being を経て Final へと変容します。
 
 ```
-PatientArrival(39.5°C, 90 bpm)
+PatientArrivalInput(39.5°C, 90 bpm)
     ↓ #[Be([TriageAssessment::class])]
 TriageAssessment
     ├─ JTASProtocol->assess() が 'emergency' を返す
@@ -303,16 +303,14 @@ EmergencyCase（$being が Emergency なので）
 
 ## 生存不可能な存在
 
-```php
-// 生存可能範囲外の体温
-$invalid = new PatientArrival(bodyTemperature: 50.0, heartRate: 80);
+```bash
+php bin/be.php 'patientArrival?bodyTemperature=50.0&heartRate=80'
+```
 
-try {
-    $becoming($invalid);
-} catch (SemanticVariableException $e) {
-    echo $e->getErrors()->getMessages('ja')[0];
-    // "バイタルサインが生存不可能な状態を示しています。"
-}
+出力:
+
+```txt
+バイタルサインが生存不可能な状態を示しています。
 ```
 
 変容は拒否されます。致死的なバイタルサインを持つ患者は私たちのシステムに存在できません。
@@ -337,7 +335,7 @@ if ($triageService->isEmergency($patient)) {
 ### Be Framework のアプローチ（Being）
 
 ```php
-$patient = new PatientArrival($temp, $hr);
+$patient = new PatientArrivalInput($temp, $hr);
 $final = $becoming($patient);
 
 // $final は EmergencyCase または ObservationCase である
@@ -361,7 +359,7 @@ src/
 ├── Exception/
 │   └── LethalVitalException.php
 ├── Input/
-│   └── PatientArrival.php      # 入力
+│   └── PatientArrivalInput.php # 入力
 ├── Module/
 │   └── AppModule.php           # DI設定
 ├── Final/
@@ -388,7 +386,7 @@ src/
 
 | ドメイン | Input | Being | Final | Reason |
 |---------|-------|-------|-------|--------|
-| トリアージ | PatientArrival | TriageAssessment | Emergency/Observation | JTASProtocol |
+| トリアージ | PatientArrivalInput | TriageAssessment | Emergency/Observation | JTASProtocol |
 | 醸造 | RawMaterials | Fermentation | PremiumSake/Vinegar | YeastCulture |
 | 入国審査 | VisaApplication | ConsularReview | Resident/Visitor | ImmigrationLaw |
 | 裁判 | Evidence | Trial | Guilty/Acquitted | PenalCode |
