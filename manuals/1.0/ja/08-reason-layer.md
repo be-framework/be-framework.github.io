@@ -183,7 +183,7 @@ $capture->be();               // キャプチャを確定
 
 ### Moment: Potentialを保持する
 
-ReasonからPotentialを受け取って保持するクラスを**Moment**（ヘーゲルの契機—全体の中でのみ意味を持つ不可欠な側面）と呼びます。Momentはフレームワークが提供する`MomentInterface`を実装します：
+ReasonからPotentialを受け取って保持するクラスを**Moment**（ヘーゲルの契機—全体の中でのみ意味を持つ不可欠な側面）と呼びます。Momentは`MomentInterface`を実装します。これはメソッドを1つだけ持つインターフェースで、フレームワーク本体ではなくアプリケーション側で定義します（[注文処理デモ](./demos.html)参照）：
 
 ```php
 interface MomentInterface
@@ -198,8 +198,8 @@ final readonly class PaymentCompleted implements MomentInterface
     public PaymentCapture $capture;
 
     public function __construct(
-        #[Input] public string $cardNumber,
-        #[Input] public int $amount,
+        #[CardNumber] public string $cardNumber,   // DI qualifier attribute
+        #[Amount] public int $amount,              // DI qualifier attribute
         #[Inject] PaymentGateway $gateway,
     ) {
         $this->capture = $gateway->authorize($cardNumber, $amount);
@@ -212,9 +212,11 @@ final readonly class PaymentCompleted implements MomentInterface
 }
 ```
 
+Momentは前段のオブジェクトからではなくDIコンテナによって生成されます。そのため値は`#[Input]`ではなく、モジュールで束縛したアプリケーション定義の修飾属性（`#[CardNumber]`、`#[Amount]`）を通じて渡されます。
+
 ### 収束: FinalがMomentを実現する
 
-複数のMomentがすべて揃う必要があるとき、Final Objectはそれらを受け取り、各Momentの`be()`を呼びます。これは外部からの命令ではなく、自己完成です：
+複数のMomentがすべて揃う必要があるとき、Final Objectはそれらを`#[Inject]`で受け取り、各Momentの`be()`を呼びます。これは外部からの命令ではなく、自己完成です：
 
 ```php
 final readonly class OrderConfirmed
@@ -223,9 +225,9 @@ final readonly class OrderConfirmed
     public string $status;
 
     public function __construct(
-        public InventoryReserved $inventory,
-        public PaymentCompleted $payment,
-        public ShippingArranged $shipping,
+        #[Inject] public InventoryReserved $inventory,
+        #[Inject] public PaymentCompleted $payment,
+        #[Inject] public ShippingArranged $shipping,
     ) {
         $this->inventory->be();
         $this->payment->be();

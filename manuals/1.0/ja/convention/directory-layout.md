@@ -24,7 +24,7 @@ permalink: /manuals/1.0/ja/convention/directory-layout.html
 | `src/Becoming/`   | フレームワーク配線層 — `BecomingInterface` の実装やデコレータ。                 | [Becoming](../04a-becoming.html) |
 | `src/Being/`      | 分岐 — `$being` 判別子 + `#[Be([A, B])]`。                                     | [Being クラス](../03-being-classes.html) |
 | `src/LogContext/` | `Been` に添えるセマンティックログのイベントクラス。                              | [セマンティックロギング](../10-semantic-logging.html) |
-| `src/Moment/`     | Moment — Reason が返した Potential を保持し、`be()` で実現する。                | [メタモルフォーシスパターン](../05-metamorphosis-patterns.html) |
+| `src/Moment/`     | Moment — Reason が返した Potential を保持し、`be()` で実現する。                | [Reason レイヤー](../08-reason-layer.html) |
 
 ## `src/Input/`
 
@@ -33,7 +33,7 @@ permalink: /manuals/1.0/ja/convention/directory-layout.html
 final readonly class HelloInput
 {
     public function __construct(
-        #[Input] public string $name,
+        public string $name,
     ) {}
 }
 ```
@@ -84,14 +84,14 @@ final class Email
 ## `src/Exception/`
 
 ```php
-#[Message(
-    en: 'Invalid email: {email}',
-    ja: '不正なメールアドレス: {email}',
-)]
+#[Message([
+    'en' => 'Invalid email: {email}',
+    'ja' => '不正なメールアドレス: {email}',
+])]
 final class InvalidEmailException extends \DomainException {}
 ```
 
-`#[Message]` の `en`/`ja` で、言語ごとのメッセージを指定します。`{email}` のようなプレースホルダは、throw 時に例外のプロパティからアサインされます。
+`#[Message]` には言語コード（`en`、`ja` など）をキーにした配列を1つ渡します。`{email}` のようなプレースホルダは、throw 時に例外のプロパティからアサインされます。
 
 → [エラーハンドリング](../09-error-handling.html)
 
@@ -158,7 +158,7 @@ final readonly class LoggingBecoming implements BecomingInterface
 ## `src/Being/`
 
 ```php
-#[Be([Approved::class, Rejected::class])]
+#[Be([ApprovalNotification::class, RejectionNotification::class])]
 final readonly class ApplicationReview
 {
     public Approved|Rejected $being;
@@ -172,7 +172,7 @@ final readonly class ApplicationReview
 }
 ```
 
-次にどのクラスに分岐するかは、ユニオン型の `$being` プロパティで明示的に示します。実際には `#[Be([...])]` の候補のうち、引数が用意できるものが次のクラスとして選ばれます。
+ユニオン型の `$being` には Reason オブジェクト（`Approved` か `Rejected`）が入り、その型が `#[Be([...])]` のどの候補に進むかを決めます。`ApprovalNotification` は `#[Input] Approved $being` を、`RejectionNotification` は `#[Input] Rejected $being` を宣言します。フレームワークは候補のうち、引数が用意できる最初のものを選びます（[マッチングルール](../05-metamorphosis.html#matching-rules)参照）。
 
 → [Being クラス](../03-being-classes.html)
 
@@ -202,8 +202,8 @@ final readonly class PaymentCompleted implements MomentInterface
     public PaymentCapture $capture;
 
     public function __construct(
-        #[Input] string $cardNumber,
-        #[Input] int $amount,
+        #[CardNumber] string $cardNumber,   // DI qualifier attribute
+        #[Amount] int $amount,              // DI qualifier attribute
         #[Inject] PaymentGateway $gateway,
     ) {
         $this->capture = $gateway->authorize($cardNumber, $amount);
@@ -216,9 +216,9 @@ final readonly class PaymentCompleted implements MomentInterface
 }
 ```
 
-コンストラクタで `authorize()` は済みます(Potential)が、`capture()` はまだです。全 Moment を生成できた Final だけが `be()` を一斉に呼びます — 部分的なコミットは起こりません。
+Moment は前段のオブジェクトからではなく DI コンテナによって生成されるので、値はモジュールで束縛したアプリケーション定義の修飾属性（`#[CardNumber]`、`#[Amount]`）経由で渡されます。コンストラクタで `authorize()` は済みます(Potential)が、`capture()` はまだです。全 Moment を生成できた Final だけが `be()` を一斉に呼びます — 部分的なコミットは起こりません。
 
-→ [メタモルフォーシスパターン](../05-metamorphosis-patterns.html)
+→ [Reason レイヤー](../08-reason-layer.html)
 
 ---
 

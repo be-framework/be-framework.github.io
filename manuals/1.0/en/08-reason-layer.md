@@ -183,7 +183,7 @@ $capture->be();               // Commits the capture
 
 ### Moment: Holding Potential
 
-A class that holds a Potential from Reason is called a **Moment** (Hegel's 契機—an essential aspect that only makes sense as part of a whole). A Moment implements `MomentInterface`, provided by the framework:
+A class that holds a Potential from Reason is called a **Moment** (Hegel's 契機—an essential aspect that only makes sense as part of a whole). A Moment implements `MomentInterface`, a one-method interface that the application defines (the framework core does not ship it; see the [order processing demo](./demos.html#order-processing-demo)):
 
 ```php
 interface MomentInterface
@@ -198,8 +198,8 @@ final readonly class PaymentCompleted implements MomentInterface
     public PaymentCapture $capture;
 
     public function __construct(
-        #[Input] public string $cardNumber,
-        #[Input] public int $amount,
+        #[CardNumber] public string $cardNumber,   // DI qualifier attribute
+        #[Amount] public int $amount,              // DI qualifier attribute
         #[Inject] PaymentGateway $gateway,
     ) {
         $this->capture = $gateway->authorize($cardNumber, $amount);
@@ -212,9 +212,11 @@ final readonly class PaymentCompleted implements MomentInterface
 }
 ```
 
+A Moment is built by the DI container rather than from a previous object, so its values arrive through application-defined qualifier attributes (`#[CardNumber]`, `#[Amount]`) bound in the module, not through `#[Input]`.
+
 ### Convergence: Final Realizes Moments
 
-When multiple Moments must all succeed together, a Final Object receives them and calls `be()` on each. This is not an external command—it is self-completion:
+When multiple Moments must all succeed together, a Final Object receives them via `#[Inject]` and calls `be()` on each. This is not an external command—it is self-completion:
 
 ```php
 final readonly class OrderConfirmed
@@ -223,9 +225,9 @@ final readonly class OrderConfirmed
     public string $status;
 
     public function __construct(
-        public InventoryReserved $inventory,
-        public PaymentCompleted $payment,
-        public ShippingArranged $shipping,
+        #[Inject] public InventoryReserved $inventory,
+        #[Inject] public PaymentCompleted $payment,
+        #[Inject] public ShippingArranged $shipping,
     ) {
         $this->inventory->be();
         $this->payment->be();

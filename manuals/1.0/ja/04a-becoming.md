@@ -53,7 +53,7 @@ final readonly class OrderProcessing
 
     public function __construct(
         #[Input] Order $order,                    // 内在
-        #[Inject] Becoming $becoming              // 超越
+        #[Inject] BecomingInterface $becoming     // 超越
     ) {
         $this->payment = $becoming(new PaymentInput($order->getPayment()));
         $this->shipping = $becoming(new ShippingInput($order->getAddress()));
@@ -61,7 +61,7 @@ final readonly class OrderProcessing
 }
 ```
 
-`Becoming`は超越として注入されるため、存在クラスの内部からも変容チェーンを起動できます。分岐した結果を最後に1つのオブジェクトに収束させるダイアモンド型の構成も可能です。
+`Becoming`は超越として注入されるため、存在クラスの内部からも変容チェーンを起動できます。分岐した結果を最後に1つのオブジェクトに収束させるダイアモンド型の構成も可能です（[注文処理デモ](./demos.html)参照）。
 
 ---
 

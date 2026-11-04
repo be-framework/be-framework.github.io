@@ -69,7 +69,7 @@ final readonly class HelloInput
 }
 ```
 
-The `#[Be]` attribute declares the **destiny**—what this input will become.
+The `#[Be]` attribute declares the **destiny**—what this input will become. It accepts a single class or an array of candidates; the array form is used here so that adding a second destiny later is a one-line change.
 
 ### Final Class
 
@@ -105,7 +105,7 @@ The Greeting provides the **transcendent capability**—the power to greet.
 
 ```php
 $injector = new Injector(new AppModule());
-$becoming = new Becoming($injector, 'Be\\App\\Semantic');
+$becoming = $injector->getInstance(BecomingInterface::class);
 
 $input = new HelloInput('World');
 $hello = $becoming($input);
@@ -126,19 +126,19 @@ The input didn't "do" anything—it **became** Hello through metamorphosis.
 
 ## Try Semantic Validation
 
-Edit `bin/be.php` to pass an empty name:
-
-```php
-$input = new HelloInput('');
-```
-
-Run again:
+`composer dev` runs `php bin/be.php 'hello?name=World'`. Pass an empty name this time:
 
 ```bash
-composer dev
+php bin/be.php 'hello?name='
 ```
 
-You'll see an error message because `Semantic/Name.php` validates that name cannot be empty.
+Output:
+
+```txt
+名前は空にできません。
+```
+
+`Semantic/Name.php` declares that a `$name` cannot be empty, so `HelloInput('')` never comes into existence. The message comes from the `#[Message]` attribute on `EmptyNameException`; `bin/be.php` prints its Japanese version.
 
 ## Key Concepts Demonstrated
 

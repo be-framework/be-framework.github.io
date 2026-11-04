@@ -81,9 +81,9 @@ Union types explicitly show all possible outcomes.
 
 A. No, they are not special properties.
 
-`becoming()` doesn't read property names, but looks at the types declared on properties to select the next class.
+`becoming()` matches the next class's constructor parameters against the current object's public properties by name and type. `$being` is matched like any other property—nothing in the framework looks for that particular name.
 
-Therefore, the names `$being` / `$been` are not required. `public Success|Failure $result;` works the same way with different names.
+Therefore, the names `$being` / `$been` are not required. `public Success|Failure $result;` works the same way, as long as the next class declares `#[Input] Success $result` under the same name.
 
 However, using these names according to documentation, samples, and design philosophy provides the benefit of immediately recognizing "transformation destination (being)" and "completion evidence (been)".
 
@@ -103,28 +103,44 @@ See [Semantic Variables](./06-semantic-variables.html) for details.
 
 ### Q8.5. How do you handle variables with different meanings but same constraints (`$userId`, `$authorId`, etc.)?
 
-A. Share constraints through common base classes or traits while separating meaning through inheritance.
+A. Give each name its own semantic variable class, and share the constraint logic through a common base class or trait.
 
 ```php
-// src/Semantic/Abstract/Id.php - Common constraint base class
+// src/Semantic/Abstract/Id.php - shared constraint (not a semantic variable itself)
 namespace App\Semantic\Abstract;
 
-abstract readonly class Id {
-    public function __construct(public string $value) {
-        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}/', $value)) {
+abstract class Id
+{
+    protected function assertId(string $id): void
+    {
+        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}/', $id)) {
             throw new InvalidIdException();
         }
     }
 }
 
-// src/Semantic/UserId.php - Semantic variables through inheritance
-readonly class UserId extends \App\Semantic\Abstract\Id {}
-readonly class AuthorId extends \App\Semantic\Abstract\Id {}
-
-// Usage: variable names carry semantic meaning
-function updateArticle(UserId $userId, AuthorId $authorId) {
-    // $userId and $authorId cannot be confused
+// src/Semantic/UserId.php - applied to every parameter named $userId
+final class UserId extends \App\Semantic\Abstract\Id
+{
+    #[Validate]
+    public function validate(string $userId): void
+    {
+        $this->assertId($userId);
+    }
 }
+
+// src/Semantic/AuthorId.php - applied to every parameter named $authorId
+final class AuthorId extends \App\Semantic\Abstract\Id
+{
+    #[Validate]
+    public function validate(string $authorId): void
+    {
+        $this->assertId($authorId);
+    }
+}
+
+// Usage: the parameter names carry the meaning; $userId and $authorId cannot be confused
+public function __construct(string $userId, string $authorId) {}
 ```
 
 ### Q9. What is the "Reason Layer"?
@@ -171,7 +187,7 @@ Use case-level tests can be kept sufficiently thin with `#[Be]` chain smoke test
 
 A. Procedure-dependent = linear / Results exclusive by conditions = branching / Convergence of independent processes = nested. When in doubt, start with minimal linear.
 
-See [Implementation Guidelines](./05-metamorphosis.html) for details.
+See [Choosing the Shape](./05-metamorphosis.html#choosing-the-shape) for details.
 
 ---
 

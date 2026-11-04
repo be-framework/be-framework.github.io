@@ -35,12 +35,12 @@ catch (SemanticVariableException $e) {
 
 ## Domain Exception Classes
 
-All exceptions extend PHP's `\DomainException`. Technical exceptions (`RuntimeException`, `InvalidArgumentException`, etc.) are not used. Failures are always expressed as **failures with domain meaning**:
+All exceptions extend PHP's `\DomainException`. Technical exceptions (`RuntimeException`, `InvalidArgumentException`, etc.) are not used. Failures are always expressed as **failures with domain meaning**. Note that exception classes are plain `final class`, not `readonly`—`\DomainException` is not a readonly class, and PHP does not allow a readonly class to extend a non-readonly one:
 
 ```php
-final readonly class EmptyNameException extends \DomainException {}
+final class EmptyNameException extends \DomainException {}
 
-final readonly class InvalidEmailException extends \DomainException
+final class InvalidEmailException extends \DomainException
 {
     public function __construct(public string $invalidEmail)
     {
@@ -50,8 +50,8 @@ final readonly class InvalidEmailException extends \DomainException
 
 // Age-related existence failures
 abstract class AgeException extends \DomainException {}
-final readonly class NegativeAgeException extends AgeException {}
-final readonly class AgeTooHighException extends AgeException {}
+final class NegativeAgeException extends AgeException {}
+final class AgeTooHighException extends AgeException {}
 ```
 
 Domain exceptions hold not just messages but **structured data**. From the `$invalidEmail` property, programs can access the invalid email address value—for display, API responses, logging, and more:
@@ -77,13 +77,13 @@ The `#[Message]` attribute lets exceptions speak in the user's language:
     'ja' => '名前は空にできません。',
     'es' => 'El nombre no puede estar vacío.'
 ])]
-final readonly class EmptyNameException extends \DomainException {}
+final class EmptyNameException extends \DomainException {}
 
 #[Message([
     'en' => 'Age must be at least {min} years.',
     'ja' => '年齢は最低{min}歳でなければなりません。'
 ])]
-final readonly class AgeTooYoungException extends \DomainException
+final class AgeTooYoungException extends \DomainException
 {
     public function __construct(public int $min = 13) {}
 }
@@ -114,23 +114,28 @@ Rather than "fail fast"—**understand all problems at once**.
 Error states can be treated as valid metamorphosis results:
 
 ```php
-#[Be([ValidUser::class, InvalidUser::class])]
-final readonly class UserValidation
+#[Be([PaidOrder::class, DeclinedOrder::class])]
+final readonly class Payment
 {
-    public ValidUser|InvalidUser $being;
+    public Charged|Declined $being;
 
-    public function __construct(#[Input] string $data)
-    {
+    public function __construct(
+        #[Input] Money $amount,
+        #[Input] CreditCard $card,
+        #[Inject] PaymentGateway $gateway
+    ) {
         try {
-            $this->being = new ValidUser($data);
-        } catch (ValidationException $e) {
-            $this->being = new InvalidUser($e->getErrors());
+            $this->being = new Charged($gateway->charge($card, $amount));
+        } catch (CardDeclinedException $e) {
+            $this->being = new Declined($e->reason);
         }
     }
 }
 ```
 
-Rather than halting execution with exceptions, errors are expressed as types. Failure, like success, is a legitimate result of transformation.
+`Charged` and `Declined` are Reason objects. The type assigned to `$being` decides whether `PaidOrder` or `DeclinedOrder` comes next. Rather than letting the gateway's exception halt execution, the failure is expressed as a type. Failure, like success, is a legitimate result of transformation.
+
+Semantic variable failures are different. They are collected and raised as `SemanticVariableException` before the constructor runs, because an object whose names are violated cannot come into existence at all.
 
 ---
 

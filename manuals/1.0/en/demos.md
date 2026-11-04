@@ -70,7 +70,7 @@ echo $final->greeting; // "Hello World"
 
 ### Links
 
-- [Source Code](https://github.com/be-framework/demos/tree/1.x/demos/hello-world)
+- [Source Code](https://github.com/be-framework/be-patterns/tree/1.x/demos/hello-world)
 
 ---
 
@@ -178,7 +178,7 @@ The directory structure is grounded in ontological concepts.
 ### Links
 
 - [Demo Site](https://be-framework.github.io/demos/) - Interactive ALPS state diagram
-- [Source Code](https://github.com/be-framework/demos/tree/1.x/demos/order-processing) - Full implementation
+- [Source Code](https://github.com/be-framework/be-patterns/tree/1.x/demos/order-processing) - Full implementation
 - [ALPS Profile](https://be-framework.github.io/demos/alps.html) - Semantic ontology
 
 ---

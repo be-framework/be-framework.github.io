@@ -22,35 +22,31 @@ final readonly class SuccessfulOrder
 {
     public string $orderId;
     public string $confirmationCode;
-    public DateTimeImmutable $timestamp;
     public string $message;
-    public BeenConfirmed $been;          // 完了の証跡
+    public Been $been;                            // 完了の証跡
 
     public function __construct(
         #[Input] Money $total,                    // 内在
         #[Input] CreditCard $card,                // 内在
         #[Inject] OrderIdGenerator $generator,    // 超越
-        #[Inject] Receipt $receipt                // 超越
+        #[Inject] Receipt $receipt,               // 超越
+        #[Inject] Been $been                      // 証跡の記録者
     ) {
         $this->orderId = $generator->generate();
         $this->confirmationCode = $receipt->generate($total);
-        $this->timestamp = new DateTimeImmutable();
         $this->message = "注文確認: {$this->orderId}";
 
-        $this->been = new BeenConfirmed(
-            actor: $card->getHolderName(),
-            timestamp: $this->timestamp,
-            evidence: [
-                'total' => $total->getAmount(),
-                'payment_method' => $card->getType(),
-                'confirmation' => $this->confirmationCode
-            ]
-        );
+        $this->been = $been->with(new OrderConfirmedContext(
+            orderId: $this->orderId,
+            total: $total->getAmount(),
+            paymentMethod: $card->getType(),
+            confirmation: $this->confirmationCode,
+        ));
     }
 }
 ```
 
-`$been`プロパティはアプリケーションが定義する、ドメイン固有の型を持ちます。`SuccessfulOrder`には`BeenConfirmed`、`FailedOrder`には`BeenRejected`、`DeletedUser`なら`BeenDeleted`というように命名します。何を「完了の証跡」とするかはドメインによって異なり、必要な証跡に応じてクラスを設計します。
+`Been`はフレームワークが提供し、他の超越と同じように注入されます。`Been`はこの変容がどこから始まりどこに至ったかを既に知っています。知り得ないのは、コンストラクタの内側で何が起きたかです。その部分は最終オブジェクト自身が`with()`で追記します。渡すのは`OrderConfirmedContext`のような、アプリケーションが定義するイベントコンテキストです。何を「完了の証跡」とするかはドメインによって異なります。`SuccessfulOrder`なら確認コードを、`DeletedUser`なら誰がいつ削除したかを記録するでしょう。コンテキストの構造と出力されるJSONは[意味的ログ](./10-semantic-logging.html)で説明します。
 
 入力クラスとは対照的に、最終オブジェクトはドメインの豊かさを完全に表現した存在です。内在が超越と出会い、変容を経て、これ以上変わる必要のない完全な状態に達しています。
 

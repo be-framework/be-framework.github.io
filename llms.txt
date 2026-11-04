@@ -34,7 +34,7 @@ For complete API reference and code examples: [llms-full.txt](https://be-framewo
 
 ## Repository
 
-- Framework: https://github.com/be-framework/be-framework
-- App Skeleton: https://github.com/be-framework/app
-- Demos: https://github.com/be-framework/demos
+- Framework: https://github.com/be-framework/Be.Framework
+- App Skeleton: https://github.com/be-framework/be-skeleton
+- Demos: https://github.com/be-framework/be-patterns
 - Claude Code Skills: https://github.com/be-framework/skills

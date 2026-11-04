@@ -24,7 +24,7 @@ permalink: /manuals/1.0/en/convention/directory-layout.html
 | `src/Becoming/`   | Framework wiring — `BecomingInterface` implementations/decorators.        | [Becoming](../04a-becoming.html) |
 | `src/Being/`      | Branching — `$being` discriminator + `#[Be([A, B])]`.                     | [Being Classes](../03-being-classes.html) |
 | `src/LogContext/` | Semantic-log event classes attached to `Been`.                            | [Semantic Logging](../10-semantic-logging.html) |
-| `src/Moment/`     | Moment — holds a Potential from Reason, realized via `be()`.              | [Metamorphosis Patterns](../05-metamorphosis-patterns.html) |
+| `src/Moment/`     | Moment — holds a Potential from Reason, realized via `be()`.              | [Reason Layer](../08-reason-layer.html) |
 
 ## `src/Input/`
 
@@ -33,7 +33,7 @@ permalink: /manuals/1.0/en/convention/directory-layout.html
 final readonly class HelloInput
 {
     public function __construct(
-        #[Input] public string $name,
+        public string $name,
     ) {}
 }
 ```
@@ -84,14 +84,14 @@ The class name becomes the parameter name. `#[Validate]` auto-applies to every a
 ## `src/Exception/`
 
 ```php
-#[Message(
-    en: 'Invalid email: {email}',
-    ja: '不正なメールアドレス: {email}',
-)]
+#[Message([
+    'en' => 'Invalid email: {email}',
+    'ja' => '不正なメールアドレス: {email}',
+])]
 final class InvalidEmailException extends \DomainException {}
 ```
 
-`#[Message]` `en`/`ja` declare the per-language message. Placeholders like `{email}` are assigned from the exception's properties at throw time.
+`#[Message]` takes one array keyed by language code (`en`, `ja`, …). Placeholders like `{email}` are assigned from the exception's properties at throw time.
 
 → [Error Handling](../09-error-handling.html)
 
@@ -158,7 +158,7 @@ Touched rarely — only when you need to instrument metamorphosis itself (loggin
 ## `src/Being/`
 
 ```php
-#[Be([Approved::class, Rejected::class])]
+#[Be([ApprovalNotification::class, RejectionNotification::class])]
 final readonly class ApplicationReview
 {
     public Approved|Rejected $being;
@@ -172,7 +172,7 @@ final readonly class ApplicationReview
 }
 ```
 
-Which class comes next is declared by the union-typed `$being` property. In practice, the framework picks the `#[Be([...])]` candidate whose constructor arguments can be satisfied.
+The union-typed `$being` holds a Reason object (`Approved` or `Rejected`), and its type decides which `#[Be([...])]` candidate comes next: `ApprovalNotification` declares `#[Input] Approved $being`, `RejectionNotification` declares `#[Input] Rejected $being`. The framework picks the first candidate whose constructor arguments can be satisfied (see [Matching Rules](../05-metamorphosis.html#matching-rules)).
 
 → [Being Classes](../03-being-classes.html)
 
@@ -202,8 +202,8 @@ final readonly class PaymentCompleted implements MomentInterface
     public PaymentCapture $capture;
 
     public function __construct(
-        #[Input] string $cardNumber,
-        #[Input] int $amount,
+        #[CardNumber] string $cardNumber,   // DI qualifier attribute
+        #[Amount] int $amount,              // DI qualifier attribute
         #[Inject] PaymentGateway $gateway,
     ) {
         $this->capture = $gateway->authorize($cardNumber, $amount);
@@ -216,9 +216,9 @@ final readonly class PaymentCompleted implements MomentInterface
 }
 ```
 
-The constructor completes `authorize()` (the Potential), but not `capture()`. Only a Final that could construct *every* Moment then calls `be()` on each — so partial commits never happen.
+A Moment is built by the DI container, not from a previous object, so its values arrive through application-defined qualifier attributes (`#[CardNumber]`, `#[Amount]`) bound in the module. The constructor completes `authorize()` (the Potential), but not `capture()`. Only a Final that could construct *every* Moment then calls `be()` on each — so partial commits never happen.
 
-→ [Metamorphosis Patterns](../05-metamorphosis-patterns.html)
+→ [Reason Layer](../08-reason-layer.html)
 
 ---
 

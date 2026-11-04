@@ -35,12 +35,12 @@ catch (SemanticVariableException $e) {
 
 ## ドメイン例外クラス
 
-すべての例外はPHPの`\DomainException`を継承します。ドメイン層では技術的例外（`RuntimeException`、`InvalidArgumentException`等）を使わず、常にドメイン例外を使います。失敗は常に**ドメインの意味を持つ失敗**として表現されます：
+すべての例外はPHPの`\DomainException`を継承します。ドメイン層では技術的例外（`RuntimeException`、`InvalidArgumentException`等）を使わず、常にドメイン例外を使います。失敗は常に**ドメインの意味を持つ失敗**として表現されます。なお例外クラスは`readonly`にしません。`\DomainException`はreadonlyクラスではなく、PHPではreadonlyクラスが非readonlyクラスを継承できないためです：
 
 ```php
-final readonly class EmptyNameException extends \DomainException {}
+final class EmptyNameException extends \DomainException {}
 
-final readonly class InvalidEmailException extends \DomainException
+final class InvalidEmailException extends \DomainException
 {
     public function __construct(public string $invalidEmail)
     {
@@ -50,8 +50,8 @@ final readonly class InvalidEmailException extends \DomainException
 
 // 年齢関連の存在失敗
 abstract class AgeException extends \DomainException {}
-final readonly class NegativeAgeException extends AgeException {}
-final readonly class AgeTooHighException extends AgeException {}
+final class NegativeAgeException extends AgeException {}
+final class AgeTooHighException extends AgeException {}
 ```
 
 ドメイン例外はメッセージだけでなく**構造化データ**を持ちます。`$invalidEmail`プロパティから、プログラムは無効なメールアドレスの値にアクセスできます——表示、APIレスポンス、ログなど、さまざまな用途に：
@@ -77,13 +77,13 @@ catch (InvalidEmailException $e) {
     'ja' => '名前は空にできません。',
     'es' => 'El nombre no puede estar vacío.'
 ])]
-final readonly class EmptyNameException extends \DomainException {}
+final class EmptyNameException extends \DomainException {}
 
 #[Message([
     'en' => 'Age must be at least {min} years.',
     'ja' => '年齢は最低{min}歳でなければなりません。'
 ])]
-final readonly class AgeTooYoungException extends \DomainException
+final class AgeTooYoungException extends \DomainException
 {
     public function __construct(public int $min = 13) {}
 }
@@ -114,23 +114,28 @@ try {
 エラー状態も変容の有効な結果として扱えます：
 
 ```php
-#[Be([ValidUser::class, InvalidUser::class])]
-final readonly class UserValidation
+#[Be([PaidOrder::class, DeclinedOrder::class])]
+final readonly class Payment
 {
-    public ValidUser|InvalidUser $being;
+    public Charged|Declined $being;
 
-    public function __construct(#[Input] string $data)
-    {
+    public function __construct(
+        #[Input] Money $amount,
+        #[Input] CreditCard $card,
+        #[Inject] PaymentGateway $gateway
+    ) {
         try {
-            $this->being = new ValidUser($data);
-        } catch (ValidationException $e) {
-            $this->being = new InvalidUser($e->getErrors());
+            $this->being = new Charged($gateway->charge($card, $amount));
+        } catch (CardDeclinedException $e) {
+            $this->being = new Declined($e->reason);
         }
     }
 }
 ```
 
-例外で実行を止めるのではなく、エラーを型として表現する。失敗も成功と同じく、変容の正当な結果です。
+`Charged`と`Declined`はReasonオブジェクトです。`$being`に代入された型が、次に`PaidOrder`と`DeclinedOrder`のどちらになるかを決めます。ゲートウェイの例外で実行を止めるのではなく、失敗を型として表現する。失敗も成功と同じく、変容の正当な結果です。
+
+意味変数の失敗はこれとは別です。名前に宿る制約を破ったオブジェクトはそもそも存在できないため、コンストラクタが走る前に収集され、`SemanticVariableException`として送出されます。
 
 ---
 

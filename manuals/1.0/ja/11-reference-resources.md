@@ -13,9 +13,10 @@ permalink: /manuals/1.0/ja/11-reference-resources.html
 
 ## 公式リポジトリ
 
-- [Be Framework Core](https://github.com/koriym/be-framework) — フレームワーク本体
-- [Application Skeleton](https://github.com/be-framework/app) — プロジェクト開始用スケルトン
-- [コンセプト段階ドキュメント](https://github.com/koriym/be-framework/tree/manual/docs-ja) — 設計思想の変遷を辿る初期ドキュメント群
+- [Be Framework Core](https://github.com/be-framework/Be.Framework) — フレームワーク本体
+- [Application Skeleton](https://github.com/be-framework/be-skeleton) — プロジェクト開始用スケルトン
+- [Demos](https://github.com/be-framework/be-patterns) — 動くデモ：Hello World と注文処理
+- [コンセプト段階ドキュメント](https://github.com/be-framework/Be.Framework/tree/manual/docs-ja) — 設計思想の変遷を辿る初期ドキュメント群
 
 ## 開発リファレンス
 

@@ -80,11 +80,11 @@ Property names are automatically linked to the semantic variable system:
 
 ### Being Property
 **Pattern**: `$being`
-**Purpose**: Represents the object's next existential state
+**Purpose**: Holds the Reason that decides the object's next existence; its type selects the `#[Be([...])]` candidate
 
 ```php
-public SuccessfulPayment|FailedPayment $being;
-public ActiveUser|SuspendedUser $being;
+public Approved|Rejected $being;
+public Charged|Declined $being;
 ```
 
 ## Method Naming Principles
@@ -101,7 +101,10 @@ class User {
 
 // ✅ Be Framework style
 final readonly class ValidatedUser {
-    public function __construct(UserInput $input) {
+    public function __construct(
+        #[Input] string $name,
+        #[Input] string $email,
+    ) {
         // Validation is executed as a precondition for existence
     }
 }
@@ -114,9 +117,8 @@ Use names that reflect existential state:
 
 ```php
 // ✅ Correct
-$validatedInput = new ValidatedUserInput($rawInput);
-$authenticatedUser = new AuthenticatedUser($validatedInput);
-$finalUser = $authenticatedUser->being;
+$registeredUser = $becoming(new UserInput($name, $email));
+$emergencyCase = $becoming(new PatientArrival($temperature, $heartRate));
 
 // ❌ Avoid
 $result = validateUser($input);     // Action-oriented
@@ -129,7 +131,8 @@ $data = processInput($rawInput);    // Too generic
 ```php
 final readonly class AuthenticatedUser {
     public function __construct(
-        #[Input] UserInput $input,
+        #[Input] string $email,
+        #[Input] string $password,
         #[Inject] PasswordHasher $hasher,        // ✅ As capability
         #[Inject] UserRepository $repository     // ✅ As repository
     ) {}
@@ -139,11 +142,11 @@ final readonly class AuthenticatedUser {
 ## File and Directory Structure
 
 ### Semantic Variables
-**Location**: `src/Domain/SemanticVariable/`
-**Naming**: Word combinations, PascalCase
+**Location**: `src/Semantic/`
+**Naming**: PascalCase of the parameter name (`$emailAddress` → `EmailAddress`)
 
 ```txt
-src/Domain/SemanticVariable/
+src/Semantic/
 ├── EmailAddress.php
 ├── UserName.php
 ├── ProductCode.php
@@ -151,20 +154,23 @@ src/Domain/SemanticVariable/
 ```
 
 ### Domain Objects
-**Location**: `src/Domain/`
+**Location**: One directory per role — `src/Input/`, `src/Being/`, `src/Final/`, `src/Reason/`
 **Naming**: Reflects existential state
 
 ```txt
-src/Domain/
-├── User/
+src/
+├── Input/
 │   ├── UserInput.php
+│   └── OrderInput.php
+├── Being/
 │   ├── ValidatedUser.php
-│   └── RegisteredUser.php
-└── Order/
-    ├── OrderInput.php
-    ├── ProcessedOrder.php
+│   └── ProcessedOrder.php
+└── Final/
+    ├── RegisteredUser.php
     └── CompletedOrder.php
 ```
+
+See [Directory Layout](./directory-layout.html) for the full set of directories.
 
 ## Philosophical Naming Principles
 
