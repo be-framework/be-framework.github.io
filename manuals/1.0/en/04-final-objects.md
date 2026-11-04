@@ -57,7 +57,7 @@ In Be Framework, we capture the temporal existence of objects on two axes:
 - **`#[Be]`**: The self you want to become, the destination (Direction towards the future)
 - **`$been`**: The self that has completed (Evidence of past perfect)
 
-Essential values like `$orderId` and `$confirmationCode` are public properties. `$been` is different—it records the evidence of completion: who, when, and on what basis the process completed.
+Essential values like `$orderId` and `$confirmationCode` are public properties. `$been` is different—it records the evidence of completion: what happened inside the constructor, and on what basis the process completed.
 
 ## Completeness from Within
 

@@ -75,10 +75,10 @@ final readonly class ApplicationReview
 final readonly class ApprovalNotification
 {
     public function __construct(
-        #[Input] Approved $approval,
+        #[Input] Approved $being,
         #[Inject] Mailer $mailer
     ) {
-        $mailer->send($approval->email, 'Approved! Score: ' . $approval->score);
+        $mailer->send($being->email, 'Approved! Score: ' . $being->score);
     }
 }
 ```

@@ -151,7 +151,7 @@ public function __construct(
 
 So far, Reason has returned immediate values like `Fee`. But consider order processing: inventory must be reserved, payment captured, and shipping arranged—and all three must succeed before any of them commit. If payment fails after inventory is reserved, that reservation must not persist.
 
-For this kind of all-or-nothing coordination, Reason returns a **Potential**—an object that holds a deferred operation, realized later via `be()`. This pattern is only needed when multiple external operations must all commit atomically.
+For this kind of coordination, Reason returns a **Potential**—an object that holds a deferred operation, realized later via `be()`. Nothing is committed until every participant has been prepared successfully. This pattern is only needed when several external operations must be prepared together before any of them commits.
 
 ### Potential: Prepared but Uncommitted
 
@@ -239,11 +239,11 @@ final readonly class OrderConfirmed
 }
 ```
 
-If any Moment cannot be created (because its Reason failed), the Final Object is never constructed. If all Moments exist, `be()` commits every deferred operation. No manual rollback flags, no nested try-catch.
+If any Moment cannot be created (because its Reason failed), the Final Object is never constructed and nothing has been committed—no manual rollback flags, no nested try-catch for the preparation phase. If all Moments exist, `be()` commits each deferred operation in order. Should a later `be()` fail, the earlier commits remain; compensating for that belongs to the Reason (for example, a gateway that can void a capture), not to the Final Object.
 
 ### When to Use This Pattern
 
-Use Potential-returning Reason when multiple external operations must succeed atomically—all commit together, or none at all. For simple cases where Reason returns an immediate value, Potential is unnecessary.
+Use Potential-returning Reason when multiple external operations must all be prepared before any of them commits. True atomicity across external services still depends on those services (a shared transaction or compensating actions); the pattern guarantees that a failed preparation commits nothing. For simple cases where Reason returns an immediate value, Potential is unnecessary.
 
 ---
 

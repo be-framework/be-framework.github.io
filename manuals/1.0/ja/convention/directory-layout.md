@@ -71,7 +71,7 @@ final class Email
     public function validate(string $email): void
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidEmailException();
+            throw new InvalidEmailException($email);
         }
     }
 }
@@ -88,7 +88,10 @@ final class Email
     'en' => 'Invalid email: {email}',
     'ja' => '不正なメールアドレス: {email}',
 ])]
-final class InvalidEmailException extends \DomainException {}
+final class InvalidEmailException extends \DomainException
+{
+    public function __construct(public string $email) {}
+}
 ```
 
 `#[Message]` には言語コード（`en`、`ja` など）をキーにした配列を1つ渡します。`{email}` のようなプレースホルダは、throw 時に例外のプロパティからアサインされます。
@@ -216,7 +219,7 @@ final readonly class PaymentCompleted implements MomentInterface
 }
 ```
 
-Moment は前段のオブジェクトからではなく DI コンテナによって生成されるので、値はモジュールで束縛したアプリケーション定義の修飾属性（`#[CardNumber]`、`#[Amount]`）経由で渡されます。コンストラクタで `authorize()` は済みます(Potential)が、`capture()` はまだです。全 Moment を生成できた Final だけが `be()` を一斉に呼びます — 部分的なコミットは起こりません。
+Moment は前段のオブジェクトからではなく DI コンテナによって生成されるので、値はモジュールで束縛したアプリケーション定義の修飾属性（`#[CardNumber]`、`#[Amount]`）経由で渡されます。コンストラクタで `authorize()` は済みます(Potential)が、`capture()` はまだです。全 Moment を生成できた Final だけが `be()` を順に呼びます — 準備に失敗した場合は何もコミットされません。後続の `be()` が失敗すると先に成功したコミットは残るので、その補償は Reason の責務です。
 
 → [Reason レイヤー](../08-reason-layer.html)
 

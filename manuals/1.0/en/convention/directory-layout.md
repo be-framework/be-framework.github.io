@@ -71,7 +71,7 @@ final class Email
     public function validate(string $email): void
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidEmailException();
+            throw new InvalidEmailException($email);
         }
     }
 }
@@ -88,7 +88,10 @@ The class name becomes the parameter name. `#[Validate]` auto-applies to every a
     'en' => 'Invalid email: {email}',
     'ja' => '不正なメールアドレス: {email}',
 ])]
-final class InvalidEmailException extends \DomainException {}
+final class InvalidEmailException extends \DomainException
+{
+    public function __construct(public string $email) {}
+}
 ```
 
 `#[Message]` takes one array keyed by language code (`en`, `ja`, …). Placeholders like `{email}` are assigned from the exception's properties at throw time.
@@ -216,7 +219,7 @@ final readonly class PaymentCompleted implements MomentInterface
 }
 ```
 
-A Moment is built by the DI container, not from a previous object, so its values arrive through application-defined qualifier attributes (`#[CardNumber]`, `#[Amount]`) bound in the module. The constructor completes `authorize()` (the Potential), but not `capture()`. Only a Final that could construct *every* Moment then calls `be()` on each — so partial commits never happen.
+A Moment is built by the DI container, not from a previous object, so its values arrive through application-defined qualifier attributes (`#[CardNumber]`, `#[Amount]`) bound in the module. The constructor completes `authorize()` (the Potential), but not `capture()`. Only a Final that could construct *every* Moment then calls `be()` on each — a failed preparation commits nothing. The `be()` calls run in order, so if a later one fails the earlier commits remain; compensating for that is the Reason's job.
 
 → [Reason Layer](../08-reason-layer.html)
 
