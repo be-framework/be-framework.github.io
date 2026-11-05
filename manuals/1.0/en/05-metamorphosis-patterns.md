@@ -75,15 +75,38 @@ Among the candidate classes specified in `#[Be()]`, the framework automatically 
 final readonly class ApprovalNotification
 {
     public function __construct(
-        #[Input] Approved $approval,
+        #[Input] Approved $being,
         #[Inject] Mailer $mailer
     ) {
-        $mailer->send($approval->email, 'Approved! Score: ' . $approval->score);
+        $mailer->send($being->email, 'Approved! Score: ' . $being->score);
     }
 }
 ```
 
 `$being` is a conventional property name often used for this self-determination pattern, but it is not a name required by the framework. Any public property participates in matching.
+
+## Matching Rules {#matching-rules}
+
+When `#[Be()]` lists several candidates, the framework checks them in the order written and picks the first one it can bring into existence:
+
+1. Every constructor parameter that is not `#[Inject]` must have a public property of the same **name** on the current object.
+2. The property's value must be compatible with the parameter's declared **type**. This is where `Approved|Rejected $being` decides the route: `#[Input] Approved $being` matches only when `$being` holds an `Approved`.
+3. `#[Inject]` parameters are ignored during matching; they are resolved by the DI container afterwards.
+4. If a matching candidate throws `UnbecomingException` from its constructor ("I am not this"), the next candidate is tried. If no candidate matches, `BeMatchException` is thrown.
+
+When `#[Be()]` names a single class, no matching is performed—the object simply becomes that class.
+
+## Choosing the Shape {#choosing-the-shape}
+
+Three shapes cover most domains:
+
+| Shape | When | How |
+|-------|------|-----|
+| **Linear** | Each step depends on the previous one | `#[Be(Next::class)]` on every class |
+| **Branching** | Outcomes are mutually exclusive | `#[Be([A::class, B::class])]` plus a union-typed `$being` holding a Reason |
+| **Nested** | Independent sub-processes must converge | Inject `BecomingInterface` and run inner chains (see [Becoming](./04a-becoming.html)) |
+
+When in doubt, start linear. Introduce a branch only when a Reason actually produces exclusive outcomes, and nesting only when independent results must be combined.
 
 ## Self-Organizing Pipelines
 

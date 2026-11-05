@@ -11,6 +11,12 @@ permalink: /manuals/1.0/ja/
 ## [概要](./01-overview.html)
 新しいパラダイム：存在指向プログラミングとの出会い
 
+## [Getting Started](./getting-started.html)
+スケルトンを入れて最初の変容を動かす Hello World
+
+## [チュートリアル](./tutorial.html)
+救急トリアージ — 存在クラスと分岐を含む完全な例
+
 ## [入力クラス](./02-input-classes.html)
 変容の出発点 — 外部に依存しない純粋なデータ
 
@@ -19,6 +25,9 @@ permalink: /manuals/1.0/ja/
 
 ## [最終オブジェクト](./04-final-objects.html)
 変容の目的地 — 完全に変容した存在
+
+## [生成](./04a-becoming.html)
+宣言された変容を動かす仕組み
 
 ## [変容](./05-metamorphosis.html)
 時間に沿った変容と、オブジェクト自身による分岐
@@ -34,6 +43,12 @@ permalink: /manuals/1.0/ja/
 
 ## [リファレンス](./11-reference-resources.html)
 フレームワーク開発に必要なリソースとリンク集
+
+## [背後にある哲学](./12-philosophy-behind.html)
+存在論的プログラミングの思想的ルーツ
+
+## [デモ](./demos.html)
+動くコード — Hello World とダイアモンド型の注文処理
 
 ## [FAQ](./faq.html)
 よくある質問と回答集

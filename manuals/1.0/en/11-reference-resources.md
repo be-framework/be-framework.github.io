@@ -13,9 +13,10 @@ permalink: /manuals/1.0/en/11-reference-resources.html
 
 ## Official Repositories
 
-- [Be Framework Core](https://github.com/koriym/be-framework) — Framework core and libraries
-- [Application Skeleton](https://github.com/be-framework/app) — Project starter skeleton
-- [Concept Stage Documentation](https://github.com/koriym/be-framework/blob/manual/concept/docs/README.md) — Early documentation exploring design philosophy evolution
+- [Be Framework Core](https://github.com/be-framework/Be.Framework) — Framework core and libraries
+- [Application Skeleton](https://github.com/be-framework/be-skeleton) — Project starter skeleton
+- [Demos](https://github.com/be-framework/be-patterns) — Working demos: Hello World and order processing
+- [Concept Stage Documentation](https://github.com/be-framework/Be.Framework/blob/manual/concept/docs/README.md) — Early documentation exploring design philosophy evolution
 
 ## Development Reference
 

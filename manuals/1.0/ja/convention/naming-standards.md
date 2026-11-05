@@ -80,11 +80,11 @@ final readonly class OrderResult      // 結果指向
 
 ### Being プロパティ
 **パターン**: `$being`
-**目的**: オブジェクトの次の存在状態を表現
+**目的**: オブジェクトの次の存在を決めるReasonを保持する。その型が`#[Be([...])]`の候補を選ぶ
 
 ```php
-public SuccessfulPayment|FailedPayment $being;
-public ActiveUser|SuspendedUser $being;
+public Approved|Rejected $being;
+public Charged|Declined $being;
 ```
 
 ## メソッド命名原則
@@ -101,7 +101,10 @@ class User {
 
 // ✅ Be Frameworkスタイル
 final readonly class ValidatedUser {
-    public function __construct(UserInput $input) {
+    public function __construct(
+        #[Input] string $name,
+        #[Input] string $email,
+    ) {
         // バリデーションは存在の前提条件として実行される
     }
 }
@@ -114,9 +117,8 @@ final readonly class ValidatedUser {
 
 ```php
 // ✅ 正しい
-$validatedInput = new ValidatedUserInput($rawInput);
-$authenticatedUser = new AuthenticatedUser($validatedInput);
-$finalUser = $authenticatedUser->being;
+$registeredUser = $becoming(new UserInput($name, $email));
+$emergencyCase = $becoming(new PatientArrival($temperature, $heartRate));
 
 // ❌ 避けるべき
 $result = validateUser($input);     // 行動指向
@@ -129,7 +131,8 @@ $data = processInput($rawInput);    // 一般的すぎる
 ```php
 final readonly class AuthenticatedUser {
     public function __construct(
-        #[Input] UserInput $input,
+        #[Input] string $email,
+        #[Input] string $password,
         #[Inject] PasswordHasher $hasher,        // ✅ 能力として
         #[Inject] UserRepository $repository     // ✅ リポジトリとして
     ) {}
@@ -139,11 +142,11 @@ final readonly class AuthenticatedUser {
 ## ファイル・ディレクトリ構造
 
 ### 意味変数
-**場所**: `src/Domain/SemanticVariable/`
-**命名**: 単語の組み合わせ、PascalCase
+**場所**: `src/Semantic/`
+**命名**: 引数名をPascalCaseにしたもの（`$emailAddress` → `EmailAddress`）
 
 ```txt
-src/Domain/SemanticVariable/
+src/Semantic/
 ├── EmailAddress.php
 ├── UserName.php
 ├── ProductCode.php
@@ -151,20 +154,23 @@ src/Domain/SemanticVariable/
 ```
 
 ### ドメインオブジェクト
-**場所**: `src/Domain/`
+**場所**: 役割ごとのディレクトリ — `src/Input/`、`src/Being/`、`src/Final/`、`src/Reason/`
 **命名**: 存在状態を反映
 
 ```txt
-src/Domain/
-├── User/
+src/
+├── Input/
 │   ├── UserInput.php
+│   └── OrderInput.php
+├── Being/
 │   ├── ValidatedUser.php
-│   └── RegisteredUser.php
-└── Order/
-    ├── OrderInput.php
-    ├── ProcessedOrder.php
+│   └── ProcessedOrder.php
+└── Final/
+    ├── RegisteredUser.php
     └── CompletedOrder.php
 ```
+
+ディレクトリの全体は[ディレクトリ構成](./directory-layout.html)を参照してください。
 
 ## 命名の哲学的原則
 

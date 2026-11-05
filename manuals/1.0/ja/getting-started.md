@@ -69,7 +69,7 @@ final readonly class HelloInput
 }
 ```
 
-`#[Be]` 属性はこの入力が何になるか、自らの**運命**を宣言します。
+`#[Be]` 属性はこの入力が何になるか、自らの**運命**を宣言します。単一のクラスでも候補の配列でも指定でき、ここでは後から2つ目の運命を足しやすいように配列形式を使っています。
 
 ### Final クラス
 
@@ -105,7 +105,7 @@ Greeting は超越 — 挨拶する力—を提供します。
 
 ```php
 $injector = new Injector(new AppModule());
-$becoming = new Becoming($injector, 'Be\\App\\Semantic');
+$becoming = $injector->getInstance(BecomingInterface::class);
 
 $input = new HelloInput('World');
 $hello = $becoming($input);
@@ -126,19 +126,19 @@ Hello (Greeting が注入された状態)
 
 ## セマンティック検証を試す
 
-`bin/be.php` を編集して空の名前を渡してみましょう:
-
-```php
-$input = new HelloInput('');
-```
-
-再度実行:
+`composer dev` は `php bin/be.php 'hello?name=World'` を実行しています。今度は空の名前を渡してみましょう:
 
 ```bash
-composer dev
+php bin/be.php 'hello?name='
 ```
 
-`Semantic/Name.php` が名前が空であることを検証するため、エラーメッセージが表示されます。空の名前は存在できないのです。
+出力:
+
+```txt
+名前は空にできません。
+```
+
+`Semantic/Name.php` が `$name` は空にできないと宣言しているため、`HelloInput('')` は存在できません。このメッセージは `EmptyNameException` の `#[Message]` 属性に由来し、`bin/be.php` がその日本語版を表示しています。
 
 ## 示された主要概念
 

@@ -83,9 +83,9 @@ A. いいえ、特別なプロパティではありません。
 
 これらはフレームワークが魔法的に解釈するものではなく、**単なる規約**です。
 
-`becoming()`関数はプロパティ名を読むのではなく、**プロパティに宣言された型**を見て次のクラスを選択します。
+`becoming()`は、次のクラスのコンストラクタ引数を、現在のオブジェクトのpublicプロパティと**名前と型**で照合します。`$being`も他のプロパティと同じように照合されるだけで、フレームワークがこの名前を特別扱いすることはありません。
 
-そのため、`$being`や`$been`という名前である必要はありません。`public Success|Failure $result;`のように別の名前でも同じように動作します。
+そのため、`$being`や`$been`という名前である必要はありません。`public Success|Failure $result;`のように別の名前でも、次のクラス側が同じ名前で`#[Input] Success $result`と宣言していれば同じように動作します。
 
 ただし、ドキュメント・サンプル・設計思想に合わせてこの名前を使用することで、「変容先（being）」「完了の証跡（been）」が一目で分かるというメリットがあります。
 
@@ -105,28 +105,47 @@ A. 変数名＝意味＋制約です。`$email`は「有効なEmail」でなけ�
 
 ### Q8.5. 意味は違うが制約が同じ変数（`$userId`、`$authorId`など）はどう扱いますか？
 
-A. 共通の基底クラスやトレイトで制約を共有し、継承で意味を分離します。
+A. 名前ごとに意味変数クラスを用意し、制約のロジックは共通の基底クラスやトレイトで共有します。
 
 ```php
-// src/Semantic/Abstract/Id.php - 共通制約を持つ基底クラス
+// src/Semantic/Abstract/Id.php - 共通制約（それ自体は意味変数ではない）
 namespace App\Semantic\Abstract;
 
-abstract readonly class Id {
-    public function __construct(public string $value) {
-        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}/', $value)) {
+use App\Exception\InvalidIdException;
+
+abstract class Id
+{
+    protected function assertId(string $id): void
+    {
+        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/', $id)) {
             throw new InvalidIdException();
         }
     }
 }
 
-// src/Semantic/UserId.php - 意味変数として継承
-readonly class UserId extends \App\Semantic\Abstract\Id {}
-readonly class AuthorId extends \App\Semantic\Abstract\Id {}
-
-// 使用例：変数名に意味が込められる
-function updateArticle(UserId $userId, AuthorId $authorId) {
-    // $userIdと$authorIdは混同不可能
+// src/Semantic/UserId.php - $userIdという名前の引数すべてに適用
+final class UserId extends \App\Semantic\Abstract\Id
+{
+    #[Validate]
+    public function validate(string $userId): void
+    {
+        $this->assertId($userId);
+    }
 }
+
+// src/Semantic/AuthorId.php - $authorIdという名前の引数すべてに適用
+final class AuthorId extends \App\Semantic\Abstract\Id
+{
+    #[Validate]
+    public function validate(string $authorId): void
+    {
+        $this->assertId($authorId);
+    }
+}
+
+// 使用例：引数名が意味を示し、それぞれの検証が適用される。
+// どちらも string なので、取り違えを型で禁止したい場合は別の値オブジェクト型が必要。
+public function __construct(string $userId, string $authorId) {}
 ```
 
 ### Q9. 「存在理由層（Reason）」とは何ですか？
@@ -139,7 +158,7 @@ A. ある存在が成立するための根拠——道具一式をひとつの�
 
 ### Q10. `$been`（自己証明）は何のためですか？
 
-A. その存在が完了した証跡（誰が・いつ・何を）を内在させます。
+A. その存在が完了した証跡（何から・何になり・何を根拠に）を内在させます。
 
 外部テストや監査ログと整合しやすくなります。
 
@@ -177,7 +196,7 @@ A. 手順依存=線形／条件で結果が排他的=分岐／独立処理の合
 
 迷ったら最小限の線形から始めることをお勧めします。
 
-（詳細：[実装指針](./05-metamorphosis.html)）
+（詳細：[変容の形を選ぶ](./05-metamorphosis.html#choosing-the-shape)）
 
 ---
 

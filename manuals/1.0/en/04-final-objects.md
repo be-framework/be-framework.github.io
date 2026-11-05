@@ -22,35 +22,31 @@ final readonly class SuccessfulOrder
 {
     public string $orderId;
     public string $confirmationCode;
-    public DateTimeImmutable $timestamp;
     public string $message;
-    public BeenConfirmed $been;          // Evidence of completion
+    public Been $been;                            // Evidence of completion
 
     public function __construct(
         #[Input] Money $total,                    // Immanence
         #[Input] CreditCard $card,                // Immanence
         #[Inject] OrderIdGenerator $generator,    // Transcendence
-        #[Inject] Receipt $receipt                // Transcendence
+        #[Inject] Receipt $receipt,               // Transcendence
+        #[Inject] Been $been                      // Evidence recorder
     ) {
         $this->orderId = $generator->generate();
         $this->confirmationCode = $receipt->generate($total);
-        $this->timestamp = new DateTimeImmutable();
         $this->message = "Order Confirmed: {$this->orderId}";
 
-        $this->been = new BeenConfirmed(
-            actor: $card->getHolderName(),
-            timestamp: $this->timestamp,
-            evidence: [
-                'total' => $total->getAmount(),
-                'payment_method' => $card->getType(),
-                'confirmation' => $this->confirmationCode
-            ]
-        );
+        $this->been = $been->with(new OrderConfirmedContext(
+            orderId: $this->orderId,
+            total: $total->getAmount(),
+            paymentMethod: $card->getType(),
+            confirmation: $this->confirmationCode,
+        ));
     }
 }
 ```
 
-The `$been` property uses an application-defined, domain-specific type. `SuccessfulOrder` has `BeenConfirmed`, `FailedOrder` has `BeenRejected`, a `DeletedUser` might have `BeenDeleted`. What counts as "evidence of completion" depends on the domain—you design the class to capture whatever your domain requires as proof.
+`Been` is provided by the framework and injected like any other transcendence. It already knows where this metamorphosis started and where it arrived; what it cannot know is what happened inside the constructor. The Final Object appends that part itself with `with()`, passing application-defined event contexts such as `OrderConfirmedContext`. What counts as "evidence of completion" depends on the domain—`SuccessfulOrder` records the confirmation, a `DeletedUser` might record who deleted it and when. The structure of these contexts and the JSON they produce are described in [Semantic Logging](./10-semantic-logging.html).
 
 In contrast to Input Classes, Final Objects fully express the richness of the domain. Immanence has met Transcendence, undergone transformation, and reached a complete state that requires no further change.
 
@@ -61,7 +57,7 @@ In Be Framework, we capture the temporal existence of objects on two axes:
 - **`#[Be]`**: The self you want to become, the destination (Direction towards the future)
 - **`$been`**: The self that has completed (Evidence of past perfect)
 
-Essential values like `$orderId` and `$confirmationCode` are public properties. `$been` is different—it records the evidence of completion: who, when, and on what basis the process completed.
+Essential values like `$orderId` and `$confirmationCode` are public properties. `$been` is different—it records the evidence of completion: what happened inside the constructor, and on what basis the process completed.
 
 ## Completeness from Within
 

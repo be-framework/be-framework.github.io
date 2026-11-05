@@ -70,7 +70,7 @@ echo $final->greeting; // "Hello World"
 
 ### リンク
 
-- [ソースコード](https://github.com/be-framework/demos/tree/1.x/demos/hello-world)
+- [ソースコード](https://github.com/be-framework/be-patterns/tree/1.x/demos/hello-world)
 
 ---
 
@@ -180,7 +180,7 @@ final readonly class OrderConfirmed
 ### リンク
 
 - [デモサイト](https://be-framework.github.io/demos/) - インタラクティブなALPS状態図
-- [ソースコード](https://github.com/be-framework/demos/tree/1.x/demos/order-processing) - 完全な実装
+- [ソースコード](https://github.com/be-framework/be-patterns/tree/1.x/demos/order-processing) - 完全な実装
 - [ALPSプロファイル](https://be-framework.github.io/demos/alps.html) - セマンティックオントロジー
 
 ---

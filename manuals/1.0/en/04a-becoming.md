@@ -53,7 +53,7 @@ final readonly class OrderProcessing
 
     public function __construct(
         #[Input] Order $order,                    // Immanence
-        #[Inject] Becoming $becoming              // Transcendence
+        #[Inject] BecomingInterface $becoming     // Transcendence
     ) {
         $this->payment = $becoming(new PaymentInput($order->getPayment()));
         $this->shipping = $becoming(new ShippingInput($order->getAddress()));
@@ -61,7 +61,7 @@ final readonly class OrderProcessing
 }
 ```
 
-Since `Becoming` is injected as transcendence, metamorphosis chains can be triggered from within being classes as well. A diamond pattern that converges branched results into a single object is also possible.
+Since `Becoming` is injected as transcendence, metamorphosis chains can be triggered from within being classes as well. A diamond pattern that converges branched results into a single object is also possible—see the [order processing demo](./demos.html#order-processing-demo).
 
 ---
 
