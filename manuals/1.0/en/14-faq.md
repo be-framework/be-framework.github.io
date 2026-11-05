@@ -153,7 +153,7 @@ See [Reason Layer](./08-reason-layer.html) for details.
 
 ### Q10. What is `$been` (self-proof) for?
 
-A. It internally contains the trail of that existence's completion (who, when, what).
+A. It internally contains the trail of that existence's completion (what it came from, what it became, and on what basis).
 
 It aligns well with external tests and audit logs.
 
