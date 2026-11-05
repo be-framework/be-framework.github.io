@@ -111,6 +111,8 @@ A. 名前ごとに意味変数クラスを用意し、制約のロジックは�
 // src/Semantic/Abstract/Id.php - 共通制約（それ自体は意味変数ではない）
 namespace App\Semantic\Abstract;
 
+use App\Exception\InvalidIdException;
+
 abstract class Id
 {
     protected function assertId(string $id): void
@@ -141,7 +143,8 @@ final class AuthorId extends \App\Semantic\Abstract\Id
     }
 }
 
-// 使用例：引数名に意味が込められ、$userIdと$authorIdは混同不可能
+// 使用例：引数名が意味を示し、それぞれの検証が適用される。
+// どちらも string なので、取り違えを型で禁止したい場合は別の値オブジェクト型が必要。
 public function __construct(string $userId, string $authorId) {}
 ```
 

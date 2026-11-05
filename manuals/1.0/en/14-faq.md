@@ -109,6 +109,8 @@ A. Give each name its own semantic variable class, and share the constraint logi
 // src/Semantic/Abstract/Id.php - shared constraint (not a semantic variable itself)
 namespace App\Semantic\Abstract;
 
+use App\Exception\InvalidIdException;
+
 abstract class Id
 {
     protected function assertId(string $id): void
@@ -139,7 +141,8 @@ final class AuthorId extends \App\Semantic\Abstract\Id
     }
 }
 
-// Usage: the parameter names carry the meaning; $userId and $authorId cannot be confused
+// Usage: the parameter names document distinct meanings and select separate validations.
+// Both values are still strings; use distinct value-object types if swapping must be rejected.
 public function __construct(string $userId, string $authorId) {}
 ```
 
